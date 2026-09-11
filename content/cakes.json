@@ -7,7 +7,57 @@
     "fromPriceOere": 45000,
     "servings": "15 til 25 personer",
     "leadTimeDays": 5,
-    "image": "",
-    "options": ["Klassisk med slik", "Med frugt og bær", "Uden nødder"]
+    "image": ""
+  },
+  {
+    "id": "daabskage",
+    "slug": "daabskage",
+    "name": "Dåbskage",
+    "description": "Til dåben eller navngivningen. Pyntes enkelt, gerne med barnets navn.",
+    "fromPriceOere": 60000,
+    "servings": "12 til 20 personer",
+    "leadTimeDays": 7,
+    "image": ""
+  },
+  {
+    "id": "konfirmationskage",
+    "slug": "konfirmationskage",
+    "name": "Konfirmationskage",
+    "description": "Som lagkage eller flere mindre kager, i den smag konfirmanden helst vil have.",
+    "fromPriceOere": 70000,
+    "servings": "15 til 30 personer",
+    "leadTimeDays": 10,
+    "image": ""
+  },
+  {
+    "id": "foedselsdagslagkage",
+    "slug": "foedselsdagslagkage",
+    "name": "Fødselsdagslagkage",
+    "description": "En klassisk lagkage til fødselsdagen. Skriv, hvilken smag I holder af.",
+    "fromPriceOere": 35000,
+    "servings": "8 til 12 personer",
+    "leadTimeDays": 5,
+    "image": ""
+  },
+  {
+    "id": "kagetapas",
+    "slug": "kagetapas",
+    "name": "Kagetapas",
+    "description": "Små stykker af flere slags kage, så gæsterne kan smage lidt af hvert.",
+    "fromPriceOere": 6500,
+    "priceNote": "pr. person",
+    "servings": "Fra 12 personer",
+    "leadTimeDays": 7,
+    "image": ""
+  },
+  {
+    "id": "bryllupskage",
+    "slug": "bryllupskage",
+    "name": "Bryllupskage",
+    "description": "Smag, størrelse og pynt aftaler vi sammen i god tid.",
+    "fromPriceOere": 150000,
+    "servings": "30 til 60 personer",
+    "leadTimeDays": 14,
+    "image": ""
   }
 ]

@@ -49,7 +49,9 @@ const time = new Intl.DateTimeFormat("da-DK", {
 /** "fredag den 11. september 2026" */
 export function formatDateLong(d: Date | string): string {
   const date = typeof d === "string" ? new Date(d) : d;
-  return longDate.format(date).replace(/^(\p{L}+) /u, "$1 den ");
+  const s = longDate.format(date);
+  // Newer ICU data already writes "fredag den 11. september 2026"; older data omits "den".
+  return /^\p{L}+ den /u.test(s) ? s : s.replace(/^(\p{L}+) /u, "$1 den ");
 }
 
 /** "11. sep." */

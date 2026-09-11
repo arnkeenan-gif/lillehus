@@ -1,6 +1,11 @@
 {
   "_readme": "Settings for the bakery shop. Days use man/tir/ons/tor/fre/lør/søn. Prices in øre.",
-  "pickupDays": ["tir", "ons", "tor", "fre"],
+  "pickupDays": [
+    "tir",
+    "ons",
+    "tor",
+    "fre"
+  ],
   "pickupWindow": "7 til 18",
   "pickupPlace": "Hønsehuset, Torpevej 10, 4160 Herlufmagle",
   "cutoffHour": 18,
@@ -12,8 +17,10 @@
     "feeOere": 4900,
     "freeAboveOere": 40000,
     "radiusKm": 15,
-    "days": ["fre"],
-    "note": "Levering i Herlufmagle, Glumsø, Fensmark og Næstved by. Vi kører om fredagen mellem 10 og 14."
+    "days": [
+      "fre"
+    ],
+    "note": "Vi arbejder på at kunne levere i lokalområdet. Skriv til os, hvis du er interesseret, så giver vi besked når vi begynder."
   },
   "closedDates": [],
   "notice": ""

@@ -1,6 +1,72 @@
 [
   {
-    "q": "Hvordan betaler jeg i fryseren?",
-    "a": "Priserne står på skiltet, og du betaler med MobilePay til nummeret på fryserens dør."
+    "group": "Bestilling og afhentning",
+    "q": "Hvordan bestiller jeg brød?",
+    "a": "Du bestiller under Bageri her på siden og betaler med det samme med kort eller MobilePay. Du vælger selv afhentningsdag og får en ordrebekræftelse på mail."
+  },
+  {
+    "group": "Bestilling og afhentning",
+    "q": "Hvornår skal jeg senest bestille?",
+    "a": "Senest dagen før kl. 18. Du kan bestille op til 14 dage frem."
+  },
+  {
+    "group": "Bestilling og afhentning",
+    "q": "Hvor og hvornår henter jeg?",
+    "a": "I Hønsehuset på Torpevej 10 i Herlufmagle, på den dag du har valgt, mellem kl. 7 og 18. Du kan hente tirsdag, onsdag, torsdag og fredag."
+  },
+  {
+    "group": "Bestilling og afhentning",
+    "q": "Kan jeg afbestille igen?",
+    "a": "Ja, frem til bestillingsfristen dagen før kl. 18. Skriv eller ring til os, så får du hele beløbet retur. Efter fristen er brødet sat i gang, og så kan vi ikke tage det retur."
+  },
+  {
+    "group": "Bestilling og afhentning",
+    "q": "Hvad sker der, hvis jeg ikke får hentet?",
+    "a": "Brødet står i Hønsehuset til kl. 18 på afhentningsdagen. Bliver du forhindret, så ring til os samme dag, så finder vi en løsning. Brød, der ikke bliver hentet, kan vi desværre ikke refundere."
+  },
+  {
+    "group": "Bestilling og afhentning",
+    "q": "Leverer I?",
+    "a": "Ikke endnu. Vi arbejder på at kunne levere i lokalområdet og skriver på Facebook og Instagram, når vi begynder. Indtil da henter du i Hønsehuset eller finder os på Torvedag i Næstved."
+  },
+  {
+    "group": "Fryseren og Torvedag",
+    "q": "Hvordan fungerer fryseren på gården?",
+    "a": "Fryseren står på Torpevej 10 og er åben alle hverdage kl. 7 til 18. Du tager selv, priserne står på skiltet, og du betaler med MobilePay til nummeret på fryserens dør."
+  },
+  {
+    "group": "Fryseren og Torvedag",
+    "q": "Hvornår er I på Torvedag i Næstved?",
+    "a": "Onsdag og lørdag fra kl. 9 på Axeltorv, foran Løveapoteket, til kl. 14 eller til vi er udsolgt. Vi kan ikke lægge brød til side på torvet, så bestil på siden og hent i Hønsehuset, hvis du vil være sikker."
+  },
+  {
+    "group": "Fryseren og Torvedag",
+    "q": "Hvad er der i brødet, og hvad med allergener?",
+    "a": "Skriv til os, før du bestiller, så fortæller vi, hvad der er i det enkelte brød. Alt bages i samme bageri med hvede og rug, så vi kan ikke love, at noget er fri for gluten."
+  },
+  {
+    "group": "Pizzavogn, kager og arrangementer",
+    "q": "Hvor mange skal vi være for at booke pizzavognen?",
+    "a": "Mindst 40 voksne. Vi kommer med stenovnen på traileren og bager pizza på surdej, til alle er mætte. Send en forespørgsel, så vender Kristine tilbage med pris og dato."
+  },
+  {
+    "group": "Pizzavogn, kager og arrangementer",
+    "q": "Hvordan betaler vi for pizzavognen?",
+    "a": "Når aftalen er bekræftet, betaler I en tredjedel i depositum, og resten betaler I på dagen. Aflyser I inden for de sidste 14 dage før festen, refunderes depositummet ikke."
+  },
+  {
+    "group": "Pizzavogn, kager og arrangementer",
+    "q": "Hvor lang tid før skal jeg bestille en kage?",
+    "a": "Helst fem dage før, og gerne mere til store kager. Send en forespørgsel med dato, antal og ønsker, så svarer Kristine, om det kan lade sig gøre."
+  },
+  {
+    "group": "Pizzavogn, kager og arrangementer",
+    "q": "Laver I aftaler med virksomheder?",
+    "a": "Ja. Vi laver gerne faste aftaler om brød til arbejdspladsen og kører ud med pizzavognen til firmafester. Skriv til os under Firmaaftaler, så finder vi ud af, hvad der passer."
+  },
+  {
+    "group": "Pizzavogn, kager og arrangementer",
+    "q": "Hvordan hører jeg om åbent hus på gården?",
+    "a": "Vi holder åbent hus i haven og huset på udvalgte dage, alt efter humør, og det annoncerer vi på Facebook og Instagram, når det sker. Du kan også tilmelde dig nyhedsbrevet nederst på siden."
   }
 ]

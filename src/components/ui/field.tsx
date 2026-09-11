@@ -1,3 +1,4 @@
+import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/cn";
 
 /*
@@ -50,9 +51,16 @@ export function Textarea({ className, ...rest }: React.TextareaHTMLAttributes<HT
 
 export function Select({ className, children, ...rest }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select className={cn(control, "appearance-none bg-no-repeat pr-10", className)} {...rest}>
-      {children}
-    </select>
+    <div className="relative">
+      <select className={cn(control, "appearance-none pr-10", className)} {...rest}>
+        {children}
+      </select>
+      <CaretDown
+        size={18}
+        aria-hidden="true"
+        className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted"
+      />
+    </div>
   );
 }
 

@@ -1,0 +1,19 @@
+{
+  "_readme": "Billeder på forsiden. Stierne peger på filer i public/images, og alt-teksterne står i content/images.json. Byt et billede ved at skrive en anden sti her. Under instagram bestemmer position, hvilken del af et højt billede der vises i det kvadratiske udsnit: top, center eller bottom.",
+  "heroImage": "/images/cinnamon-buns-and-bread-rolls.jpg",
+  "pizzaImage": "/images/pizza-rocket-parma-ham.jpg",
+  "productFallbackImages": {
+    "brød": "/images/scored-sourdough-loaf.jpg",
+    "boller": "/images/oat-topped-bread-rolls.jpg",
+    "kager": "/images/cinnamon-buns-and-bread-rolls.jpg",
+    "andet": "/images/homemade-granola.jpg"
+  },
+  "instagram": [
+    { "src": "/images/instagram/ig-2026-09-11-fredagsfoelelsen-broedprep.jpg", "position": "top" },
+    { "src": "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg", "position": "center" },
+    { "src": "/images/instagram/ig-2026-08-04-tekst.jpg", "position": "center" },
+    { "src": "/images/instagram/ig-2026-08-21-vindue-murstensvaeg.jpg", "position": "center" },
+    { "src": "/images/instagram/ig-2026-09-02-foto.jpg", "position": "center" },
+    { "src": "/images/instagram/ig-2026-07-21-reel-trailer.jpg", "position": "center" }
+  ]
+}

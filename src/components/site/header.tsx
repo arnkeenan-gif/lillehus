@@ -6,7 +6,7 @@ import { CartButton } from "@/components/shop/cart-button";
 
 export function Header() {
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-sm">
+    <header className="no-print sticky top-0 z-40 border-b border-line bg-paper">
       <Container className="flex h-16 items-center justify-between gap-6 sm:h-[72px]">
         <Link href="/" className="shrink-0 text-[1.05rem] font-semibold tracking-tight text-ink">
           {site.name}

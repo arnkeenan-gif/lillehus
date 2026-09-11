@@ -1,0 +1,10 @@
+{
+  "_readme": "Billeder på siden Om os. Stierne peger på filer i public/images, og alt-teksterne står i content/images.json. Byt et billede ved at skrive en anden sti her.",
+  "heroImage": "/images/family-on-bench-brick-wall.jpg",
+  "photos": {
+    "barn": "/images/barn-interior-wooden-beams.jpg",
+    "family": "/images/family-at-table-in-garden.jpg",
+    "garden": "/images/garden-vegetable-harvest.jpg"
+  },
+  "logo": "/images/logo.png"
+}

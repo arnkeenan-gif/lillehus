@@ -3,12 +3,157 @@
     "id": "surdejsbroed",
     "slug": "surdejsbroed",
     "name": "Surdejsbrød",
-    "description": "Langtidshævet på hvede og lidt fuldkorn. Bagt samme morgen som du henter det.",
+    "description": "Hvede med lidt fuldkorn, hævet natten over og bagt i form. Sprød skorpe og blød krumme.",
     "priceOere": 5500,
-    "image": "",
+    "image": "/images/scored-sourdough-loaf.jpg",
     "category": "brød",
     "days": [],
-    "allergens": ["gluten"],
+    "allergens": [
+      "gluten"
+    ],
+    "active": true
+  },
+  {
+    "id": "surdejsbroed-sesam",
+    "slug": "surdejsbroed-sesam",
+    "name": "Surdejsbrød med sesam",
+    "description": "Samme dej som vores surdejsbrød, rullet i ristede sesamfrø før det kommer i ovnen.",
+    "priceOere": 5500,
+    "image": "/images/facebook/fb-sourdough-loaves-stacked.jpg",
+    "category": "brød",
+    "days": [],
+    "allergens": [
+      "gluten",
+      "sesam"
+    ],
+    "active": true
+  },
+  {
+    "id": "rugbroed-kerner",
+    "slug": "rugbroed-kerner",
+    "name": "Rugbrød med kerner",
+    "description": "Mørkt og tungt med solsikke, hørfrø og græskarkerner. Holder sig frisk en uges tid.",
+    "priceOere": 5500,
+    "image": "/images/facebook/fb-rye-bread-loaves.jpg",
+    "category": "brød",
+    "days": [
+      "tir",
+      "fre"
+    ],
+    "allergens": [
+      "gluten"
+    ],
+    "active": true
+  },
+  {
+    "id": "fladbroed",
+    "slug": "fladbroed",
+    "name": "Fladbrød med sortkommen",
+    "description": "Tynde surdejsfladbrød med olivenolie, salt og sortkommen. Gode til ost, suppe og madpakken.",
+    "priceOere": 3500,
+    "image": "/images/rustic-bread-loaves-and-flatbread.jpg",
+    "category": "brød",
+    "days": [
+      "ons",
+      "fre"
+    ],
+    "allergens": [
+      "gluten"
+    ],
+    "active": true
+  },
+  {
+    "id": "surdejsboller",
+    "slug": "surdejsboller",
+    "name": "Surdejsboller, 4 stk.",
+    "description": "Fire lyse surdejsboller med sprød skorpe. Til morgenbordet eller madpakken.",
+    "priceOere": 5000,
+    "image": "/images/facebook/fb-bread-basket.jpg",
+    "category": "boller",
+    "days": [],
+    "allergens": [
+      "gluten"
+    ],
+    "active": true
+  },
+  {
+    "id": "surdejsboller-sesam-havre",
+    "slug": "surdejsboller-sesam-havre",
+    "name": "Surdejsboller med sesam og havre, 4 stk.",
+    "description": "Fire boller rullet i sesam og havregryn. Lidt mere bid og lidt mere smag.",
+    "priceOere": 6800,
+    "image": "/images/oat-topped-bread-rolls.jpg",
+    "category": "boller",
+    "days": [],
+    "allergens": [
+      "gluten",
+      "sesam"
+    ],
+    "active": true
+  },
+  {
+    "id": "kanelsnegl",
+    "slug": "kanelsnegl",
+    "name": "Kanelsnegl",
+    "description": "Blød gærdej med kanel, smør og brun farin, bagt samme morgen. Bedst mens den er lun.",
+    "priceOere": 4000,
+    "image": "/images/cinnamon-buns-and-bread-rolls.jpg",
+    "category": "kager",
+    "days": [],
+    "allergens": [
+      "gluten",
+      "mælk",
+      "æg"
+    ],
+    "active": true
+  },
+  {
+    "id": "cookies-flagesalt",
+    "slug": "cookies-flagesalt",
+    "name": "Cookies med chokolade og flagesalt, 3 stk.",
+    "description": "Store cookies med mørk chokolade og et drys flagesalt. Seje i midten, sprøde i kanten.",
+    "priceOere": 4500,
+    "image": "/images/facebook/fb-chocolate-cookies.jpg",
+    "category": "kager",
+    "days": [],
+    "allergens": [
+      "gluten",
+      "mælk",
+      "æg"
+    ],
+    "active": true
+  },
+  {
+    "id": "babka-kanel",
+    "slug": "babka-kanel",
+    "name": "Babka med kanel",
+    "description": "Flettet gærbrød med kanel og smør, nok til hele weekenden. Bages kun til fredag.",
+    "priceOere": 8500,
+    "image": "",
+    "category": "kager",
+    "days": [
+      "fre"
+    ],
+    "allergens": [
+      "gluten",
+      "mælk",
+      "æg"
+    ],
+    "active": false
+  },
+  {
+    "id": "granola",
+    "slug": "granola",
+    "name": "Granola, 400 g",
+    "description": "Ristet havre med mandler, hasselnødder, frø og lidt honning. Ikke for sød.",
+    "priceOere": 6500,
+    "image": "/images/homemade-granola.jpg",
+    "category": "andet",
+    "days": [],
+    "allergens": [
+      "gluten",
+      "nødder"
+    ],
     "active": true
   }
 ]
