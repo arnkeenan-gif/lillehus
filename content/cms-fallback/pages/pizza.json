@@ -16,9 +16,18 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Den rullende pizzavogn",
-      "text": "Vi kommer med den hjemmebyggede stenovn og bager økologiske surdejspizzaer hos jer, til barnedåb, konfirmation, fødselsdag eller firmafest.",
-      "image": "/images/wood-fired-pizza-oven.jpg",
-      "primaryLink": { "label": "Book pizzavognen", "href": "#book" }
+      "image": {
+        "src": "/images/wood-fired-pizza-oven.jpg",
+        "hotspot": {
+          "x": 0.55,
+          "y": 0.5
+        }
+      },
+      "primaryLink": {
+        "label": "Book pizzavognen",
+        "href": "#book"
+      },
+      "variant": "cover"
     },
     {
       "_type": "pizzaSection",

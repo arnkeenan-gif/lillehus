@@ -42,8 +42,8 @@ Familjen Grotesk only (Google, variable 400 to 700, Latin Extended). It stays be
 
 | role | utility | notes |
 |---|---|---|
-| display | `text-display font-bold tracking-tight` | 56 to 96px (clamp), hero and the rust block. Two lines max. |
-| title | `text-title font-semibold` | 32 to 48px, section headings |
+| display | `text-display font-semibold tracking-tight` | 36 to 64px (clamp), page openings and the rust block. Two lines max. The cover hero uses 32 to 44px. |
+| title | `text-title font-semibold` | 24 to 32px, section headings |
 | lead | `text-xl sm:text-2xl text-ink` | the "this week" block and intro sentences: large body, not a heading |
 | body | 17px / 1.55, `text-ink-2`, max-w 62ch | |
 | ui | 15px | nav, buttons, table cells |
@@ -56,7 +56,7 @@ No uppercase tracking labels anywhere. No italics in headings. Headings are sent
 
 - Container 1200px; `size="wide"` 1400px for photo grids; full-bleed for the hero, the rust block and photo bands.
 - The forside is a shop window, not a stack. Section order and content come from Sanity; the section components are:
-  1. `hero`: a full-bleed photo (16:9 on desktop, 4:5 on phones, min 70vh on desktop), then, on paper directly below it, a left-aligned display headline and one sentence with two buttons. Nothing is written over the photo.
+  1. `hero`, variant `cover` (the default, what the Copenhagen sites do): the photograph fills the first screen edge to edge (82svh, min 540px), the header floats transparent over it in white and turns to paper once the photo has scrolled past, and a two-line headline of at most five words with two small underlined uppercase links sits at the bottom left of the photo. A gradient scrim darkens the top and bottom edges only. No paragraph. Needs a photo at least 1800px wide (2000+ preferred); smaller files use variant `stacked`: the photo in the container, the headline and one sentence on paper below it.
   2. `richText` with `imagePosition`: prose beside a photo; the "this week" block uses this with `lead` size text and no heading.
   3. `priceList`: the chalkboard as typography. A two-column list on desktop, one on phones, each row "Surdejsbrød .......... 55 kr." with dotted leaders (`border-bottom: 1px dotted` on a flex spacer), tabular prices, a footnote. No photos per row. Kristine edits rows freely.
   4. `productStrip`: photo (4/5), name, price, nothing else, four across, no borders, no buttons; the whole tile links to the shop.

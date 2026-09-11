@@ -47,7 +47,7 @@ function HeroCover({ section, level: Tag, className }: SectionProps<HeroSection>
         placeholder={image.lqip ? "blur" : "empty"}
         blurDataURL={image.lqip}
       />
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/0 to-black/60" />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/0 via-45% to-black/60" />
       <Container className="relative flex h-full flex-col justify-end pb-12 sm:pb-14 lg:pb-16">
         <Tag className="max-w-[12ch] text-balance text-[2rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.5rem] lg:text-[2.75rem]">{heading}</Tag>
         {text ? <p className="mt-4 max-w-[36ch] text-[1.05rem] text-white/90 sm:text-lg">{text}</p> : null}
