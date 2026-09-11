@@ -14,6 +14,7 @@
   "sections": [
     {
       "_type": "heroSection",
+      "_key": "top",
       "heading": "Den rullende pizzavogn",
       "text": "Vi kommer med den hjemmebyggede stenovn og bager økologiske surdejspizzaer hos jer, til barnedåb, konfirmation, fødselsdag eller firmafest.",
       "image": "/images/wood-fired-pizza-oven.jpg",
@@ -21,33 +22,37 @@
     },
     {
       "_type": "pizzaSection",
-      "part": "day",
-      "heading": "Sådan foregår det"
+      "_key": "dagen",
+      "part": "day"
     },
     {
       "_type": "pizzaSection",
+      "_key": "priser",
       "part": "prices",
       "heading": "Priser"
     },
     {
       "_type": "photoBandSection",
+      "_key": "pizza",
       "image": "/images/pizza-rocket-parma-ham.jpg",
       "caption": "Rucola, parmaskinke og parmesan, lige ud af ovnen.",
       "ratio": "3/2"
     },
     {
       "_type": "pizzaSection",
+      "_key": "pizzaerne",
       "part": "menu",
-      "heading": "Pizzaerne",
-      "text": "I vælger tre. Der er altid mindst en vegetarisk, og vegansk kan I få, hvis I beder om det."
+      "text": "I vælger tre af pizzaerne her. Der er altid mindst en vegetarisk, og vegansk eller glutenfri kan tilkøbes."
     },
     {
       "_type": "pizzaSection",
+      "_key": "praktisk",
       "part": "terms",
       "heading": "Praktisk"
     },
     {
       "_type": "formSection",
+      "_key": "book",
       "kind": "pizza",
       "heading": "Book pizzavognen",
       "text": "Udfyld formularen, så vender Kristine tilbage inden for to hverdage. Det er en forespørgsel: I betaler ikke noget, før hun har bekræftet.",

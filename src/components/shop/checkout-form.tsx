@@ -1,14 +1,22 @@
 "use client";
 
 import { useActionState, useEffect, useState, useSyncExternalStore } from "react";
-import { CaretDown } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { OrderSummary } from "@/components/shop/order-summary";
+import { controlAria } from "@/components/forms/form-state";
+import { Radio } from "@/components/forms/form-status";
 import { createCheckoutSession } from "@/app/bageri/kasse/actions";
 import { cartSubtotal, openCart, removeManyFromCart, useCart } from "@/lib/cart";
 import { INITIAL_CHECKOUT_STATE, type Fulfilment } from "@/lib/cart-order";
-import { constraintHelper, filterDaysForItems, type DeliveryConfig, type PickupDay } from "@/lib/cart-pickup";
+import {
+  constraintHelper,
+  filterDaysForItems,
+  pickupHours,
+  pickupPlaceShort,
+  type DeliveryConfig,
+  type PickupDay,
+} from "@/lib/cart-pickup";
 import { formatPrice } from "@/lib/format";
 
 type Props = {
@@ -33,11 +41,9 @@ function useHydrated() {
   );
 }
 
-function describedBy(id: string, error: string | undefined, helper: string | undefined) {
-  if (error) return `${id}-error`;
-  if (helper) return `${id}-helper`;
-  return undefined;
-}
+const PHONE_HELPER = "Så vi kan ringe, hvis der er noget med din bestilling.";
+const EMAIL_HELPER = "Vi sender din kvittering hertil.";
+const NOTE_HELPER = "Skal brødet skæres? Andet vi skal vide?";
 
 export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickupPlace, pickupWindow, phone, phoneHref }: Props) {
   const [state, formAction, pending] = useActionState(createCheckoutSession, INITIAL_CHECKOUT_STATE);
@@ -66,9 +72,9 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
   const deliveryOere = isDelivery ? (subtotal >= delivery.freeAboveOere ? 0 : delivery.feeOere) : null;
   const belowMin = minOrderOere > 0 && subtotal < minOrderOere;
 
+  const place = pickupPlaceShort(pickupPlace);
   const constraint = constraintHelper(items);
-  const hours = pickupWindow.replace(" til ", " og ");
-  const dayHelper = isDelivery ? delivery.note : (constraint ?? `Hent i ${pickupPlace}, mellem kl. ${hours}.`);
+  const dayHelper = isDelivery ? delivery.note : (constraint ?? `Hent i ${pickupPlace}, mellem kl. ${pickupHours(pickupWindow)}.`);
   const noDayError =
     options.length === 0
       ? isDelivery
@@ -82,8 +88,8 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
   if (hydrated && items.length === 0) {
     return (
       <div className="max-w-[60ch]">
-        <p className="text-ink">Din kurv er tom.</p>
-        <p className="mt-1 text-ink-2">Læg noget i kurven i bageriet, så kan du betale her.</p>
+        <p className="text-lead text-ink">Din kurv er tom.</p>
+        <p className="mt-2 text-ink-2">Læg noget i kurven i bageriet, så kan du betale her.</p>
         <div className="mt-6">
           <Button href="/bageri">Tilbage til bageriet</Button>
         </div>
@@ -103,40 +109,36 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
         </div>
 
         {delivery.enabled ? (
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 text-sm font-medium text-ink">Afhentning eller levering</legend>
-            <label htmlFor="fulfilment-pickup" className="flex min-h-11 cursor-pointer items-start gap-3 py-1 text-[0.95rem] text-ink">
-              <input
-                id="fulfilment-pickup"
-                type="radio"
-                name="fulfilment"
-                value="pickup"
-                checked={fulfilment === "pickup"}
-                onChange={() => setFulfilment("pickup")}
-                className="mt-1 size-4 shrink-0 accent-rust"
-              />
-              <span>
-                Jeg henter selv i Hønsehuset
-                <span className="block text-sm text-muted">Gratis</span>
-              </span>
-            </label>
-            <label htmlFor="fulfilment-delivery" className="flex min-h-11 cursor-pointer items-start gap-3 py-1 text-[0.95rem] text-ink">
-              <input
-                id="fulfilment-delivery"
-                type="radio"
-                name="fulfilment"
-                value="delivery"
-                checked={fulfilment === "delivery"}
-                onChange={() => setFulfilment("delivery")}
-                className="mt-1 size-4 shrink-0 accent-rust"
-              />
-              <span>
-                Levering
-                <span className="block text-sm text-muted">
-                  {formatPrice(delivery.feeOere)}, gratis over {formatPrice(delivery.freeAboveOere)}. {delivery.note}
-                </span>
-              </span>
-            </label>
+          <fieldset className="flex min-w-0 flex-col gap-1">
+            <legend className="float-left w-full pb-2 text-sm font-medium text-ink">Afhentning eller levering</legend>
+            <Radio
+              id="fulfilment-pickup"
+              name="fulfilment"
+              value="pickup"
+              checked={fulfilment === "pickup"}
+              onChange={() => setFulfilment("pickup")}
+              label={
+                <>
+                  Jeg henter selv i {place}
+                  <span className="block text-sm text-muted">Gratis</span>
+                </>
+              }
+            />
+            <Radio
+              id="fulfilment-delivery"
+              name="fulfilment"
+              value="delivery"
+              checked={fulfilment === "delivery"}
+              onChange={() => setFulfilment("delivery")}
+              label={
+                <>
+                  Levering
+                  <span className="block text-sm text-muted">
+                    {formatPrice(delivery.feeOere)}, gratis over {formatPrice(delivery.freeAboveOere)}. {delivery.note}
+                  </span>
+                </>
+              }
+            />
             {state.errors?.fulfilment ? (
               <p role="alert" className="text-sm text-danger">
                 {state.errors.fulfilment}
@@ -148,30 +150,25 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
         )}
 
         <Field label={isDelivery ? "Leveringsdag" : "Afhentningsdag"} htmlFor="pickupDate" required helper={dayHelper} error={dayError}>
-          <div className="relative">
-            <Select
-              id="pickupDate"
-              name="pickupDate"
-              value={selectedDate}
-              onChange={(e) => setPickupDate(e.target.value)}
-              required
-              disabled={options.length === 0}
-              aria-invalid={dayError ? true : undefined}
-              aria-describedby={describedBy("pickupDate", dayError, dayHelper)}
-              className="h-11"
-            >
-              {options.length === 0 ? (
-                <option value="">Ingen dage at vælge</option>
-              ) : (
-                options.map((d) => (
-                  <option key={d.iso} value={d.iso}>
-                    {d.label}
-                  </option>
-                ))
-              )}
-            </Select>
-            <CaretDown size={18} aria-hidden="true" className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted" />
-          </div>
+          <Select
+            id="pickupDate"
+            name="pickupDate"
+            value={selectedDate}
+            onChange={(e) => setPickupDate(e.target.value)}
+            required
+            disabled={options.length === 0}
+            {...controlAria("pickupDate", dayError, dayHelper)}
+          >
+            {options.length === 0 ? (
+              <option value="">Ingen dage at vælge</option>
+            ) : (
+              options.map((d) => (
+                <option key={d.iso} value={d.iso}>
+                  {d.label}
+                </option>
+              ))
+            )}
+          </Select>
         </Field>
 
         <Field label="Navn" htmlFor="name" required error={state.errors?.name}>
@@ -183,19 +180,11 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            aria-invalid={state.errors?.name ? true : undefined}
-            aria-describedby={describedBy("name", state.errors?.name, undefined)}
-            className="h-11"
+            {...controlAria("name", state.errors?.name)}
           />
         </Field>
 
-        <Field
-          label="Telefon"
-          htmlFor="phone"
-          required
-          helper="Så vi kan ringe, hvis der er noget med din bestilling."
-          error={state.errors?.phone}
-        >
+        <Field label="Telefon" htmlFor="phone" required helper={PHONE_HELPER} error={state.errors?.phone}>
           <Input
             id="phone"
             name="phone"
@@ -205,13 +194,12 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
             required
             value={phoneValue}
             onChange={(e) => setPhoneValue(e.target.value)}
-            aria-invalid={state.errors?.phone ? true : undefined}
-            aria-describedby={describedBy("phone", state.errors?.phone, "Så vi kan ringe")}
-            className="tnum h-11"
+            className="tnum"
+            {...controlAria("phone", state.errors?.phone, PHONE_HELPER)}
           />
         </Field>
 
-        <Field label="E-mail" htmlFor="email" required helper="Vi sender din kvittering hertil." error={state.errors?.email}>
+        <Field label="E-mail" htmlFor="email" required helper={EMAIL_HELPER} error={state.errors?.email}>
           <Input
             id="email"
             name="email"
@@ -221,13 +209,11 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            aria-invalid={state.errors?.email ? true : undefined}
-            aria-describedby={describedBy("email", state.errors?.email, "Vi sender")}
-            className="h-11"
+            {...controlAria("email", state.errors?.email, EMAIL_HELPER)}
           />
         </Field>
 
-        <Field label="Besked til os" htmlFor="note" helper="Skal brødet skæres? Andet vi skal vide?" error={state.errors?.note}>
+        <Field label="Besked til os" htmlFor="note" helper={NOTE_HELPER} error={state.errors?.note}>
           <Textarea
             id="note"
             name="note"
@@ -235,14 +221,12 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
             maxLength={500}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            aria-invalid={state.errors?.note ? true : undefined}
-            aria-describedby={describedBy("note", state.errors?.note, "Skal brødet skæres")}
-            className="min-h-24"
+            {...controlAria("note", state.errors?.note, NOTE_HELPER)}
           />
         </Field>
 
         {state.message ? (
-          <p role="alert" className="rounded-md bg-danger-tint px-4 py-3 text-[0.95rem] text-danger">
+          <p role="alert" className="rounded-md bg-danger-tint px-4 py-3 text-danger">
             {state.message}
           </p>
         ) : null}
@@ -250,19 +234,19 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
 
         {stripeReady ? (
           <div>
-            <Button type="submit" size="lg" disabled={!canSubmit} className="w-full sm:w-auto">
+            <Button type="submit" size="lg" disabled={!canSubmit} className="w-full sm:w-auto sm:min-w-56">
               {pending ? "Sender dig til betaling..." : "Gå til betaling"}
             </Button>
             <p className="mt-3 text-sm text-muted">Du betaler med kort eller MobilePay på næste side.</p>
           </div>
         ) : (
-          <div className="rounded-md bg-paper-2 px-4 py-3 text-[0.95rem] text-ink-2">
+          <p className="rounded-md bg-rust-tint px-4 py-3 text-ink">
             Betaling er ikke sat op endnu. Ring eller skriv til os, så tager vi bestillingen manuelt. Telefon{" "}
-            <a href={`tel:${phoneHref}`} className="tnum text-rust underline underline-offset-[3px] hover:text-rust-deep">
+            <a href={`tel:${phoneHref}`} className="tnum font-medium text-rust underline underline-offset-[3px] hover:text-rust-deep">
               {phone}
             </a>
             .
-          </div>
+          </p>
         )}
       </form>
 
@@ -271,7 +255,7 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
           {hydrated ? (
             <OrderSummary items={items} deliveryOere={deliveryOere} />
           ) : (
-            <div className="rounded-md border border-line p-5">
+            <div className="rounded-md border border-line p-5 sm:p-6">
               <p className="text-sm text-muted">Henter din kurv...</p>
             </div>
           )}

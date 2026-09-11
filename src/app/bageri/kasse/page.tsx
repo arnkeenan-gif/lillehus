@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { CheckoutForm } from "@/components/shop/checkout-form";
-import { getPickupDays } from "@/lib/cart-pickup";
-import { shop } from "@/lib/products";
+import { getSiteSettings } from "@/lib/cms";
+import { getPickupDays, pickupPlaceShort } from "@/lib/cart-pickup";
+import { getShop } from "@/lib/products";
 import { isStripeConfigured } from "@/lib/stripe";
-import { site } from "@/lib/site";
 
 // The list of days depends on the clock, so this page is never prerendered.
 export const dynamic = "force-dynamic";
@@ -15,19 +15,21 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
+  const [shop, settings] = await Promise.all([getShop(), getSiteSettings()]);
   const days = getPickupDays(new Date(), shop);
 
   return (
     <Section>
       <Container>
-        <div className="max-w-[60ch]">
+        <div className="max-w-[40rem]">
           <h1 className="text-title font-semibold">Din bestilling</h1>
-          <p className="mt-4 text-lg text-ink-2">
-            Vælg en dag, skriv hvem du er, og betal med kort eller MobilePay. Så står brødet klar i Hønsehuset.
+          <p className="mt-5 text-lead text-ink">
+            Vælg en dag, skriv hvem du er, og betal med kort eller MobilePay. Så står brødet klar i{" "}
+            {pickupPlaceShort(shop.pickupPlace)}.
           </p>
         </div>
-        <div className="mt-10">
+        <div className="mt-12">
           <CheckoutForm
             days={days}
             stripeReady={isStripeConfigured()}
@@ -35,8 +37,8 @@ export default function CheckoutPage() {
             minOrderOere={shop.minOrderOere}
             pickupPlace={shop.pickupPlace}
             pickupWindow={shop.pickupWindow}
-            phone={site.phone}
-            phoneHref={site.phoneHref}
+            phone={settings.phone}
+            phoneHref={settings.phoneHref}
           />
         </div>
       </Container>

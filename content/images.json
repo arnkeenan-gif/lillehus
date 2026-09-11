@@ -309,13 +309,13 @@
       "note": "Kristines vogn på torvet. Prisliste for brød og kaffe på tavlerne."
     },
     "/images/instagram/ig-2026-07-25-foto.jpg": {
-      "alt": "Fra Instagram",
+      "alt": "Den grønne vogn med tavlerne under blommetræet",
       "w": 480,
       "h": 640,
       "use": [
         "instagram-strip"
       ],
-      "subject": "opslag"
+      "subject": "torvedag"
     },
     "/images/instagram/ig-2026-07-21-reel-trailer.jpg": {
       "alt": "Den færdige grønne vogn foran laden",
@@ -355,22 +355,22 @@
       "subject": "torvedag"
     },
     "/images/instagram/ig-2026-08-31-reel.jpg": {
-      "alt": "Fra Instagram",
+      "alt": "Familien klatrer mellem to mosgroede klippeblokke",
       "w": 361,
       "h": 640,
       "use": [
         "instagram-strip"
       ],
-      "subject": "opslag"
+      "subject": "familie"
     },
     "/images/instagram/ig-2024-05-05-reel-pinned.jpg": {
-      "alt": "Fastgjort video på Instagram",
+      "alt": "Balloner ved pizzavognen under en blomstrende magnolie",
       "w": 360,
       "h": 640,
       "use": [
         "instagram-strip"
       ],
-      "subject": "opslag"
+      "subject": "pizza"
     },
     "/images/logo.png": {
       "alt": "Det lille hus på landet, håndtegnet logo med to huse i en krans",

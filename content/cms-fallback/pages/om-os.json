@@ -13,17 +13,14 @@
   "sections": [
     {
       "_type": "heroSection",
+      "_key": "top",
       "heading": "Historien bag Det lille hus på landet",
-      "text": "Kristine, Nicolas og børnene på en gård ved Herlufmagle. Siden 2009."
-    },
-    {
-      "_type": "photoBandSection",
-      "image": "/images/family-on-bench-brick-wall.jpg",
-      "caption": "På bænken foran den røde mur på gården.",
-      "ratio": "3/2"
+      "text": "Kristine, Nicolas og børnene på en gård ved Herlufmagle. Siden 2009.",
+      "image": "/images/family-on-bench-brick-wall.jpg"
     },
     {
       "_type": "richTextSection",
+      "_key": "historien",
       "body": [
         "Det lille hus på landet startede i 2009. Det er en historie om personlige tilvalg og fravalg: et liv med fokus på familie, økologi og bæredygtighed, og lysten til at lave god mad til dem, der har lyst til at smage.",
         "Vi bor på gården på Torpevej uden for Herlufmagle: Kristine, Nicolas og børnene. Her er en lade med gamle bjælker, et hønsehus, en køkkenhave og det bageri, hvor brødet bliver til. Børnene er med i det meste. Vi har valgt et liv uden skole, hvor hverdagen foregår herhjemme.",
@@ -39,31 +36,26 @@
     },
     {
       "_type": "gallerySection",
+      "_key": "gaarden",
+      "columns": 4,
       "images": [
-        { "image": "/images/barn-interior-wooden-beams.jpg", "caption": "Laden på gården." },
-        { "image": "/images/family-at-table-in-garden.jpg", "caption": "Efterår i haven." },
-        { "image": "/images/garden-vegetable-harvest.jpg", "caption": "Høst fra køkkenhaven." }
-      ],
-      "columns": 3
+        { "image": "/images/barn-interior-wooden-beams.jpg", "caption": "Laden, haven, køkkenhaven og køkkenet på gården." },
+        { "image": "/images/family-at-table-in-garden.jpg" },
+        { "image": "/images/garden-vegetable-harvest.jpg" },
+        { "image": "/images/rhubarb-leaves-harvest.jpg" },
+        { "image": "/images/instagram/ig-2026-09-02-foto.jpg" }
+      ]
     },
     {
       "_type": "richTextSection",
+      "_key": "vaerdier",
       "heading": "Det går vi op i",
       "body": [
         "**Familien.** Vi arbejder hjemme, og børnene er med. Derfor holder vi arrangementer, når det passer ind, og ikke efter en fast kalender.",
         "**Økologi.** Vi bruger økologiske råvarer og laver tingene selv, fra surdej til granola. Det tager længere tid, og det smager man.",
         "**Bæredygtighed.** Vi dyrker en del af maden selv, bruger det, vi har, og holder tingene i en størrelse, vi selv kan overskue.",
-        "**Ro.** Slow living kalder nogen det. Vi kalder det at have tid til at gøre tingene ordentligt."
-      ],
-      "imagePosition": "right",
-      "tone": "paper"
-    },
-    {
-      "_type": "richTextSection",
-      "heading": "Kontrol fra Fødevarestyrelsen",
-      "body": [
-        "Fødevarestyrelsen fører tilsyn med bageriet, som med alle andre der laver mad til salg. Den seneste kontrolrapport kan du læse på findsmiley.dk.",
-        "[Se kontrolrapporten](https://www.findsmiley.dk/1221266)"
+        "**Ro.** Slow living kalder nogen det. Vi kalder det at have tid til at gøre tingene ordentligt.",
+        "Fødevarestyrelsen fører tilsyn med bageriet, som med alle andre der laver mad til salg. Den seneste kontrolrapport kan du læse på [findsmiley.dk](https://www.findsmiley.dk/1221266)."
       ],
       "imagePosition": "right",
       "tone": "paper"

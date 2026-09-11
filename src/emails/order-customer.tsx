@@ -1,12 +1,12 @@
 import { Column, Hr, Row, Section, Text } from "@react-email/components";
 import { EmailLayout, EmailRow, emailStyles } from "@/emails/_layout";
 import type { OrderDetails } from "@/lib/cart-order";
-import { pickupDayLabel } from "@/lib/cart-pickup";
+import { pickupDayLabel, pickupHours, type ShopConfig } from "@/lib/cart-pickup";
 import { formatPrice } from "@/lib/format";
-import { shop } from "@/lib/products";
 import { site } from "@/lib/site";
 
-/* The customer's receipt: what, when and where, in that order. */
+/* The customer's receipt: what, when and where, in that order. The pickup
+   facts come from getShop() in the webhook, so they match the site. */
 
 const line = {
   row: { borderBottom: "1px solid #d9d7d0" },
@@ -23,14 +23,16 @@ const line = {
   },
 };
 
-function whenAndWhere(order: OrderDetails): { day: string; place: string } {
+type Props = { order: OrderDetails; shop: ShopConfig };
+
+function whenAndWhere(order: OrderDetails, shop: ShopConfig): { day: string; place: string } {
   const day = order.pickupDate ? pickupDayLabel(order.pickupDate) : "den aftalte dag";
   const place = order.fulfilment === "delivery" ? shop.delivery.note : `${shop.pickupPlace}, kl. ${shop.pickupWindow}`;
   return { day, place };
 }
 
-export function OrderCustomerEmail({ order }: { order: OrderDetails }) {
-  const { day, place } = whenAndWhere(order);
+export function OrderCustomerEmail({ order, shop }: Props) {
+  const { day, place } = whenAndWhere(order, shop);
   const isDelivery = order.fulfilment === "delivery";
 
   return (
@@ -39,7 +41,7 @@ export function OrderCustomerEmail({ order }: { order: OrderDetails }) {
         Vi har modtaget din betaling.{" "}
         {isDelivery
           ? `Vi leverer ${day}. ${shop.delivery.note}`
-          : `Du henter dine varer ${day} i ${shop.pickupPlace}, mellem kl. ${shop.pickupWindow.replace(" til ", " og ")}.`}
+          : `Du henter dine varer ${day} i ${shop.pickupPlace}, mellem kl. ${pickupHours(shop.pickupWindow)}.`}
       </Text>
       <Section style={{ marginTop: 16 }}>
         {order.lines.map((l, i) => (
@@ -72,14 +74,14 @@ export function OrderCustomerEmail({ order }: { order: OrderDetails }) {
   );
 }
 
-export function orderCustomerText(order: OrderDetails): string {
-  const { day, place } = whenAndWhere(order);
+export function orderCustomerText(order: OrderDetails, shop: ShopConfig): string {
+  const { day, place } = whenAndWhere(order, shop);
   const isDelivery = order.fulfilment === "delivery";
   const out: string[] = ["Tak for din bestilling", ""];
   out.push(
     isDelivery
       ? `Vi har modtaget din betaling. Vi leverer ${day}. ${shop.delivery.note}`
-      : `Vi har modtaget din betaling. Du henter dine varer ${day} i ${shop.pickupPlace}, mellem kl. ${shop.pickupWindow.replace(" til ", " og ")}.`,
+      : `Vi har modtaget din betaling. Du henter dine varer ${day} i ${shop.pickupPlace}, mellem kl. ${pickupHours(shop.pickupWindow)}.`,
   );
   out.push("");
   for (const l of order.lines) out.push(`${l.qty} x ${l.name}   ${formatPrice(l.totalOere)}`);

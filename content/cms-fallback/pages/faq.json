@@ -13,15 +13,20 @@
   "sections": [
     {
       "_type": "heroSection",
+      "_key": "top",
       "heading": "Spørgsmål og svar",
       "text": "Det, vi oftest bliver spurgt om ved fryseren og på torvet. Mangler dit spørgsmål, så skriv til os."
     },
     {
       "_type": "faqSection",
+      "_key": "svar",
       "mode": "all"
     },
     {
       "_type": "ctaSection",
+      "_key": "skriv",
+      "heading": "Mangler dit spørgsmål?",
+      "text": "Skriv, så svarer Kristine inden for to hverdage.",
       "link": { "label": "Skriv til os", "href": "/kontakt" },
       "tone": "paper"
     }

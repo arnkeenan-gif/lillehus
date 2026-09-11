@@ -1,4 +1,5 @@
 {
+  "_readme": "Åbningstider og adresser kommer fra content/site.json (i Studio: Åbningstider og steder); afhentning fra content/shop.json. Ret tallene der, ikke her.",
   "title": "Find os",
   "slug": "find-os",
   "seo": {
@@ -13,27 +14,44 @@
   "sections": [
     {
       "_type": "heroSection",
-      "heading": "Find os",
-      "text": "Bageriet ligger på gården på Torpevej ved Herlufmagle. Onsdag og lørdag holder vi på torvet i Næstved."
+      "_key": "top",
+      "heading": "Her får du fat i brødet",
+      "text": "Bageriet og fryseren ligger på gården på Torpevej ved Herlufmagle. Onsdag og lørdag holder vi på torvet i Næstved."
     },
     {
       "_type": "hoursSection",
+      "_key": "steder",
       "only": "alle"
     },
     {
+      "_type": "richTextSection",
+      "_key": "vognen",
+      "body": "Vi holder i den grønne vogn på Axeltorv, foran Løveapoteket. Ud over brød har vi kaffe, te og boller med smør, og vi bliver til vi er udsolgt.",
+      "image": "/images/instagram/ig-2026-08-04-tekst.jpg",
+      "imagePosition": "right",
+      "tone": "paper"
+    },
+    {
       "_type": "pickupInfoSection",
+      "_key": "afhentning",
       "heading": "Sådan henter du bestilt brød",
       "detail": "kort",
-      "link": { "label": "Læs mere om afhentning og levering", "href": "/levering" }
+      "link": {
+        "label": "Læs mere om afhentning og levering",
+        "href": "/levering"
+      }
     },
     {
       "_type": "eventsSection",
-      "heading": "Kalender",
-      "text": "Sådan ser en almindelig uge ud.",
-      "showWeek": true,
-      "emptyText": "Ingen faste datoer lige nu. Åbent hus på gården annoncerer vi på Facebook og Instagram, når vi kender dagen.",
+      "_key": "kalender",
+      "text": "Datoer for åbent hus og andet, der sker på gården.",
+      "showWeek": false,
+      "emptyText": "Ingen faste datoer lige nu. Åbent hus på gården annoncerer vi, når vi kender dagen.",
       "limit": 10,
-      "link": { "label": "Se alle arrangementer", "href": "/arrangementer" }
+      "link": {
+        "label": "Se alle arrangementer",
+        "href": "/arrangementer"
+      }
     }
   ]
 }

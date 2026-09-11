@@ -6,11 +6,11 @@ import { Section } from "@/components/ui/section";
 import { ClearCart } from "@/components/shop/clear-cart";
 import { PrintButton } from "@/components/shop/print-button";
 import { cn } from "@/lib/cn";
+import { getSiteSettings, type ShopSettings, type SiteSettings } from "@/lib/cms";
 import { orderFromSession, type OrderDetails } from "@/lib/cart-order";
-import { noonUtc } from "@/lib/cart-pickup";
+import { noonUtc, pickupDaysLabel, pickupHours } from "@/lib/cart-pickup";
 import { formatDateLong, formatPrice } from "@/lib/format";
-import { shop } from "@/lib/products";
-import { site } from "@/lib/site";
+import { getShop } from "@/lib/products";
 import { getStripe } from "@/lib/stripe";
 
 export const metadata: Metadata = {
@@ -24,12 +24,14 @@ export default async function ThanksPage({ searchParams }: Props) {
   const params = await searchParams;
   const sessionId = typeof params.session_id === "string" ? params.session_id : "";
   const stripe = getStripe();
+  const [shop, settings] = await Promise.all([getShop(), getSiteSettings()]);
 
   if (!stripe || !sessionId) {
     return (
       <Calm
         title="Vi kan ikke finde bestillingen"
         text="Linket mangler et ordrenummer, eller betaling er ikke sat op endnu. Har du betalt, så ring til os, så finder vi den."
+        phone={settings.phone}
       />
     );
   }
@@ -46,6 +48,7 @@ export default async function ThanksPage({ searchParams }: Props) {
       <Calm
         title="Vi kan ikke finde bestillingen"
         text="Ordren findes ikke, eller linket er gammelt. Har du betalt, så ring til os, så finder vi den."
+        phone={settings.phone}
       />
     );
   }
@@ -56,23 +59,26 @@ export default async function ThanksPage({ searchParams }: Props) {
       <Calm
         title="Betalingen er ikke gået igennem endnu"
         text="Vi har ikke fået besked om betalingen. Gå tilbage til kassen og prøv igen, eller ring til os."
+        phone={settings.phone}
         backHref="/bageri/kasse"
         backLabel="Tilbage til kassen"
       />
     );
   }
 
-  return <Receipt order={orderFromSession(session, session.line_items?.data ?? [])} />;
+  return <Receipt order={orderFromSession(session, session.line_items?.data ?? [])} shop={shop} settings={settings} />;
 }
 
 function Calm({
   title,
   text,
+  phone,
   backHref = "/bageri",
   backLabel = "Tilbage til bageriet",
 }: {
   title: string;
   text: string;
+  phone: string;
   backHref?: string;
   backLabel?: string;
 }) {
@@ -80,8 +86,9 @@ function Calm({
     <Section>
       <Container size="narrow">
         <h1 className="text-title font-semibold">{title}</h1>
-        <p className="mt-4 max-w-[55ch] text-ink-2">
-          {text} Telefon <span className="tnum">{site.phone}</span>.
+        <p className="mt-5 max-w-[55ch] text-lead text-ink">{text}</p>
+        <p className="mt-3 text-ink-2">
+          Telefon <span className="tnum">{phone}</span>.
         </p>
         <div className="mt-8">
           <Button href={backHref}>{backLabel}</Button>
@@ -101,36 +108,37 @@ function Fact({ label, value, tnum = false }: { label: string; value: string; tn
 }
 
 /** The confirmation. Prints on one A4 page: header, footer and buttons are hidden by no-print. */
-function Receipt({ order }: { order: OrderDetails }) {
+function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSettings; settings: SiteSettings }) {
   const day = order.pickupDate ? formatDateLong(noonUtc(order.pickupDate)) : "";
-  const hours = shop.pickupWindow.replace(" til ", " og ");
+  const hours = pickupHours(shop.pickupWindow);
   const isDelivery = order.fulfilment === "delivery";
-  const address = `${site.address.street}, ${site.address.postalCode} ${site.address.city}`;
 
   return (
     <Section className="print:py-0">
       <Container size="narrow" className="print:max-w-none print:px-0">
         <ClearCart />
         <h1 className="text-title font-semibold print:text-2xl">Tak for din bestilling</h1>
-        <p className="mt-4 max-w-[60ch] text-ink-2 print:text-[#000]">
-          {order.email ? `Vi har sendt en kvittering til ${order.email}. ` : ""}
+        <p className="mt-5 max-w-[60ch] text-lead text-ink print:mt-3 print:text-base print:text-[#000]">
           {isDelivery
             ? `Vi leverer ${day || "den aftalte dag"}.`
-            : `Du henter i Hønsehuset, ${site.address.street}, ${day || "den valgte dag"} mellem kl. ${hours}.`}
+            : `Du henter i ${shop.pickupPlace}, ${day || "den valgte dag"} mellem kl. ${hours}.`}
         </p>
+        {order.email ? (
+          <p className="mt-3 max-w-[60ch] text-ink-2 print:text-[#000]">Vi har sendt en kvittering til {order.email}.</p>
+        ) : null}
 
-        <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 text-[0.95rem] sm:grid-cols-4 print:grid-cols-4">
+        <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 text-[0.95rem] sm:grid-cols-4 print:mt-6 print:grid-cols-4">
           <Fact label="Ordrenummer" value={order.orderNo} tnum />
           <Fact label={isDelivery ? "Levering" : "Afhentning"} value={day || "Ukendt dag"} />
           <Fact label="Navn" value={order.customerName || "Ikke oplyst"} />
           <Fact label="Telefon" value={order.phone || "Ikke oplyst"} tnum />
         </dl>
 
-        <table className="mt-8 w-full text-[0.95rem]">
+        <table className="mt-10 w-full text-[0.95rem] print:mt-6">
           <caption className="sr-only">Dine varer</caption>
           <thead>
             <tr className="border-b border-line text-left text-sm text-muted print:border-[#000] print:text-[#000]">
-              <th scope="col" className="w-16 py-2 pr-3 font-medium">
+              <th scope="col" className="w-14 py-2 pr-3 font-medium">
                 Antal
               </th>
               <th scope="col" className="py-2 pr-3 font-medium">
@@ -141,19 +149,19 @@ function Receipt({ order }: { order: OrderDetails }) {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-line print:divide-[#000]">
+          <tbody className="print:divide-y print:divide-[#000]">
             {order.lines.map((line, i) => (
               <tr key={i}>
-                <td className="tnum py-3 pr-3 align-top text-lg font-semibold text-ink print:text-[#000]">{line.qty}</td>
-                <td className="py-3 pr-3 align-top text-ink print:text-[#000]">{line.name}</td>
-                <td className="tnum py-3 text-right align-top text-ink print:text-[#000]">{formatPrice(line.totalOere)}</td>
+                <td className="tnum py-2.5 pr-3 align-top text-lg font-semibold text-ink print:text-[#000]">{line.qty}</td>
+                <td className="py-2.5 pr-3 align-top text-ink print:text-[#000]">{line.name}</td>
+                <td className="tnum py-2.5 text-right align-top text-ink print:text-[#000]">{formatPrice(line.totalOere)}</td>
               </tr>
             ))}
             {order.deliveryOere !== null ? (
               <tr>
-                <td className="py-3 pr-3" />
-                <td className="py-3 pr-3 text-ink print:text-[#000]">Levering</td>
-                <td className="tnum py-3 text-right text-ink print:text-[#000]">{formatPrice(order.deliveryOere)}</td>
+                <td className="py-2.5 pr-3" />
+                <td className="py-2.5 pr-3 text-ink print:text-[#000]">Levering</td>
+                <td className="tnum py-2.5 text-right text-ink print:text-[#000]">{formatPrice(order.deliveryOere)}</td>
               </tr>
             ) : null}
           </tbody>
@@ -176,8 +184,8 @@ function Receipt({ order }: { order: OrderDetails }) {
         <p className="mt-8 max-w-[60ch] text-ink-2 print:text-[#000]">
           {isDelivery
             ? shop.delivery.note
-            : `Bestilte varer afhentes i Hønsehuset på ${address}, alle hverdage kl. ${shop.pickupWindow}.`}{" "}
-          Spørgsmål? Ring på <span className="tnum">{site.phone}</span>.
+            : `Bestilte varer hentes i ${shop.pickupPlace}, ${pickupDaysLabel(shop.pickupDays)} kl. ${shop.pickupWindow}.`}{" "}
+          Spørgsmål? Ring på <span className="tnum">{settings.phone}</span>.
         </p>
 
         <div className="no-print mt-10 flex flex-wrap gap-3">

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { ProductTile } from "@/components/shop/product-tile";
-import { getShopProducts, groupByCategory, shop } from "@/lib/products";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
+import { cutoffLabel, pickupDaysLabel, pickupHours } from "@/lib/cart-pickup";
+import { getShop, getShopProducts, groupByCategory } from "@/lib/products";
 
 export const revalidate = 300;
 
@@ -14,27 +15,24 @@ export const metadata: Metadata = {
 };
 
 export default async function BakeryPage() {
-  const products = await getShopProducts();
+  const [products, shop, settings] = await Promise.all([getShopProducts(), getShop(), getSiteSettings()]);
   const groups = groupByCategory(products);
-  const hours = shop.pickupWindow.replace(" til ", " og ");
+  const lead = `Bestil ${cutoffLabel(shop)}, og hent ${pickupDaysLabel(shop.pickupDays)} mellem kl. ${pickupHours(shop.pickupWindow)} i ${shop.pickupPlace}.`;
 
   return (
     <Section>
-      <Container>
-        <div className="max-w-[65ch]">
+      <Container size="wide">
+        <div className="max-w-[40rem]">
           <h1 className="text-title font-semibold">Bestil brød til hverdagen</h1>
-          <p className="mt-4 text-lg text-ink-2">
-            Vælg dit brød, vælg en dag at hente det, og betal med kort eller MobilePay. Så står det klar i Hønsehuset på{" "}
-            {site.address.street} mellem kl. {hours}.
-          </p>
-          {shop.notice ? <p className="mt-5 rounded-md bg-rust-tint px-4 py-3 text-[0.95rem] text-ink">{shop.notice}</p> : null}
+          <p className="mt-5 text-lead text-ink">{lead}</p>
+          {shop.notice ? <p className="mt-6 rounded-md bg-rust-tint px-4 py-3 text-ink">{shop.notice}</p> : null}
         </div>
 
         {groups.length === 0 ? (
-          <p className="mt-12 text-ink-2">
+          <p className="mt-14 max-w-[60ch] text-ink-2">
             Der er ikke noget at bestille lige nu. Følg med på{" "}
             <a
-              href={site.social.facebook}
+              href={settings.social.facebook}
               target="_blank"
               rel="noreferrer"
               className="text-rust underline underline-offset-[3px] hover:text-rust-deep"
@@ -45,11 +43,11 @@ export default async function BakeryPage() {
           </p>
         ) : (
           groups.map((group) => (
-            <section key={group.category} aria-labelledby={`kategori-${group.slug}`} className="mt-12 sm:mt-16">
-              <h2 id={`kategori-${group.slug}`} className="text-xl font-semibold text-ink">
+            <section key={group.category} aria-labelledby={`kategori-${group.slug}`} className="mt-14 sm:mt-20">
+              <h2 id={`kategori-${group.slug}`} className="text-2xl font-semibold text-ink">
                 {group.label}
               </h2>
-              <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+              <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 xl:grid-cols-4">
                 {group.products.map((product) => (
                   <ProductTile key={product.id} product={product} />
                 ))}

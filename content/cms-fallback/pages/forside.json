@@ -1,5 +1,5 @@
 {
-  "_readme": "Forsiden som afsnit. Bruges af siden, indtil Sanity er sat op, og lægges ind i Sanity af scripts/seed-sanity.ts. Billeder er stier i public/images; alt-tekster kommer fra content/images.json. Tekst med **fed** og [link](/adresse) bliver til rigtig tekst.",
+  "_readme": "Forsiden som afsnit. Bruges af siden, indtil Sanity er sat op, og lægges ind i Sanity af scripts/seed-sanity.ts. Billeder er stier i public/images; alt-tekster kommer fra content/images.json. Tekst med **fed** og [link](/adresse) bliver til rigtig tekst. Prislisten er Kristines egen tavle: ret navne, priser og noter her eller i Studio.",
   "title": "Forside",
   "slug": "forside",
   "seo": {
@@ -14,55 +14,147 @@
   "sections": [
     {
       "_type": "heroSection",
+      "_key": "top",
       "heading": "Brød fra gården ved Herlufmagle",
       "text": "Vi bager surdejsbrød, rugbrød og kanelsnegle på gården og sælger dem på Torvedag i Næstved onsdag og lørdag.",
       "image": "/images/cinnamon-buns-and-bread-rolls.jpg",
-      "primaryLink": { "label": "Bestil brød", "href": "/bageri" },
-      "secondaryLink": { "label": "Book pizzavognen", "href": "/pizza" }
-    },
-    {
-      "_type": "hoursSection",
-      "heading": "Her får du fat i brødet",
-      "only": "alle",
-      "link": { "label": "Se kort, kalender og hvordan du henter", "href": "/find-os" }
-    },
-    {
-      "_type": "productStripSection",
-      "heading": "Det bager vi",
-      "text": "",
-      "mode": "auto",
-      "limit": 4,
-      "link": { "label": "Bestil brød", "href": "/bageri" }
-    },
-    {
-      "_type": "photoBandSection",
-      "image": "/images/pizza-rocket-parma-ham.jpg",
-      "caption": "Pizza med rucola og parmaskinke, lige ud af stenovnen.",
-      "ratio": "3/2"
-    },
-    {
-      "_type": "ctaSection",
-      "heading": "Pizzavognen kommer ud til jer",
-      "text": "Vi kommer med ovnen på traileren og bager pizza på surdej, til alle er mætte. Det passer til barnedåb, konfirmation, fødselsdag og firmafest, og I skal være mindst 40 voksne.",
-      "link": { "label": "Book pizzavognen", "href": "/pizza" },
-      "tone": "paper"
-    },
-    {
-      "_type": "eventsSection",
-      "heading": "Det sker",
-      "showWeek": false,
-      "emptyText": "Lige nu er der ingen datoer i kalenderen. Åbent hus i haven og huset holder vi på udvalgte dage, og vi skriver på Facebook og Instagram, når vi kender dagen.",
-      "limit": 3,
-      "link": { "label": "Se alle arrangementer", "href": "/arrangementer" }
-    },
-    {
-      "_type": "instagramSection",
-      "linkLabel": "Følg med på Instagram",
-      "limit": 6
+      "primaryLink": {
+        "label": "Bestil brød",
+        "href": "/bageri"
+      },
+      "secondaryLink": {
+        "label": "Book pizzavognen",
+        "href": "/pizza"
+      }
     },
     {
       "_type": "richTextSection",
-      "heading": "Familien på Torpevej",
+      "_key": "ugen",
+      "body": [
+        "Onsdag og lørdag holder vi på Torvedag i Næstved, **kl. 9 til 14** eller til vi er udsolgt.",
+        "Resten af ugen er fryseren på gården åben **alle hverdage kl. 7 til 18**, og har du bestilt, står brødet klar i Hønsehuset."
+      ],
+      "image": "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg",
+      "imagePosition": "right",
+      "tone": "paper"
+    },
+    {
+      "_type": "priceListSection",
+      "_key": "priser",
+      "heading": "Brød og priser",
+      "rows": [
+        {
+          "_key": "surdejsbroed",
+          "name": "Surdejsbrød",
+          "price": "55 kr.",
+          "note": "Hvede med lidt fuldkorn, hævet natten over og bagt i form."
+        },
+        {
+          "_key": "surdejsbroed-sesam",
+          "name": "Surdejsbrød med sesam",
+          "price": "55 kr.",
+          "note": "Rullet i ristede sesamfrø, før det kommer i ovnen."
+        },
+        {
+          "_key": "rugbroed",
+          "name": "Rugbrød med kerner",
+          "price": "55 kr.",
+          "note": "Solsikke, hørfrø og græskarkerner. Bages tirsdag og fredag."
+        },
+        {
+          "_key": "fladbroed",
+          "name": "Fladbrød med sortkommen",
+          "price": "35 kr.",
+          "note": "Tynde surdejsfladbrød med olivenolie og salt. Bages onsdag og fredag."
+        },
+        {
+          "_key": "boller",
+          "name": "Surdejsboller, 4 stk.",
+          "price": "50 kr."
+        },
+        {
+          "_key": "boller-sesam-havre",
+          "name": "Surdejsboller med sesam og havre, 4 stk.",
+          "price": "68 kr."
+        },
+        {
+          "_key": "kanelsnegl",
+          "name": "Kanelsnegl",
+          "price": "40 kr.",
+          "note": "Bagt samme morgen. Bedst mens den er lun."
+        },
+        {
+          "_key": "cookies",
+          "name": "Cookies med chokolade og flagesalt, 3 stk.",
+          "price": "45 kr."
+        },
+        {
+          "_key": "granola",
+          "name": "Granola, 400 g",
+          "price": "65 kr.",
+          "note": "Ristet havre med mandler, hasselnødder og lidt honning."
+        }
+      ],
+      "footnote": "Bestil på siden senest dagen før kl. 18, og hent i Hønsehuset tirsdag til fredag mellem kl. 7 og 18. I fryseren står priserne på skiltet."
+    },
+    {
+      "_type": "gallerySection",
+      "_key": "billeder",
+      "columns": 4,
+      "images": [
+        {
+          "image": "/images/scored-sourdough-loaf.jpg"
+        },
+        {
+          "image": "/images/oat-topped-bread-rolls.jpg"
+        },
+        {
+          "image": "/images/garden-vegetable-harvest.jpg"
+        },
+        {
+          "image": "/images/facebook/fb-rye-bread-loaves.jpg"
+        },
+        {
+          "image": "/images/wood-fired-pizza-oven.jpg"
+        }
+      ]
+    },
+    {
+      "_type": "ctaSection",
+      "_key": "pizzavogn",
+      "heading": "Pizzavognen kommer ud til jer",
+      "text": "Vi kommer med stenovnen på traileren og bager pizza på surdej, til alle er mætte. Til barnedåb, konfirmation, fødselsdag og firmafest, fra 40 voksne.",
+      "link": {
+        "label": "Book pizzavognen",
+        "href": "/pizza"
+      },
+      "tone": "tint",
+      "image": "/images/wood-fired-pizza-oven.jpg"
+    },
+    {
+      "_type": "hoursSection",
+      "_key": "steder",
+      "only": "alle",
+      "link": {
+        "label": "Se kort, kalender og hvordan du henter",
+        "href": "/find-os"
+      }
+    },
+    {
+      "_type": "eventsSection",
+      "_key": "det-sker",
+      "heading": "Det sker",
+      "showWeek": false,
+      "emptyText": "Lige nu er der ingen datoer i kalenderen. Åbent hus i haven og huset holder vi på udvalgte dage, og vi skriver, når vi kender dagen.",
+      "limit": 3,
+      "link": {
+        "label": "Se alle arrangementer",
+        "href": "/arrangementer"
+      }
+    },
+    {
+      "_type": "richTextSection",
+      "_key": "familien",
       "body": [
         "Vi er Kristine og Nicolas. Det lille hus på landet startede i 2009 og er i dag en gård ved Herlufmagle med bageri, køkkenhave og en stenovn på hjul.",
         "[Læs mere om os](/om-os)"

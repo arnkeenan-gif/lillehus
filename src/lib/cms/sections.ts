@@ -171,7 +171,7 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
     case "ctaSection": {
       const l = link(raw, "link");
       if (!l) return null;
-      return { _type: type, _key, heading, text, link: l, tone: oneOf(raw, "tone", ["paper", "tint"] as const, "paper") };
+      return { _type: type, _key, heading, text, link: l, image: ctx.image(raw.image), tone: oneOf(raw, "tone", ["paper", "tint"] as const, "paper") };
     }
     case "formSection": {
       const kind = raw.kind;

@@ -25,6 +25,8 @@ export interface CartItem {
   priceOere: number;
   qty: number;
   image?: string;
+  /** object-position for the small cart photo, from the CMS hotspot ("40% 60%"). */
+  imagePosition?: string;
   /** Weekdays the item can be baked. Empty = every pickup day. */
   days: Weekday[];
 }
@@ -66,6 +68,7 @@ function load(): CartItem[] {
       priceOere: i.priceOere,
       qty: clampQty(i.qty),
       image: typeof i.image === "string" && i.image ? i.image : undefined,
+      imagePosition: typeof i.imagePosition === "string" && i.imagePosition ? i.imagePosition : undefined,
       days: Array.isArray(i.days) ? (i.days as Weekday[]) : [],
     }));
     return items.length > 0 ? items : EMPTY;

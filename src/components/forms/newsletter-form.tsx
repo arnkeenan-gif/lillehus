@@ -8,9 +8,10 @@ import { INITIAL_FORM_STATE, fieldError, formValues, valueOf } from "@/component
 import { Honeypot } from "@/components/forms/form-status";
 
 /**
- * Compact sign-up rendered in the footer on every page: one email input and
- * a "Tilmeld" button, stacked on small screens. The action adds the address to
- * the Resend audience, or emails Kristine when no audience is configured.
+ * Compact sign-up rendered in the footer on every page: a labelled email
+ * input and a "Tilmeld" button, stacked on small screens. The action adds
+ * the address to the Resend audience, or emails Kristine when no audience is
+ * configured.
  */
 export function NewsletterForm() {
   const [state, formAction, pending] = useActionState(subscribeNewsletter, INITIAL_FORM_STATE);
@@ -30,10 +31,10 @@ export function NewsletterForm() {
 
   return (
     <form action={formAction} noValidate className="relative flex flex-col gap-2">
+      <label htmlFor={inputId} className="text-sm font-medium text-ink">
+        Din e-mail
+      </label>
       <div className="flex flex-col gap-3 sm:flex-row">
-        <label htmlFor={inputId} className="sr-only">
-          Din e-mail
-        </label>
         <Input
           id={inputId}
           type="email"
@@ -45,7 +46,7 @@ export function NewsletterForm() {
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
         />
-        <Button type="submit" variant="secondary" className="shrink-0" disabled={pending}>
+        <Button type="submit" variant="secondary" className="h-12 shrink-0" disabled={pending}>
           {pending ? "Sender..." : "Tilmeld"}
         </Button>
       </div>

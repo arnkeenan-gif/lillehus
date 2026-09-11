@@ -5,7 +5,7 @@
   "seo": {
     "title": "Kager på bestilling",
     "description": "Kagemand, dåbskage, konfirmationskage, fødselsdagslagkage, kagetapas og bryllupskage bages efter ønske. Send en forespørgsel, så bekræfter Kristine dato og pris inden for to hverdage.",
-    "image": "/images/facebook/fb-cinnamon-buns.jpg"
+    "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
   },
   "showInNav": true,
   "navLabel": "Kager",
@@ -14,18 +14,19 @@
   "sections": [
     {
       "_type": "heroSection",
+      "_key": "top",
       "heading": "Kager på bestilling",
       "text": "Kagemand til børnefødselsdagen, dåbskage, konfirmationskage eller et helt kagebord. Vi bager efter ønske og aftaler det hele på mail.",
-      "image": "/images/facebook/fb-cinnamon-buns.jpg",
       "primaryLink": { "label": "Forespørg på kage", "href": "#forespoerg" }
     },
     {
       "_type": "cakeListSection",
-      "heading": "Det kan du bestille",
+      "_key": "kagerne",
       "text": "Priserne er fra-priser. Den endelige pris afhænger af størrelse og pynt, og den får du sammen med Kristines svar."
     },
     {
       "_type": "formSection",
+      "_key": "forespoerg",
       "kind": "cake",
       "heading": "Forespørg på kage",
       "text": "Skriv, hvad du har brug for, og hvornår. Det er en forespørgsel, ikke en bestilling: Kristine svarer inden for to hverdage.",

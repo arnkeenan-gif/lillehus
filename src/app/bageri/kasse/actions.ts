@@ -5,18 +5,19 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type Stripe from "stripe";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
 import { formatPrice } from "@/lib/format";
 import { MAX_QTY, type CheckoutField, type CheckoutState } from "@/lib/cart-order";
-import { filterDaysForItems, getPickupDays, pickupDayLabel } from "@/lib/cart-pickup";
-import { getShopProducts, shop, type ShopProduct } from "@/lib/products";
+import { filterDaysForItems, getPickupDays, pickupDayLabel, pickupHours } from "@/lib/cart-pickup";
+import { getShop, getShopProducts, type ShopProduct } from "@/lib/products";
 import { getStripe, siteOrigin } from "@/lib/stripe";
 
 /*
   Validates the checkout form, re-prices every line from the server-side
   catalogue (client prices are never trusted), builds a Stripe Checkout Session
   and sends the customer to it. Payment methods are whatever the Stripe
-  dashboard has enabled, which is how MobilePay gets in.
+  dashboard has enabled, which is how MobilePay gets in. The pickup facts and
+  the phone number come from the CMS façade.
 */
 
 const FIELDS = new Set<string>(["pickupDate", "name", "phone", "email", "note", "fulfilment", "items"]);
@@ -115,10 +116,11 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
   }
   const data = parsed.data;
 
+  const [shop, settings] = await Promise.all([getShop(), getSiteSettings()]);
   const stripe = getStripe();
   if (!stripe) {
     return {
-      message: `Betaling er ikke sat op endnu. Ring eller skriv til os på ${site.phone}, så tager vi bestillingen manuelt.`,
+      message: `Betaling er ikke sat op endnu. Ring eller skriv til os på ${settings.phone}, så tager vi bestillingen manuelt.`,
     };
   }
 
@@ -160,7 +162,7 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
   const publicImages = origin.startsWith("https://");
   const orderNo = makeOrderNo();
   const dayLabel = pickupDayLabel(day.iso);
-  const hours = shop.pickupWindow.replace(" til ", " og ");
+  const hours = pickupHours(shop.pickupWindow);
 
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lines.map(({ product, qty }) => {
     if (product.stripePriceId) return { price: product.stripePriceId, quantity: qty };
@@ -197,7 +199,7 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
       submit: {
         message: isDelivery
           ? `Vi leverer ${dayLabel}. ${shop.delivery.note}`
-          : `Du henter dine varer i Hønsehuset, ${site.address.street}, ${dayLabel} mellem kl. ${hours}.`,
+          : `Du henter dine varer i ${shop.pickupPlace}, ${dayLabel} mellem kl. ${hours}.`,
       },
     },
     payment_intent_data: {
@@ -228,7 +230,7 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
     console.error("[checkout] kunne ikke oprette Stripe-session", err);
   }
   if (!url) {
-    return { message: `Vi kunne ikke starte betalingen. Prøv igen om lidt, eller ring til os på ${site.phone}.` };
+    return { message: `Vi kunne ikke starte betalingen. Prøv igen om lidt, eller ring til os på ${settings.phone}.` };
   }
 
   redirect(url);

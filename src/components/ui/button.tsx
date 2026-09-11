@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "paper";
 type Size = "md" | "lg";
 
 const base =
@@ -11,6 +11,8 @@ const variants: Record<Variant, string> = {
   primary: "bg-rust text-white hover:bg-rust-deep",
   secondary: "border border-ink text-ink hover:bg-ink hover:text-paper",
   ghost: "text-ink hover:bg-paper-2",
+  /** On the rust block: paper outline and paper text, filled paper on hover. */
+  paper: "border border-paper text-paper hover:bg-paper hover:text-rust",
 };
 
 const sizes: Record<Size, string> = {

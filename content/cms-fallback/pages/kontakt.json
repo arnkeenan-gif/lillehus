@@ -12,16 +12,18 @@
   "sections": [
     {
       "_type": "contactSection",
-      "heading": "Kontakt",
+      "_key": "top",
+      "heading": "Her får du fat i os",
       "text": "Ring, skriv en mail eller brug formularen nederst på siden. Kristine svarer normalt inden for to hverdage."
     },
     {
       "_type": "hoursSection",
-      "heading": "Her finder du os",
+      "_key": "steder",
       "only": "alle"
     },
     {
       "_type": "formSection",
+      "_key": "skriv",
       "kind": "contact",
       "heading": "Skriv til os",
       "text": "Spørgsmål om en bestilling, pizzavognen, en kage eller noget helt fjerde. Skriv, så svarer Kristine."

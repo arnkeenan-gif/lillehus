@@ -2,12 +2,14 @@ import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/cn";
 
 /*
-  Form primitives. Label above, helper text in markup, error below.
-  Never use placeholder as the label.
+  Form primitives. Label above, helper text in markup, error below. Controls
+  are 48px tall with 16px text, so phones do not zoom in on focus; the focus
+  ring is rust. Never use placeholder as the label.
 */
 
-const control =
-  "w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-ink placeholder:text-muted/70 transition-colors focus:border-rust focus:outline-none focus-visible:ring-2 focus-visible:ring-rust/30 disabled:bg-paper-2 aria-[invalid=true]:border-danger";
+/** The shared look of every text control. Add a height (h-12) or a min-height. */
+export const controlClass =
+  "w-full rounded-md border border-line bg-white px-3.5 text-base text-ink placeholder:text-muted/70 transition-[border-color,box-shadow] duration-150 ease-out-quart focus:border-rust focus:outline-none focus:ring-2 focus:ring-rust/25 disabled:bg-paper-2 disabled:text-muted aria-[invalid=true]:border-danger";
 
 type FieldProps = {
   label: string;
@@ -21,7 +23,7 @@ type FieldProps = {
 
 export function Field({ label, htmlFor, helper, error, required, children, className }: FieldProps) {
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("flex min-w-0 flex-col gap-2", className)}>
       <label htmlFor={htmlFor} className="text-sm font-medium text-ink">
         {label}
         {required ? <span aria-hidden="true"> *</span> : null}
@@ -42,21 +44,21 @@ export function Field({ label, htmlFor, helper, error, required, children, class
 }
 
 export function Input({ className, ...rest }: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={cn(control, className)} {...rest} />;
+  return <input className={cn(controlClass, "h-12", className)} {...rest} />;
 }
 
 export function Textarea({ className, ...rest }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className={cn(control, "min-h-32 resize-y", className)} {...rest} />;
+  return <textarea className={cn(controlClass, "min-h-32 resize-y py-3", className)} {...rest} />;
 }
 
 export function Select({ className, children, ...rest }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <div className="relative">
-      <select className={cn(control, "appearance-none pr-10", className)} {...rest}>
+      <select className={cn(controlClass, "h-12 appearance-none pr-10", className)} {...rest}>
         {children}
       </select>
       <CaretDown
-        size={18}
+        size={20}
         aria-hidden="true"
         className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted"
       />
@@ -64,6 +66,7 @@ export function Select({ className, children, ...rest }: React.SelectHTMLAttribu
   );
 }
 
+/** One row of a checkbox group: a 44px target, the box and the label on one line. */
 export function Checkbox({
   label,
   id,
@@ -71,13 +74,8 @@ export function Checkbox({
   ...rest
 }: React.InputHTMLAttributes<HTMLInputElement> & { label: React.ReactNode; id: string }) {
   return (
-    <label htmlFor={id} className={cn("flex cursor-pointer items-start gap-3 text-[0.95rem] text-ink-2", className)}>
-      <input
-        id={id}
-        type="checkbox"
-        className="mt-1 size-4 shrink-0 rounded-sm border-line accent-rust"
-        {...rest}
-      />
+    <label htmlFor={id} className={cn("flex min-h-11 cursor-pointer items-center gap-3 py-1 text-base text-ink", className)}>
+      <input id={id} type="checkbox" className="size-5 shrink-0 accent-rust" {...rest} />
       <span>{label}</span>
     </label>
   );

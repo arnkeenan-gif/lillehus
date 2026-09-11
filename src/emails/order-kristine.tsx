@@ -1,9 +1,8 @@
 import { Column, Hr, Row, Section, Text } from "@react-email/components";
 import { EmailLayout, EmailRow, emailStyles } from "@/emails/_layout";
 import type { OrderDetails } from "@/lib/cart-order";
-import { pickupDayLabel } from "@/lib/cart-pickup";
+import { pickupDayLabel, pickupPlaceShort, type ShopConfig } from "@/lib/cart-pickup";
 import { formatPrice } from "@/lib/format";
-import { shop } from "@/lib/products";
 
 /*
   The baking list. Lines first, big and tabular, then who and when. Kristine
@@ -37,7 +36,9 @@ const line = {
   },
 };
 
-export function OrderKristineEmail({ order }: { order: OrderDetails }) {
+type Props = { order: OrderDetails; shop: ShopConfig };
+
+export function OrderKristineEmail({ order, shop }: Props) {
   const day = orderDayLabel(order);
   const isDelivery = order.fulfilment === "delivery";
   const preview = `${order.customerName || "Ukendt navn"}: ${order.lines.map((l) => `${l.qty} ${l.name}`).join(", ")}`;
@@ -67,7 +68,7 @@ export function OrderKristineEmail({ order }: { order: OrderDetails }) {
       <EmailRow label="Ordrenummer" value={order.orderNo} />
       <EmailRow
         label={isDelivery ? "Levering" : "Afhentning"}
-        value={isDelivery ? day : `${day} i Hønsehuset, kl. ${shop.pickupWindow}`}
+        value={isDelivery ? day : `${day} i ${pickupPlaceShort(shop.pickupPlace)}, kl. ${shop.pickupWindow}`}
       />
       <EmailRow label="Navn" value={order.customerName || "Ikke oplyst"} />
       <EmailRow label="Telefon" value={order.phone || "Ikke oplyst"} />
@@ -78,7 +79,7 @@ export function OrderKristineEmail({ order }: { order: OrderDetails }) {
   );
 }
 
-export function orderKristineText(order: OrderDetails): string {
+export function orderKristineText(order: OrderDetails, shop: ShopConfig): string {
   const day = orderDayLabel(order);
   const isDelivery = order.fulfilment === "delivery";
   const out: string[] = [`Bagesedel til ${day}`, ""];
@@ -86,7 +87,9 @@ export function orderKristineText(order: OrderDetails): string {
   if (order.deliveryOere !== null) out.push(`Levering   ${formatPrice(order.deliveryOere)}`);
   out.push("", `Betalt i alt: ${formatPrice(order.totalOere)}`, "");
   out.push(`Ordrenummer: ${order.orderNo}`);
-  out.push(`${isDelivery ? "Levering" : "Afhentning"}: ${isDelivery ? day : `${day} i Hønsehuset, kl. ${shop.pickupWindow}`}`);
+  out.push(
+    `${isDelivery ? "Levering" : "Afhentning"}: ${isDelivery ? day : `${day} i ${pickupPlaceShort(shop.pickupPlace)}, kl. ${shop.pickupWindow}`}`,
+  );
   out.push(`Navn: ${order.customerName || "Ikke oplyst"}`);
   out.push(`Telefon: ${order.phone || "Ikke oplyst"}`);
   out.push(`E-mail: ${order.email || "Ikke oplyst"}`);

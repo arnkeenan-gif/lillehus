@@ -5,6 +5,7 @@ import { OrderCustomerEmail, orderCustomerText } from "@/emails/order-customer";
 import { OrderKristineEmail, orderKristineText } from "@/emails/order-kristine";
 import { orderFromSession } from "@/lib/cart-order";
 import { pickupDayLabel } from "@/lib/cart-pickup";
+import { getShop } from "@/lib/products";
 import { EMAIL_TO, sendEmail } from "@/lib/resend";
 import { site } from "@/lib/site";
 import { getStripe } from "@/lib/stripe";
@@ -31,7 +32,10 @@ function remember(id: string) {
 
 async function sendOrderEmails(stripe: Stripe, session: Stripe.Checkout.Session) {
   try {
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
+    const [lineItems, shop] = await Promise.all([
+      stripe.checkout.sessions.listLineItems(session.id, { limit: 100 }),
+      getShop(),
+    ]);
     const order = orderFromSession(session, lineItems.data);
     const day = order.pickupDate ? pickupDayLabel(order.pickupDate) : "ukendt dag";
 
@@ -39,16 +43,16 @@ async function sendOrderEmails(stripe: Stripe, session: Stripe.Checkout.Session)
       sendEmail({
         to: EMAIL_TO,
         subject: `Ny bestilling til ${day}: ${order.customerName || "ukendt navn"}`,
-        react: createElement(OrderKristineEmail, { order }),
-        text: orderKristineText(order),
+        react: createElement(OrderKristineEmail, { order, shop }),
+        text: orderKristineText(order, shop),
         replyTo: order.email || undefined,
       }),
       order.email
         ? sendEmail({
             to: order.email,
             subject: `Din bestilling hos ${site.name}`,
-            react: createElement(OrderCustomerEmail, { order }),
-            text: orderCustomerText(order),
+            react: createElement(OrderCustomerEmail, { order, shop }),
+            text: orderCustomerText(order, shop),
             replyTo: site.email,
           })
         : Promise.resolve({ ok: true as const, skipped: true }),

@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Trash, X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { QuantityStepper } from "@/components/shop/quantity-stepper";
+import { isOptimizable } from "@/components/shop/product-photo";
 import { OPEN_CART_EVENT, cartSubtotal, removeFromCart, setCartQty, useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
 
@@ -39,7 +40,12 @@ function trapTab(e: KeyboardEvent, root: HTMLElement | null) {
   }
 }
 
-export function CartDrawer() {
+type Props = {
+  /** One line under the total: where to pick up and how to pay. From the shop settings. */
+  note?: string;
+};
+
+export function CartDrawer({ note }: Props) {
   const [open, setOpen] = useState(false);
   const items = useCart();
   const reduceMotion = useReducedMotion();
@@ -120,8 +126,8 @@ export function CartDrawer() {
           className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-paper shadow-drawer outline-none sm:rounded-l-lg"
           {...panelMotion}
         >
-          <div className="flex h-16 shrink-0 items-center justify-between border-b border-line px-5 sm:h-[72px]">
-            <h2 id="kurv-titel" className="text-lg font-semibold text-ink">
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-line pl-5 pr-3 sm:h-[72px]">
+            <h2 id="kurv-titel" className="text-xl font-semibold text-ink">
               Kurv
             </h2>
             <button
@@ -137,22 +143,23 @@ export function CartDrawer() {
           <div className="flex-1 overflow-y-auto px-5">
             {items.length === 0 ? (
               <div className="py-8">
-                <p className="text-ink">Din kurv er tom.</p>
-                <p className="mt-1 text-sm text-muted">Læg noget i kurven, så står det her.</p>
+                <p className="text-lead text-ink">Din kurv er tom.</p>
+                <p className="mt-2 text-ink-2">Læg noget i kurven, så står det her.</p>
               </div>
             ) : (
-              <ul className="divide-y divide-line">
+              <ul className="flex flex-col gap-6 py-6">
                 {items.map((item) => (
-                  <li key={item.productId} className="flex gap-4 py-4">
-                    <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-paper-2">
+                  <li key={item.productId} className="flex gap-4">
+                    <div className="relative size-14 shrink-0 overflow-hidden rounded-md bg-paper-2">
                       {item.image ? (
                         <Image
                           src={item.image}
                           alt=""
                           fill
-                          sizes="64px"
+                          sizes="56px"
                           className="object-cover"
-                          unoptimized={item.image.startsWith("http")}
+                          style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined}
+                          unoptimized={!isOptimizable(item.image)}
                         />
                       ) : null}
                     </div>
@@ -162,7 +169,7 @@ export function CartDrawer() {
                         <p className="tnum shrink-0 font-medium text-ink">{formatPrice(item.priceOere * item.qty)}</p>
                       </div>
                       <p className="tnum mt-0.5 text-sm text-muted">{formatPrice(item.priceOere)} pr. stk.</p>
-                      <div className="mt-2 flex items-center justify-between gap-3">
+                      <div className="mt-3 flex items-center justify-between gap-3">
                         <QuantityStepper
                           value={item.qty}
                           onChange={(q) => setCartQty(item.productId, q)}
@@ -184,24 +191,24 @@ export function CartDrawer() {
             )}
           </div>
 
-          <div className="shrink-0 border-t border-line px-5 py-4">
-            <div className="flex items-baseline justify-between">
-              <span className="text-ink-2">I alt</span>
-              <span className="tnum text-lg font-semibold text-ink">{formatPrice(subtotal)}</span>
+          <div className="shrink-0 border-t border-line px-5 py-5">
+            <div className="flex items-baseline justify-between gap-4 text-lead">
+              <span className="text-ink">I alt</span>
+              <span className="tnum font-semibold text-ink">{formatPrice(subtotal)}</span>
             </div>
-            <p className="mt-1 text-sm text-muted">Afhentning i Hønsehuset. Betal med kort eller MobilePay.</p>
-            <div className="mt-4 flex flex-col gap-2">
+            {note ? <p className="mt-2 text-sm text-muted">{note}</p> : null}
+            <div className="mt-5 flex flex-col gap-2">
               {items.length > 0 ? (
-                <Button href="/bageri/kasse" onClick={close} className="w-full">
+                <Button href="/bageri/kasse" size="lg" onClick={close} className="w-full">
                   Gå til betaling
                 </Button>
               ) : null}
               {inShopRoot ? (
-                <Button type="button" variant="secondary" onClick={close} className="w-full">
+                <Button type="button" variant="secondary" size="lg" onClick={close} className="w-full">
                   Tilbage til bageriet
                 </Button>
               ) : (
-                <Button href="/bageri" variant="secondary" onClick={close} className="w-full">
+                <Button href="/bageri" variant="secondary" size="lg" onClick={close} className="w-full">
                   Tilbage til bageriet
                 </Button>
               )}

@@ -13,17 +13,20 @@
   "sections": [
     {
       "_type": "heroSection",
+      "_key": "top",
       "heading": "Afhentning og levering",
       "text": "Det meste af vores brød bliver hentet på gården. Her er, hvordan det foregår, og hvad vi har af planer om levering."
     },
     {
       "_type": "pickupInfoSection",
+      "_key": "afhentning",
       "detail": "udførlig"
     },
     {
       "_type": "ctaSection",
-      "heading": "Pizzavognen kører ud",
-      "text": "Pizzavognen kører derimod gerne ud til jer med stenovnen på traileren.",
+      "_key": "pizzavogn",
+      "heading": "Pizzavognen kører til gengæld ud",
+      "text": "Stenovnen står på en trailer, så den kommer gerne hjem til jer og bager pizza på surdej, til alle er mætte.",
       "link": { "label": "Book pizzavognen", "href": "/pizza" },
       "tone": "paper"
     }

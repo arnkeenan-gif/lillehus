@@ -308,6 +308,7 @@ export interface CtaSection extends SectionBase {
   heading?: string;
   text?: string;
   link: CmsLink;
+  image?: CmsImage;
   tone: "paper" | "tint";
 }
 

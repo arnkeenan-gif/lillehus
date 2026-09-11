@@ -1,9 +1,10 @@
 import type { Weekday } from "@/lib/content";
 
 /*
-  Pure pickup-day arithmetic. No JSON imports and no server-only code, so both
-  the checkout form (client) and the server action can use it. All calendar
-  maths happens on Copenhagen dates represented as "YYYY-MM-DD" strings.
+  Pure pickup-day arithmetic and the Danish sentences built from the shop
+  settings. No JSON imports and no server-only code, so both the checkout
+  form (client) and the server action can use it. All calendar maths happens
+  on Copenhagen dates represented as "YYYY-MM-DD" strings.
 */
 
 export const WEEKDAY_ORDER: Weekday[] = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
@@ -39,6 +40,7 @@ export interface DeliveryConfig {
   note: string;
 }
 
+/** The shop settings as the client needs them. getShopSettings() from the façade returns this shape. */
 export interface ShopConfig extends PickupConfig {
   pickupWindow: string;
   pickupPlace: string;
@@ -146,4 +148,37 @@ export function constraintHelper(items: DayConstraint[]): string | null {
     (i) => `${i.name} bages kun ${joinDa(sortWeekdays(i.days).map((d) => WEEKDAY_NAMES[d]))}.`,
   );
   return `${sentences.join(" ")} Derfor kan du kun vælge de dage.`;
+}
+
+/** "tirsdag til fredag" for three or more consecutive days, otherwise "tirsdag, onsdag og fredag". */
+export function pickupDaysLabel(days: Weekday[]): string {
+  const sorted = sortWeekdays(days);
+  if (sorted.length === 0) return "";
+  const first = WEEKDAY_ORDER.indexOf(sorted[0]);
+  const consecutive = sorted.every((d, i) => WEEKDAY_ORDER.indexOf(d) === first + i);
+  if (consecutive && sorted.length > 2) {
+    return `${WEEKDAY_NAMES[sorted[0]]} til ${WEEKDAY_NAMES[sorted[sorted.length - 1]]}`;
+  }
+  return joinDa(sorted.map((d) => WEEKDAY_NAMES[d]));
+}
+
+/** "7 og 18" from the window "7 til 18", for "mellem kl. 7 og 18". */
+export function pickupHours(pickupWindow: string): string {
+  return pickupWindow.replace(" til ", " og ");
+}
+
+/** "Hønsehuset" from "Hønsehuset, Torpevej 10, 4160 Herlufmagle". */
+export function pickupPlaceShort(pickupPlace: string): string {
+  return pickupPlace.split(",")[0]?.trim() || pickupPlace;
+}
+
+/** "senest kl. 18 dagen før", from the cutoff settings. */
+export function cutoffLabel(config: Pick<PickupConfig, "cutoffHour" | "cutoffDaysBefore">): string {
+  const when =
+    config.cutoffDaysBefore <= 0
+      ? "samme dag"
+      : config.cutoffDaysBefore === 1
+        ? "dagen før"
+        : `${config.cutoffDaysBefore} dage før`;
+  return `senest kl. ${config.cutoffHour} ${when}`;
 }

@@ -382,6 +382,7 @@ export const ctaSection = defineType({
     heading(),
     text(),
     defineField({ name: "link", title: "Knap", type: "link", validation: (rule) => rule.required().error("Vælg, hvor knappen skal føre hen.") }),
+    defineField({ name: "image", title: "Billede", type: "photo", description: "Valgfrit. Vises i højre halvdel af blokken på store skærme." }),
     tone,
   ],
   preview: {
