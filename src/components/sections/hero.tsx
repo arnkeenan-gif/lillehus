@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { CmsPhoto } from "@/components/cms/photo";
 import { CoverHeaderMode } from "@/components/site/cover-header-mode";
+import { HeroSlideshow } from "./hero-slideshow";
 import { cn } from "@/lib/cn";
 import type { HeroSection } from "@/lib/cms";
 import type { SectionProps } from "./types";
 
 /** Photos at least this wide go edge to edge in the stacked variant. */
 const FULL_BLEED_MIN_WIDTH = 1800;
+/** Slides narrower than this are thumbnails, not hero material, and are left out of the rotation. */
+const MIN_SLIDE_WIDTH = 1000;
 
 export function Hero(props: SectionProps<HeroSection>) {
   if (props.section.variant === "cover" && props.section.image) return <HeroCover {...props} />;
@@ -28,27 +31,33 @@ function HeroCover({ section, level: Tag, className }: SectionProps<HeroSection>
   const position = image.hotspot
     ? `${Math.round(image.hotspot.x * 100)}% ${Math.round(image.hotspot.y * 100)}%`
     : "50% 50%";
+  const bigSlides = (section.slides ?? []).filter((s) => (s.width ?? 0) >= MIN_SLIDE_WIDTH);
+  const slides = bigSlides.length > 1 ? bigSlides : null;
 
   return (
     <section
       className={cn(
-        "relative -mt-16 h-[82svh] max-h-[920px] min-h-[540px] w-full overflow-hidden bg-ink text-white lg:-mt-[72px]",
+        "relative -mt-[65px] h-[82svh] max-h-[920px] min-h-[540px] w-full overflow-hidden bg-ink text-white lg:-mt-[73px]",
         className,
       )}
     >
-      <Image
-        src={image.src}
-        alt={image.alt}
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-        style={{ objectPosition: position }}
-        placeholder={image.lqip ? "blur" : "empty"}
-        blurDataURL={image.lqip}
-      />
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/0 via-45% to-black/60" />
-      <Container className="relative flex h-full flex-col justify-end pb-12 sm:pb-14 lg:pb-16">
+      {slides ? (
+        <HeroSlideshow slides={slides} intervalSeconds={section.interval ?? 5} />
+      ) : (
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: position }}
+          placeholder={image.lqip ? "blur" : "empty"}
+          blurDataURL={image.lqip}
+        />
+      )}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-black/0 via-45% to-black/60" />
+      <Container className="pointer-events-none relative flex h-full flex-col justify-end pb-12 pr-16 sm:pb-14 lg:pb-16 [&_a]:pointer-events-auto">
         <Tag className="max-w-[12ch] text-balance text-[2rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.5rem] lg:text-[2.75rem]">{heading}</Tag>
         {text ? <p className="mt-4 max-w-[36ch] text-[1.05rem] text-white/90 sm:text-lg">{text}</p> : null}
         {links.length > 0 ? (

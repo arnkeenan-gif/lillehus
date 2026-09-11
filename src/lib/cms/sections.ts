@@ -91,6 +91,11 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
     case "heroSection": {
       const h = heading;
       if (!h) return null;
+      const slides: CmsImage[] = [];
+      for (const entry of list(raw, "slides")) {
+        const image = ctx.image(entry);
+        if (image) slides.push(image);
+      }
       return {
         _type: type,
         _key,
@@ -98,6 +103,8 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
         text,
         image: ctx.image(raw.image),
         variant: oneOf(raw, "variant", ["cover", "stacked"] as const, "stacked"),
+        slides: slides.length > 0 ? slides : undefined,
+        interval: Math.min(15, Math.max(3, num(raw, "interval", 5))),
         primaryLink: link(raw, "primaryLink"),
         secondaryLink: link(raw, "secondaryLink"),
       };

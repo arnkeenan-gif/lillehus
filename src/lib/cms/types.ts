@@ -216,6 +216,10 @@ export interface HeroSection extends SectionBase {
   image?: CmsImage;
   /** "cover": the photo fills the first screen with the text on it. "stacked": photo first, text below. */
   variant?: "cover" | "stacked";
+  /** Extra photos for the cover variant; the hero crossfades through them. */
+  slides?: CmsImage[];
+  /** Seconds each slide stays, 3 to 15. */
+  interval?: number;
   primaryLink?: CmsLink;
   secondaryLink?: CmsLink;
 }

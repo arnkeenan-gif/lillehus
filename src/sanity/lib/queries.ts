@@ -65,6 +65,7 @@ const SECTIONS = /* groq */ `sections[]{
   ...,
   "image": image ${IMAGE},
   "images": images[]{ _key, caption, "image": image ${IMAGE} },
+  "slides": slides[] ${IMAGE},
   "primaryLink": primaryLink ${LINK},
   "secondaryLink": secondaryLink ${LINK},
   "link": link ${LINK},

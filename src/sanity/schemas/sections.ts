@@ -63,6 +63,23 @@ export const heroSection = defineType({
       options: { list: [{ title: "Billedet fylder hele skærmen, teksten ligger på det", value: "cover" }, { title: "Billedet først, teksten under", value: "stacked" }], layout: "radio" },
       initialValue: "cover",
     }),
+    defineField({
+      name: "slides",
+      title: "Flere billeder, der skifter af sig selv",
+      type: "array",
+      of: [defineArrayMember({ type: "photo" })],
+      description:
+        "Læg to eller flere billeder ind, så skifter toppen mellem dem af sig selv. Brug kun skarpe billeder på mindst 1800 px i bredden. Med ét billede står toppen stille.",
+      hidden: ({ parent }) => parent?.variant !== "cover",
+    }),
+    defineField({
+      name: "interval",
+      title: "Sekunder pr. billede",
+      type: "number",
+      initialValue: 5,
+      validation: (rule) => rule.min(3).max(15).integer(),
+      hidden: ({ parent }) => parent?.variant !== "cover",
+    }),
     defineField({ name: "primaryLink", title: "Knap", type: "link", description: 'Den vigtigste knap, fx "Bestil brød".' }),
     defineField({ name: "secondaryLink", title: "Knap nummer to", type: "link", description: "En mindre knap ved siden af. Kan udelades." }),
   ],

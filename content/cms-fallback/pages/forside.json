@@ -31,7 +31,38 @@
         "label": "Book pizzavognen",
         "href": "/pizza"
       },
-      "variant": "cover"
+      "variant": "cover",
+      "slides": [
+        {
+          "src": "/images/cinnamon-buns-and-bread-rolls.jpg",
+          "hotspot": {
+            "x": 0.5,
+            "y": 0.45
+          }
+        },
+        {
+          "src": "/images/rustic-bread-loaves-and-flatbread.jpg",
+          "hotspot": {
+            "x": 0.5,
+            "y": 0.5
+          }
+        },
+        {
+          "src": "/images/oat-topped-bread-rolls.jpg",
+          "hotspot": {
+            "x": 0.5,
+            "y": 0.5
+          }
+        },
+        {
+          "src": "/images/homemade-granola.jpg",
+          "hotspot": {
+            "x": 0.5,
+            "y": 0.5
+          }
+        }
+      ],
+      "interval": 5
     },
     {
       "_type": "richTextSection",
@@ -165,7 +196,13 @@
         "Vi er Kristine og Nicolas. Det lille hus på landet startede i 2009 og er i dag en gård ved Herlufmagle med bageri, køkkenhave og en stenovn på hjul.",
         "[Læs mere om os](/om-os)"
       ],
-      "image": "/images/logo.png",
+      "image": {
+        "src": "/images/family-on-bench-brick-wall.jpg",
+        "hotspot": {
+          "x": 0.5,
+          "y": 0.45
+        }
+      },
       "imagePosition": "left",
       "tone": "paper"
     }
