@@ -5,13 +5,14 @@ import { cutoffText, pickupDaysText } from "@/components/cms/text";
 import { getProducts, getShopSettings, type CmsImage, type Product, type ProductStripSection } from "@/lib/cms";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/cn";
-import { SectionHeading, textLink } from "./heading";
+import { SectionHeading, SectionIntro, afterIntro, textLink } from "./heading";
 import type { SectionProps } from "./types";
 
 /**
  * Bread as a shop window: photo (4/5), name, price. Four across from lg, two
- * on phones, no borders, no buttons; every tile links to the shop. Products
- * without a photo are left out, since the photo is the tile.
+ * on phones, even gutters at every width, no borders, no buttons; every tile
+ * links to the shop. Products without a photo are left out, since the photo
+ * is the tile.
  */
 function photoOf(product: Product): CmsImage | undefined {
   if (product.photo) return product.photo;
@@ -36,8 +37,12 @@ export async function ProductStrip({ section, level, className }: SectionProps<P
     <section className={className}>
       <Container>
         {section.heading ? <SectionHeading as={level}>{section.heading}</SectionHeading> : null}
-        {text ? <p className="mt-4 max-w-[62ch] text-ink-2">{text}</p> : null}
-        <ul className={cn("grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4 lg:gap-x-6", hasTop && "mt-10")}>
+        {text ? (
+          <SectionIntro level={level} afterHeading={Boolean(section.heading)}>
+            {text}
+          </SectionIntro>
+        ) : null}
+        <ul className={cn("grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10", hasTop && afterIntro)}>
           {products.map(({ product, photo }) => (
             <li key={product.id}>
               <Link href="/bageri" className="group block">

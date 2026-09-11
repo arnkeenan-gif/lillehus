@@ -56,7 +56,7 @@ export async function Header() {
               </ul>
             </nav>
             <CartButton />
-            <MobileNav items={nav} />
+            <MobileNav items={nav} name={settings.name} />
           </div>
         </Container>
       </header>

@@ -38,7 +38,7 @@ export function CakeRequestForm({ cakes, defaultCakeId }: { cakes: CakeChoice[];
   const cake = cakes.find((c) => c.id === cakeId);
   const lead = cake?.leadTimeDays ?? 5;
   const earliest = today ? localIso(lead) : undefined;
-  const dateHelper = `${cake?.name ?? "Kagen"} skal bestilles mindst ${lead} dage før.`;
+  const dateHelper = "Kristine bekræfter, om datoen kan lade sig gøre.";
 
   return (
     <form action={formAction} noValidate className={formClass}>

@@ -5,14 +5,14 @@ import { Container } from "@/components/ui/container";
 import { endSentence, groupHours, splitNotes } from "@/components/cms/text";
 import { getLocations, type HoursSection, type Location } from "@/lib/cms";
 import { cn } from "@/lib/cn";
-import { SectionHeading, textLink } from "./heading";
+import { SectionHeading, SectionIntro, afterIntro, textLink } from "./heading";
 import type { SectionProps } from "./types";
 
 /**
  * Where and when, as sentences a person would say rather than a table:
  * "Torvedag i Næstved, onsdag og lørdag kl. 9 til 14, eller til vi er
  * udsolgt." with the times in bold, the practical notes in body size and a
- * map link for each place.
+ * map link for each place. Two places stand side by side from lg.
  */
 function Place({ location }: { location: Location }) {
   const groups = groupHours(location.hours);
@@ -40,7 +40,7 @@ function Place({ location }: { location: Location }) {
           href={location.mapsUrl}
           target="_blank"
           rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-2 text-ink transition-colors duration-150 ease-out-quart hover:text-rust"
+          className="mt-4 inline-flex min-h-11 items-center gap-2 text-ink transition-colors duration-150 ease-out-quart hover:text-rust"
         >
           <MapPin size={20} aria-hidden="true" />
           <span>{location.address}</span>
@@ -63,8 +63,12 @@ export async function Hours({ section, level, className }: SectionProps<HoursSec
     <section className={className}>
       <Container>
         {section.heading ? <SectionHeading as={level}>{section.heading}</SectionHeading> : null}
-        {section.text ? <p className="mt-4 max-w-[62ch] text-ink-2">{section.text}</p> : null}
-        <div className={cn("grid gap-12 lg:gap-16", locations.length > 1 && "lg:grid-cols-2", hasTop && "mt-10")}>
+        {section.text ? (
+          <SectionIntro level={level} afterHeading={Boolean(section.heading)}>
+            {section.text}
+          </SectionIntro>
+        ) : null}
+        <div className={cn("grid gap-10 sm:gap-12 lg:gap-16", locations.length > 1 && "lg:grid-cols-2", hasTop && afterIntro)}>
           {locations.map((location) => (
             <Place key={location.id} location={location} />
           ))}

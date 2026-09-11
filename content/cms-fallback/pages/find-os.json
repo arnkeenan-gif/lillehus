@@ -16,7 +16,7 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Her får du fat i brødet",
-      "text": "Bageriet og fryseren ligger på gården på Torpevej ved Herlufmagle. Onsdag og lørdag holder vi på torvet i Næstved."
+      "text": "Bageriet og fryseren ligger på Torpevej 10 i Herlufmagle. Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved, foran Løveapoteket."
     },
     {
       "_type": "hoursSection",
@@ -26,7 +26,7 @@
     {
       "_type": "richTextSection",
       "_key": "vognen",
-      "body": "Vi holder i den grønne vogn på Axeltorv, foran Løveapoteket. Ud over brød har vi kaffe, te og boller med smør, og vi bliver til vi er udsolgt.",
+      "body": "Vi holder i den grønne vogn på Axeltorv. Ud over brød har vi kaffe og boller med smør, og priserne står på tavlerne.",
       "image": "/images/instagram/ig-2026-08-04-tekst.jpg",
       "imagePosition": "right",
       "tone": "paper"
@@ -44,14 +44,15 @@
     {
       "_type": "eventsSection",
       "_key": "kalender",
-      "text": "Datoer for åbent hus og andet, der sker på gården.",
+      "text": "Datoer for åbent hus på gården.",
       "showWeek": false,
-      "emptyText": "Ingen faste datoer lige nu. Åbent hus på gården annoncerer vi, når vi kender dagen.",
+      "emptyText": "Ingen datoer lige nu. Åbent hus på gården bliver ikke annonceret lang tid i forvejen.",
       "limit": 10,
       "link": {
         "label": "Se alle arrangementer",
         "href": "/arrangementer"
-      }
+      },
+      "heading": "Det sker"
     }
   ]
 }

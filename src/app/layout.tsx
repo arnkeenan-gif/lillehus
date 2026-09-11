@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="da" className={`${figtree.variable} h-full`}>
+    <html lang="da" className={`${figtree.variable} h-full`} suppressHydrationWarning>
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
         <a
           href="#indhold"

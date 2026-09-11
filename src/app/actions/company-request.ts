@@ -7,7 +7,7 @@ import { field, fieldErrors, gate, invalid, list, MSG, plainText, sendFailure, s
 import { COMPANY_FREQUENCY, COMPANY_WANTS, optionLabel, optionValues } from "@/components/forms/options";
 import { CompanyKristineEmail, companyRows, type CompanyEmailData } from "@/emails/firma-kristine";
 
-const SUCCESS = "Tak for din henvendelse. Kristine vender tilbage inden for to hverdage med et forslag og en pris.";
+const SUCCESS = "Tak for din forespørgsel. Kristine svarer, når hun har set den.";
 
 const wantValues = new Set(COMPANY_WANTS.map((o) => o.value));
 

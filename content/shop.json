@@ -14,13 +14,11 @@
   "minOrderOere": 0,
   "delivery": {
     "enabled": false,
-    "feeOere": 4900,
-    "freeAboveOere": 40000,
-    "radiusKm": 15,
-    "days": [
-      "fre"
-    ],
-    "note": "Vi arbejder på at kunne levere i lokalområdet. Skriv til os, hvis du er interesseret, så giver vi besked når vi begynder."
+    "feeOere": 0,
+    "freeAboveOere": 0,
+    "radiusKm": 0,
+    "days": [],
+    "note": "Vil du spørge om levering, så skriv til os gennem kontaktformularen."
   },
   "closedDates": [],
   "notice": ""

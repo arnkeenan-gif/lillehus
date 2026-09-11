@@ -43,7 +43,7 @@ function useHydrated() {
 
 const PHONE_HELPER = "Så vi kan ringe, hvis der er noget med din bestilling.";
 const EMAIL_HELPER = "Vi sender din kvittering hertil.";
-const NOTE_HELPER = "Skal brødet skæres? Andet vi skal vide?";
+const NOTE_HELPER = "Er der noget, vi skal vide?";
 
 export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickupPlace, pickupWindow, phone, phoneHref }: Props) {
   const [state, formAction, pending] = useActionState(createCheckoutSession, INITIAL_CHECKOUT_STATE);
@@ -250,7 +250,7 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
         )}
       </form>
 
-      <aside className="lg:col-span-5">
+      <aside className="order-first lg:order-none lg:col-span-5">
         <div className="lg:sticky lg:top-24">
           {hydrated ? (
             <OrderSummary items={items} deliveryOere={deliveryOere} />

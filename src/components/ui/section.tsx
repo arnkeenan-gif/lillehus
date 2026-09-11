@@ -12,9 +12,11 @@ const tones = {
 };
 
 /**
- * Vertical rhythm for page sections. Use "tint" sparingly to separate
- * neighbouring sections; never alternate every section.
+ * The wrapper of a page that is not built from CMS sections (the shop, the
+ * checkout, the receipt): the same opening space as the section pages get
+ * from render.tsx, and the same room before the footer. Use "tint"
+ * sparingly; never alternate every section.
  */
 export function Section({ tone = "paper", as: Tag = "section", className, ...rest }: Props) {
-  return <Tag className={cn("py-14 sm:py-20", tones[tone], className)} {...rest} />;
+  return <Tag className={cn("pb-24 pt-12 sm:pb-32 sm:pt-20", tones[tone], className)} {...rest} />;
 }

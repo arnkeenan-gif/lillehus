@@ -13,7 +13,7 @@
     {
       "_type": "heroSection",
       "heading": "Privatlivspolitik",
-      "text": "Kort fortalt: vi gemmer kun det, vi skal bruge for at bage dit brød og svare dig, og vi giver ikke oplysninger videre til andre end dem, der hjælper os med det."
+      "text": "Kort fortalt: vi gemmer kun det, vi skal bruge for at ekspedere din bestilling og svare dig, og vi giver ikke oplysninger videre til andre end de tjenester, der hjælper os med det."
     },
     {
       "_type": "richTextSection",
@@ -22,7 +22,7 @@
         "Kristine Kjær Schmeling\nDet lille hus på landet\nTorpevej 10, 4160 Herlufmagle\nCVR 32164579\nE-mail [kristine.k.h@gmail.com](mailto:kristine.k.h@gmail.com)\nTelefon [22 59 44 93](tel:+4522594493)",
         { "h2": "Hvad vi gemmer, og hvorfor" },
         { "h3": "Når du bestiller brød" },
-        "Når du bestiller i webshoppen, gemmer vi navn, e-mail, telefonnummer, afhentningsdag, det du har bestilt og en eventuel besked til os. Det bruger vi til at bage og pakke din ordre, sende ordrebekræftelsen og kontakte dig, hvis der er spørgsmål. Betalingen sker hos Stripe, som håndterer dine kortoplysninger. Vi ser dem aldrig. Grundlaget er aftalen med dig (databeskyttelsesforordningens artikel 6, stk. 1, litra b).",
+        "Når du bestiller i webshoppen, gemmer vi navn, e-mail, telefonnummer, afhentningsdag, det du har bestilt og en eventuel besked til os. Det bruger vi til at gøre din ordre klar, sende ordrebekræftelsen og kontakte dig, hvis der er spørgsmål. Betalingen sker hos Stripe, som håndterer dine kortoplysninger. Vi ser dem aldrig. Grundlaget er aftalen med dig (databeskyttelsesforordningens artikel 6, stk. 1, litra b).",
         { "h3": "Når du skriver til os" },
         "Forespørgsler på pizzavognen, kager, arrangementer og firmaaftaler samt beskeder fra kontaktsiden sendes som e-mail til Kristine gennem tjenesten Resend. Vi gemmer det, du skriver, indtil vi har svaret, og aftalen er afsluttet. Grundlaget er vores interesse i at besvare din henvendelse og en eventuel aftale med dig.",
         { "h3": "Nyhedsbrev" },

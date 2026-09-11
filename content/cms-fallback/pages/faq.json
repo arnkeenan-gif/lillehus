@@ -4,7 +4,7 @@
   "slug": "faq",
   "seo": {
     "title": "Spørgsmål og svar",
-    "description": "Svar på det, vi oftest bliver spurgt om: bestilling, afhentning i Hønsehuset, fryseren og MobilePay, Torvedag i Næstved, allergener, pizzavognen og kager."
+    "description": "Spørgsmål og svar om bestilling, afhentning i Hønsehuset, fryseren og MobilePay, Torvedag i Næstved, allergener, pizzavognen og åbent hus."
   },
   "showInNav": false,
   "navLabel": "Spørgsmål og svar",
@@ -15,7 +15,7 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Spørgsmål og svar",
-      "text": "Det, vi oftest bliver spurgt om ved fryseren og på torvet. Mangler dit spørgsmål, så skriv til os."
+      "text": "Om bestilling, afhentning, fryseren, Torvedag og pizzavognen. Mangler dit spørgsmål, så skriv til os."
     },
     {
       "_type": "faqSection",
@@ -26,7 +26,7 @@
       "_type": "ctaSection",
       "_key": "skriv",
       "heading": "Mangler dit spørgsmål?",
-      "text": "Skriv, så svarer Kristine inden for to hverdage.",
+      "text": "Skriv, så svarer Kristine, når hun har set din besked.",
       "link": { "label": "Skriv til os", "href": "/kontakt" },
       "tone": "paper"
     }

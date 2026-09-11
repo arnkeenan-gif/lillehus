@@ -49,6 +49,7 @@ function HeroCover({ section, level: Tag, className }: SectionProps<HeroSection>
           alt={image.alt}
           fill
           priority
+          quality={90}
           sizes="100vw"
           className="object-cover"
           style={{ objectPosition: position }}
@@ -56,7 +57,7 @@ function HeroCover({ section, level: Tag, className }: SectionProps<HeroSection>
           blurDataURL={image.lqip}
         />
       )}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-black/0 via-45% to-black/60" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/65 via-black/0 via-42% to-black/60" />
       <Container className="pointer-events-none relative flex h-full flex-col justify-end pb-12 pr-16 sm:pb-14 lg:pb-16 [&_a]:pointer-events-auto">
         <Tag className="max-w-[12ch] text-balance text-[2rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.5rem] lg:text-[2.75rem]">{heading}</Tag>
         {text ? <p className="mt-4 max-w-[36ch] text-[1.05rem] text-white/90 sm:text-lg">{text}</p> : null}

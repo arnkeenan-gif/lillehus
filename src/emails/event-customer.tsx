@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 import { eventSignupRows, type EventSignupEmailData } from "@/emails/event-kristine";
 
 export const EVENT_NEXT_STEPS =
-  "Kristine bekræfter din plads inden for to hverdage. Er der noget, der skal betales, står det i hendes svar.";
+  "Kristine bekræfter din plads, når hun har set tilmeldingen. Er der noget, der skal betales, står det i hendes svar.";
 
 export function EventSignupCustomerEmail({ data }: { data: EventSignupEmailData }) {
   return (

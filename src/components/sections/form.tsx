@@ -6,6 +6,7 @@ import { CourseInterestForm } from "@/components/forms/course-interest-form";
 import { EventSignupForm } from "@/components/forms/event-signup-form";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { PizzaBookingForm } from "@/components/forms/pizza-booking-form";
+import { pizzaRates } from "@/components/forms/pizza-estimate";
 import { getCakes, getEvents, getPizzaSettings, type FormKind, type FormSection } from "@/lib/cms";
 import { formatDateLong, formatTime, ucfirst } from "@/lib/format";
 import { cn } from "@/lib/cn";
@@ -23,8 +24,8 @@ const ANCHORS: Record<FormKind, string> = {
   event: "tilmeld",
 };
 
-async function renderForm(kind: FormKind): Promise<React.ReactNode> {
-  switch (kind) {
+async function renderForm(section: FormSection): Promise<React.ReactNode> {
+  switch (section.kind) {
     case "pizza": {
       const pizza = await getPizzaSettings();
       return (
@@ -34,6 +35,9 @@ async function renderForm(kind: FormKind): Promise<React.ReactNode> {
           minAdults={pizza.packages[0]?.minGuests ?? 40}
           dessertMinCovers={pizza.prices.dessertMinCovers}
           childAges={pizza.prices.childAges}
+          rates={pizzaRates(pizza)}
+          steps={section.steps}
+          anchor={ANCHORS.pizza}
         />
       );
     }
@@ -81,21 +85,39 @@ async function renderForm(kind: FormKind): Promise<React.ReactNode> {
 
 /**
  * The booking, request and contact forms with their heading and text; the
- * "Sådan går det videre" steps stand beside the form from lg.
+ * "Sådan går det videre" steps stand beside the form from lg. The pizza
+ * form lays itself out instead: the fields on the left and the running
+ * price estimate on the right (with the steps under it, if any).
  */
 export async function FormBlock({ section, level, className }: SectionProps<FormSection>) {
-  const form = await renderForm(section.kind);
+  const form = await renderForm(section);
   if (!form) return null;
   const { heading, text, steps } = section;
   const hasTop = Boolean(heading || text);
+  const top = (
+    <>
+      {heading ? <SectionHeading as={level}>{heading}</SectionHeading> : null}
+      {text ? <p className="mt-4 max-w-[62ch] text-ink-2">{text}</p> : null}
+    </>
+  );
+
+  if (section.kind === "pizza") {
+    return (
+      <section id={ANCHORS.pizza} className={cn("scroll-mt-24", className)}>
+        <Container>
+          {top}
+          <div className={cn(hasTop && "mt-10")}>{form}</div>
+        </Container>
+      </section>
+    );
+  }
 
   return (
     <section id={ANCHORS[section.kind]} className={cn("scroll-mt-24", className)}>
       <Container>
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            {heading ? <SectionHeading as={level}>{heading}</SectionHeading> : null}
-            {text ? <p className="mt-4 max-w-[62ch] text-ink-2">{text}</p> : null}
+            {top}
             <div className={cn(hasTop && "mt-10")}>{form}</div>
           </div>
           {steps.length > 0 ? (

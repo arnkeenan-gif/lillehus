@@ -3,7 +3,7 @@
   "slug": "firmaaftaler",
   "seo": {
     "title": "Firmaaftaler",
-    "description": "Fast brød til kontoret, morgenbrød til møder og pizzavognen til firmaarrangementet. Skriv, hvad I har brug for, så vender Kristine tilbage med et forslag og en pris.",
+    "description": "Firmaaftaler med Det lille hus på landet: brød, kager eller pizzavognen. Skriv, hvad I har brug for, så svarer Kristine.",
     "image": "/images/rustic-bread-loaves-and-flatbread.jpg"
   },
   "showInNav": false,
@@ -14,32 +14,17 @@
     {
       "_type": "heroSection",
       "_key": "top",
-      "heading": "Brød og pizza til arbejdspladsen",
-      "text": "Fast brød til kontoret, morgenbrød til møderne og pizzavognen til sommerfesten. Vi aftaler det, der passer til jer.",
+      "heading": "Firmaaftaler",
+      "text": "Brød, kager eller pizzavognen til et arrangement. Skriv, hvad I har brug for, så svarer Kristine, når hun har set forespørgslen.",
       "image": "/images/rustic-bread-loaves-and-flatbread.jpg",
       "primaryLink": { "label": "Send forespørgsel", "href": "#forespoerg" }
-    },
-    {
-      "_type": "richTextSection",
-      "_key": "det-kan-vi",
-      "body": [
-        { "h3": "Fast brød til kontoret" },
-        "En fast bestilling af surdejsbrød, boller eller rugbrød på de ugedage, der passer jer. Så er der altid godt brød til frokosten, uden at nogen skal huske at bestille.",
-        { "h3": "Morgenbrød til møder" },
-        "Boller, kanelsnegle og brød til morgenmødet, kursusdagen eller receptionen. Bestil til en enkelt dag, eller lav en fast aftale.",
-        { "h3": "Pizzavognen til firmaarrangementet" },
-        "Sommerfest, fredagsbar eller kundedag: vi kommer med den hjemmebyggede stenovn og bager pizzaer på stedet i to timer. Priser og praktisk står på siden om [pizzavognen](/pizza).",
-        "Brødet hentes i Hønsehuset på gården, eller vi aftaler levering. Skriv, hvad I har brug for, hvor ofte og cirka hvor mange I er, så vender Kristine tilbage inden for to hverdage med et forslag og en pris."
-      ],
-      "imagePosition": "right",
-      "tone": "paper"
     },
     {
       "_type": "formSection",
       "_key": "forespoerg",
       "kind": "company",
       "heading": "Fortæl os, hvad I har brug for",
-      "text": "Ingen forpligtelse. I får et forslag og en pris, og så tager vi den derfra."
+      "text": "En forespørgsel er ikke en aftale. Kristine svarer på mail."
     }
   ]
 }

@@ -127,13 +127,19 @@ html[data-hero-cover="true"]:not([data-hero-scrolled="true"]) .site-header :is(a
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
 }
 
-/* Dotted leader between a name and a price, as on a chalkboard list. */
+/*
+  Dotted leader between a name and a price, as on a chalkboard list. It is an
+  empty flex item in a row with `items-baseline`: an empty item's baseline is
+  the bottom edge of its border box, so the dots sit exactly on the text
+  baseline at every font size. No transform, or the dots float mid x-height.
+*/
 @utility leader {
   flex: 1 1 auto;
+  align-self: baseline;
   min-width: 1.5rem;
+  height: 0;
   margin: 0 0.5rem;
-  border-bottom: 2px dotted var(--color-line);
-  transform: translateY(-0.35em);
+  border-bottom: 2px dotted color-mix(in oklab, var(--color-line) 60%, var(--color-muted));
 }
 
 /* Tabular figures for prices, times and order numbers. */

@@ -3,7 +3,7 @@
   "slug": "om-os",
   "seo": {
     "title": "Om os",
-    "description": "Kristine, Nicolas og børnene driver Det lille hus på landet på en gård ved Herlufmagle: surdejsbageri, køkkenhave og en stenovn på hjul, alt sammen økologisk og hjemmelavet.",
+    "description": "Historien om Det lille hus på landet: en historie om personlige tilvalg og fravalg, og et liv med fokus på familie, økologi, bæredygtighed.",
     "image": "/images/family-on-bench-brick-wall.jpg"
   },
   "showInNav": true,
@@ -14,7 +14,7 @@
     {
       "_type": "heroSection",
       "_key": "top",
-      "heading": "Historien bag Det lille hus på landet",
+      "heading": "Historien om Det lille hus på landet",
       "image": {
         "src": "/images/family-on-bench-brick-wall.jpg",
         "hotspot": {
@@ -28,13 +28,13 @@
       "_type": "richTextSection",
       "_key": "historien",
       "body": [
-        "Det lille hus på landet startede i 2009. Det er en historie om personlige tilvalg og fravalg: et liv med fokus på familie, økologi og bæredygtighed, og lysten til at lave god mad til dem, der har lyst til at smage.",
-        "Vi bor på gården på Torpevej uden for Herlufmagle: Kristine, Nicolas og børnene. Her er en lade med gamle bjælker, et hønsehus, en køkkenhave og det bageri, hvor brødet bliver til. Børnene er med i det meste. Vi har valgt et liv uden skole, hvor hverdagen foregår herhjemme.",
-        "Alt, vi sælger, er økologisk og hjemmelavet. Surdejsbrødet får den tid, det skal have, rugbrødet bages med kerner, og kanelsneglene og granolaen kommer fra det samme bageri. I køkkenhaven høster vi grønkål, squash, rabarber, gulerødder, tomater og æbler, og det ender i det, vi laver.",
-        "Stenovnen har vi selv bygget. Den står på en trailer, så vi kan køre den ud til barnedåb, konfirmationer, fødselsdage og firmafester og bage pizza på surdej på stedet.",
-        "Onsdag og lørdag holder vi på Torvedag i Næstved, foran Løveapoteket på Axeltorv, fra klokken 9, til vi er udsolgt. Resten af ugen kan du købe brød i fryseren på gården, og har du bestilt, står det klar i Hønsehuset.",
-        "Hønsehuset er også der, hvor vi gerne vil åbne en lille café på gården. Indtil da holder vi åbent hus i haven og huset på udvalgte dage, alt efter humør, med pizza, kager og noget at drikke. Vi skriver på Facebook og Instagram, når det sker.",
-        "**Kristine og Nicolas**"
+        "En historie om personlige tilvalg og fravalg.",
+        "En historie skabt ud af søgen efter det bedste liv.",
+        "Et liv med fokus på familie, økologi, bæredygtighed.",
+        "Vi forsøger med hygge og nærvær at formidle vores kærlighed til kvalitet og god mad ud til alle de, som har lyst til at lytte og smage.",
+        "Det lille hus på landet startede i 2009. Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved. På gården er fryseren åben hverdage kl. 7 til 18, og bestilte varer afhentes i Hønsehuset. Cafén Hønsehuset på gården kommer senere.",
+        "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn. Læs mere om [den rullende pizzavogn](/pizza).",
+        "**Kristine & Nicolas**"
       ],
       "image": "/images/logo.png",
       "imagePosition": "right",
@@ -65,14 +65,12 @@
     },
     {
       "_type": "richTextSection",
-      "_key": "vaerdier",
-      "heading": "Det går vi op i",
+      "_key": "besoeg-os",
+      "heading": "Besøg os i Det lille hus på landet",
       "body": [
-        "**Familien.** Vi arbejder hjemme, og børnene er med. Derfor holder vi arrangementer, når det passer ind, og ikke efter en fast kalender.",
-        "**Økologi.** Vi bruger økologiske råvarer og laver tingene selv, fra surdej til granola. Det tager længere tid, og det smager man.",
-        "**Bæredygtighed.** Vi dyrker en del af maden selv, bruger det, vi har, og holder tingene i en størrelse, vi selv kan overskue.",
-        "**Ro.** Slow living kalder nogen det. Vi kalder det at have tid til at gøre tingene ordentligt.",
-        "Fødevarestyrelsen fører tilsyn med bageriet, som med alle andre der laver mad til salg. Den seneste kontrolrapport kan du læse på [findsmiley.dk](https://www.findsmiley.dk/1221266)."
+        "På udvalgte dage holder vi “Åben dørene til haven og huset”. Alt efter humør, står vi klar med de lækreste pizzaer, de skønneste kager og de dejligste drikke. Selvfølgelig alt sammen økologisk og hjemmelavet.",
+        "Arrangementerne afholdes sporadisk og vil derfor ikke blive annonceret lang tid i forvejen. Når de annonceres, sker det via vores [facebookside](https://www.facebook.com/dlhpl) og vores [Instagramprofil](https://www.instagram.com/detlillehuspaalandet/).",
+        "Fødevarestyrelsens seneste kontrolrapport kan du læse på [findsmiley.dk](https://www.findsmiley.dk/1221266)."
       ],
       "imagePosition": "right",
       "tone": "paper"

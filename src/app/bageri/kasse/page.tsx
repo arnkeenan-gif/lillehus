@@ -22,14 +22,14 @@ export default async function CheckoutPage() {
   return (
     <Section>
       <Container>
-        <div className="max-w-[40rem]">
-          <h1 className="text-title font-semibold">Din bestilling</h1>
-          <p className="mt-5 text-lead text-ink">
+        <div className="max-w-[44rem]">
+          <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink">Din bestilling</h1>
+          <p className="mt-5 max-w-[46ch] text-lead text-ink-2">
             Vælg en dag, skriv hvem du er, og betal med kort eller MobilePay. Så står brødet klar i{" "}
             {pickupPlaceShort(shop.pickupPlace)}.
           </p>
         </div>
-        <div className="mt-12">
+        <div className="mt-12 sm:mt-16">
           <CheckoutForm
             days={days}
             stripeReady={isStripeConfigured()}

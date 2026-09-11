@@ -3,7 +3,7 @@
   "slug": "kontakt",
   "seo": {
     "title": "Kontakt",
-    "description": "Ring, skriv en mail eller brug formularen. Find bageriet på Torpevej 10 i Herlufmagle og torvedagen på Axeltorv i Næstved."
+    "description": "Ring, skriv en mail eller brug formularen. Find bageriet på Torpevej 10 i Herlufmagle og Torvedag på Axeltorv i Næstved."
   },
   "showInNav": true,
   "navLabel": "Kontakt",
@@ -14,7 +14,7 @@
       "_type": "contactSection",
       "_key": "top",
       "heading": "Her får du fat i os",
-      "text": "Ring, skriv en mail eller brug formularen nederst på siden. Kristine svarer normalt inden for to hverdage."
+      "text": "Ring, skriv en mail eller brug formularen nederst på siden."
     },
     {
       "_type": "hoursSection",
@@ -26,7 +26,7 @@
       "_key": "skriv",
       "kind": "contact",
       "heading": "Skriv til os",
-      "text": "Spørgsmål om en bestilling, pizzavognen, en kage eller noget helt fjerde. Skriv, så svarer Kristine."
+      "text": "Skriv, så svarer Kristine, når hun har set din besked."
     }
   ]
 }

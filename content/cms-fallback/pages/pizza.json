@@ -1,10 +1,10 @@
 {
-  "_readme": "Pizzavognens side. Priser, pizzaer, desserter og teksterne om dagen og det praktiske ligger i content/pizza.json (i Studio: Pizzavogn); afsnittene af typen pizzaSection henter dem derfra.",
+  "_readme": "Pizzavognens side. Priser, pizzaer, desserter og teksterne om dagen og depositum ligger i content/pizza.json (i Studio: Pizzavogn); afsnittene af typen pizzaSection henter dem derfra. Bookingformularen står højt på siden, lige efter priserne, så man kan sende en forespørgsel uden at læse det hele først.",
   "title": "Pizzavogn",
   "slug": "pizza",
   "seo": {
     "title": "Den rullende pizzavogn",
-    "description": "Book pizzavognen til barnedåb, konfirmation, fødselsdag eller firmafest. Vi bager økologiske surdejspizzaer i den hjemmebyggede stenovn hos jer, på Sjælland, Fyn og Lolland-Falster.",
+    "description": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangement eller marked, rykker vi ud med vores hjemmebyggede pizzaovn. Vi kører på Sjælland, Fyn og Lolland-Falster.",
     "image": "/images/wood-fired-pizza-oven.jpg"
   },
   "showInNav": true,
@@ -31,46 +31,41 @@
     },
     {
       "_type": "pizzaSection",
-      "_key": "dagen",
-      "part": "day"
-    },
-    {
-      "_type": "pizzaSection",
       "_key": "priser",
-      "part": "prices",
-      "heading": "Priser"
-    },
-    {
-      "_type": "photoBandSection",
-      "_key": "pizza",
-      "image": "/images/pizza-rocket-parma-ham.jpg",
-      "caption": "Rucola, parmaskinke og parmesan, lige ud af ovnen.",
-      "ratio": "3/2"
-    },
-    {
-      "_type": "pizzaSection",
-      "_key": "pizzaerne",
-      "part": "menu",
-      "text": "I vælger tre af pizzaerne her. Der er altid mindst en vegetarisk, og vegansk eller glutenfri kan tilkøbes."
-    },
-    {
-      "_type": "pizzaSection",
-      "_key": "praktisk",
-      "part": "terms",
-      "heading": "Praktisk"
+      "part": "prices"
     },
     {
       "_type": "formSection",
       "_key": "book",
       "kind": "pizza",
       "heading": "Book pizzavognen",
-      "text": "Udfyld formularen, så vender Kristine tilbage inden for to hverdage. Det er en forespørgsel: I betaler ikke noget, før hun har bekræftet.",
-      "steps": [
-        "Du sender forespørgslen her på siden.",
-        "Kristine svarer inden for to hverdage med en bekræftelse, den samlede pris og betalingsoplysninger til depositum.",
-        "Depositum er en tredjedel af beløbet. Resten betaler I på dagen.",
-        "Vi kommer to timer før spisetid og bager i to timer, eller til I er mætte."
-      ]
+      "text": "Udfyld det vigtigste her, så bekræfter Kristine pris og dato. Du betaler ikke noget, før hun har bekræftet.",
+      "steps": []
+    },
+    {
+      "_type": "photoBandSection",
+      "_key": "pizza",
+      "image": "/images/pizza-rocket-parma-ham.jpg",
+      "caption": "Tomat, mozzarella, frisk rucola, parmaskinke og parmesan.",
+      "ratio": "3/2"
+    },
+    {
+      "_type": "pizzaSection",
+      "_key": "pizzaerne",
+      "part": "menu",
+      "text": "Alle vores pizzaer er økologiske og lavet på en langtidskoldhævet bund, toppet med vores lækre fyld. I vælger tre varianter fra listen, og der er altid mindst en vegetarisk. Pizzaerne er hele tiden under udvikling, så spørg endelig ind, og kom med ønsker."
+    },
+    {
+      "_type": "pizzaSection",
+      "_key": "dagen",
+      "part": "day",
+      "heading": "På dagen"
+    },
+    {
+      "_type": "pizzaSection",
+      "_key": "depositum",
+      "part": "terms",
+      "text": "Depositum"
     }
   ]
 }

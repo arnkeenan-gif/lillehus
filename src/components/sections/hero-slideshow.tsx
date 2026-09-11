@@ -47,6 +47,7 @@ export function HeroSlideshow({ slides, intervalSeconds }: { slides: CmsImage[];
           alt={slide.alt}
           fill
           priority={i === 0}
+          quality={90}
           sizes="100vw"
           aria-hidden={i !== index}
           className={`object-cover transition-opacity duration-1000 ease-linear ${i === index ? "opacity-100" : "opacity-0"}`}

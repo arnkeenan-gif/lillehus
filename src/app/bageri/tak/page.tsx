@@ -85,8 +85,8 @@ function Calm({
   return (
     <Section>
       <Container size="narrow">
-        <h1 className="text-title font-semibold">{title}</h1>
-        <p className="mt-5 max-w-[55ch] text-lead text-ink">{text}</p>
+        <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink">{title}</h1>
+        <p className="mt-5 max-w-[46ch] text-lead text-ink-2">{text}</p>
         <p className="mt-3 text-ink-2">
           Telefon <span className="tnum">{phone}</span>.
         </p>
@@ -117,8 +117,10 @@ function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSet
     <Section className="print:py-0">
       <Container size="narrow" className="print:max-w-none print:px-0">
         <ClearCart />
-        <h1 className="text-title font-semibold print:text-2xl">Tak for din bestilling</h1>
-        <p className="mt-5 max-w-[60ch] text-lead text-ink print:mt-3 print:text-base print:text-[#000]">
+        <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink print:text-2xl">
+          Tak for din bestilling
+        </h1>
+        <p className="mt-5 max-w-[46ch] text-lead text-ink-2 print:mt-3 print:text-base print:text-[#000]">
           {isDelivery
             ? `Vi leverer ${day || "den aftalte dag"}.`
             : `Du henter i ${shop.pickupPlace}, ${day || "den valgte dag"} mellem kl. ${hours}.`}

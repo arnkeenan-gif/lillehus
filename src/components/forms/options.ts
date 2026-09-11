@@ -22,7 +22,7 @@ export const SOURCES: readonly Option[] = [
   { value: "facebook", label: "Facebook" },
   { value: "instagram", label: "Instagram" },
   { value: "anbefaling", label: "Anbefaling" },
-  { value: "marked", label: "Markedet i Næstved" },
+  { value: "marked", label: "Torvedag i Næstved" },
   { value: "andet", label: "Andet" },
 ];
 
@@ -42,17 +42,11 @@ export const CONTACT_SUBJECTS: readonly Option[] = [
   { value: "andet", label: "Andet" },
 ];
 
-export const COURSES: readonly Option[] = [
-  { value: "surdej", label: "Surdejskursus" },
-  { value: "pizza", label: "Pizzakursus for grupper" },
-  { value: "andet", label: "Noget andet" },
-];
-
 export const COMPANY_WANTS: readonly Option[] = [
-  { value: "broed", label: "Fast brød til kontoret" },
-  { value: "morgenbroed", label: "Morgenbrød til møder" },
-  { value: "pizzavogn", label: "Pizzavognen til et arrangement" },
-  { value: "andet", label: "Noget andet" },
+  { value: "broed", label: "Brød" },
+  { value: "kager", label: "Kager" },
+  { value: "pizzavogn", label: "Pizzavognen" },
+  { value: "andet", label: "Andet" },
 ];
 
 export const COMPANY_FREQUENCY: readonly Option[] = [

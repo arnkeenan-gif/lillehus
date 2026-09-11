@@ -3,8 +3,8 @@
   "title": "Arrangementer",
   "slug": "arrangementer",
   "seo": {
-    "title": "Arrangementer og kurser",
-    "description": "Åbne døre i haven og huset på udvalgte dage, torvedag på Axeltorv i Næstved onsdag og lørdag, og surdejs- og pizzakurser efter aftale.",
+    "title": "Arrangementer",
+    "description": "På udvalgte dage holder vi åbent i haven og huset, og onsdag og lørdag holder vi Torvedag i Næstved. Skriv, hvis du er interesseret i et kursus.",
     "image": "/images/family-at-table-in-garden.jpg"
   },
   "showInNav": true,
@@ -15,15 +15,15 @@
     {
       "_type": "heroSection",
       "_key": "top",
-      "heading": "Åbne døre, torvedag og kurser",
-      "text": "Åbent hus på gården på udvalgte dage, torvedag i Næstved hver uge, og kurser i surdej og pizza, når vi finder en dag sammen."
+      "heading": "Åben dørene til haven og huset",
+      "text": "På udvalgte dage holder vi åbent i haven og huset. Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved."
     },
     {
       "_type": "richTextSection",
       "_key": "aabne-doere",
       "body": [
-        "På udvalgte dage åbner vi dørene til haven og huset. Så står vi klar med pizzaer fra ovnen, kager og noget at drikke, alt sammen økologisk og hjemmelavet.",
-        "Dagene ligger spredt, og vi annoncerer dem kort tid før på [Facebook](https://www.facebook.com/dlhpl) og [Instagram](https://www.instagram.com/detlillehuspaalandet/). Følg med der, hvis du vil have besked."
+        "På udvalgte dage holder vi “Åben dørene til haven og huset”. Alt efter humør, står vi klar med de lækreste pizzaer, de skønneste kager og de dejligste drikke. Selvfølgelig alt sammen økologisk og hjemmelavet.",
+        "Arrangementerne afholdes sporadisk og vil derfor ikke blive annonceret lang tid i forvejen. Når de annonceres, sker det via vores [facebookside](https://www.facebook.com/dlhpl) og vores [Instagramprofil](https://www.instagram.com/detlillehuspaalandet/)."
       ],
       "imagePosition": "right",
       "tone": "paper"
@@ -33,7 +33,7 @@
       "_key": "haven",
       "columns": 4,
       "images": [
-        { "image": "/images/family-at-table-in-garden.jpg", "caption": "Efterår i haven, og noget af det, der kommer på bordet, når der er åbent hus." },
+        { "image": "/images/family-at-table-in-garden.jpg" },
         { "image": "/images/kale-burger-on-plate.jpg" },
         { "image": "/images/rainbow-salad-bowl.jpg" },
         { "image": "/images/roasted-carrots-with-parsley.jpg" },
@@ -44,15 +44,15 @@
       "_type": "formSection",
       "_key": "kursus",
       "kind": "course",
-      "heading": "Kurser efter aftale",
-      "text": "Vi holder surdejskursus og pizzakursus for grupper efter aftale. Der er ingen faste datoer: skriv, hvad I har lyst til, hvor mange I er, og hvornår det kunne passe, så finder vi en dag. Kristine skriver tilbage inden for to hverdage med et forslag."
+      "heading": "Interesseret i et kursus?",
+      "text": "Skriv, hvad du gerne vil lære, hvor mange I er, og hvornår det kunne passe. Kristine svarer, når hun har set din forespørgsel."
     },
     {
       "_type": "eventsSection",
       "_key": "kalender",
       "heading": "Det sker",
       "showWeek": true,
-      "emptyText": "Lige nu er der ikke sat dato på nye arrangementer. De næste åbne døre bliver annonceret her, og tilmelder du dig nyhedsbrevet nederst på siden, skriver vi, når der sker noget.",
+      "emptyText": "Lige nu er der ingen datoer i kalenderen. Arrangementerne bliver ikke annonceret lang tid i forvejen.",
       "limit": 20
     }
   ]

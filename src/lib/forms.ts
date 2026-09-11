@@ -39,7 +39,6 @@ export const MSG = {
 } as const;
 
 /** The answer-time promise, used on every success message and in the emails. */
-export const ANSWER_TIME = "inden for to hverdage";
 
 /* ------------------------------------------------------------------ */
 /* Honeypot, IP and the shared gate                                    */

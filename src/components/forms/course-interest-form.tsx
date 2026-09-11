@@ -1,10 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { Field, Input, Textarea } from "@/components/ui/field";
 import { submitCourseInterest } from "@/app/actions/course-interest";
 import { INITIAL_FORM_STATE, controlAria, fieldError, formValues, valueOf } from "@/components/forms/form-state";
-import { COURSES } from "@/components/forms/options";
 import { FormGroup, FormMessage, FormSuccess, Honeypot, SubmitButton, formClass } from "@/components/forms/form-status";
 
 export function CourseInterestForm() {
@@ -17,6 +16,7 @@ export function CourseInterestForm() {
   const values = formValues(state);
   const err = (name: string) => fieldError(state, name);
   const periodHelper = "For eksempel en lørdag i november, eller en hverdagsaften efter nytår.";
+  const courseHelper = "Skriv, hvilket kursus du er interesseret i.";
 
   return (
     <form action={formAction} noValidate className={formClass}>
@@ -24,21 +24,14 @@ export function CourseInterestForm() {
 
       <FormGroup legend="Hvad vil I gerne lære?">
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field label="Hvilket kursus?" htmlFor="kursus-course" required error={err("course")}>
-            <Select
+          <Field label="Kursus" htmlFor="kursus-course" required helper={courseHelper} error={err("course")}>
+            <Input
               id="kursus-course"
               name="course"
               required
               defaultValue={valueOf(values, "course")}
-              {...controlAria("kursus-course", err("course"))}
-            >
-              <option value="">Vælg</option>
-              {COURSES.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </Select>
+              {...controlAria("kursus-course", err("course"), courseHelper)}
+            />
           </Field>
           <Field label="Hvor mange er I?" htmlFor="kursus-persons" required error={err("persons")}>
             <Input

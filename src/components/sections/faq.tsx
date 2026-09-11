@@ -1,8 +1,8 @@
-import { Plus } from "@phosphor-icons/react/dist/ssr";
+import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 import { Container } from "@/components/ui/container";
 import { RichText, getFaq, type FaqItem, type FaqSection } from "@/lib/cms";
 import { cn } from "@/lib/cn";
-import { SectionHeading } from "./heading";
+import { SectionHeading, afterIntro, listMeasure } from "./heading";
 import type { SectionProps } from "./types";
 
 /** Questions under their group, in the order Kristine set. */
@@ -20,7 +20,11 @@ function groupItems(items: FaqItem[]): { name: string; items: FaqItem[] }[] {
   return groups;
 }
 
-/** Native details/summary rows with hairlines, no JavaScript. */
+/**
+ * Native details/summary rows with a hairline between them, no JavaScript.
+ * Every summary is at least 44px tall and carries a caret that turns when
+ * the row opens; the answer is prose in the same measure as the question.
+ */
 export async function Faq({ section, level, className }: SectionProps<FaqSection>) {
   const items = section.mode === "selected" && section.items.length > 0 ? section.items : await getFaq();
   if (items.length === 0) return null;
@@ -31,24 +35,24 @@ export async function Faq({ section, level, className }: SectionProps<FaqSection
     <section className={className}>
       <Container>
         {section.heading ? <SectionHeading as={level}>{section.heading}</SectionHeading> : null}
-        <div className={cn("max-w-[720px]", section.heading && "mt-10")}>
+        <div className={cn(listMeasure, section.heading && afterIntro)}>
           {groups.map((group, index) => (
-            <div key={group.name} className={index > 0 ? "mt-12" : undefined}>
+            <div key={group.name} className={index > 0 ? "mt-14" : undefined}>
               {groups.length > 1 || group.name !== "Andet" ? (
                 <GroupTag className="text-xl font-semibold text-ink">{group.name}</GroupTag>
               ) : null}
               <div className="mt-4 border-t border-line">
                 {group.items.map((item) => (
                   <details key={item.id} className="group border-b border-line">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-left font-medium text-ink [&::-webkit-details-marker]:hidden">
+                    <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-6 py-4 text-left font-medium text-ink transition-colors duration-150 ease-out-quart hover:text-rust [&::-webkit-details-marker]:hidden">
                       <span>{item.q}</span>
-                      <Plus
+                      <CaretDown
                         size={20}
                         aria-hidden="true"
-                        className="shrink-0 text-muted transition-transform duration-150 ease-out-quart group-open:rotate-45"
+                        className="shrink-0 text-muted transition-transform duration-150 ease-out-quart group-open:rotate-180"
                       />
                     </summary>
-                    <RichText value={item.answer} className="pb-5" />
+                    <RichText value={item.answer} className="pb-6 pr-11" />
                   </details>
                 ))}
               </div>

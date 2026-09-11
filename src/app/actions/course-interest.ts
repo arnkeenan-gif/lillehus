@@ -3,15 +3,13 @@
 import { createElement } from "react";
 import { z } from "zod";
 import { EMAIL_TO, sendEmail } from "@/lib/resend";
-import { field, fieldErrors, gate, invalid, MSG, plainText, sendFailure, str, type FormState } from "@/lib/forms";
-import { COURSES, optionLabel, optionValues } from "@/components/forms/options";
+import { field, fieldErrors, gate, invalid, plainText, sendFailure, str, type FormState } from "@/lib/forms";
 import { CourseInterestKristineEmail, courseInterestRows, type CourseInterestEmailData } from "@/emails/event-kristine";
 
-const SUCCESS =
-  "Tak for din interesse. Kristine skriver til dig inden for to hverdage, så I kan finde en dag, der passer.";
+const SUCCESS = "Tak for din interesse. Kristine skriver til dig, når hun har set din forespørgsel.";
 
 const schema = z.object({
-  course: z.enum(optionValues(COURSES), { error: MSG.choose }),
+  course: field.requiredText(120),
   persons: field.count(1, "Skriv, hvor mange I er."),
   period: field.requiredText(200),
   name: field.name,
@@ -37,7 +35,7 @@ export async function submitCourseInterest(_prev: FormState, formData: FormData)
 
   const v = parsed.data;
   const data: CourseInterestEmailData = {
-    course: optionLabel(COURSES, v.course),
+    course: v.course,
     persons: v.persons,
     period: v.period,
     name: v.name,

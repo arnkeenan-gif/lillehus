@@ -56,7 +56,7 @@ function leadTimeError(formData: FormData, cakes: CakeTypeExt[]): Record<string,
   const earliest = addDaysIso(todayIso(), cake.leadTimeDays);
   if (date >= earliest) return {};
   return {
-    date: `${cake.name} skal bestilles mindst ${cake.leadTimeDays} dage før. Vælg en dato fra ${formatIsoDate(earliest)} og frem.`,
+    date: `Vælg en dato fra ${formatIsoDate(earliest)} og frem.`,
   };
 }
 

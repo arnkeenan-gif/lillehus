@@ -4,7 +4,7 @@
   "slug": "levering",
   "seo": {
     "title": "Afhentning og levering",
-    "description": "Bestilt brød hentes i Hønsehuset på Torpevej 10 i Herlufmagle. Her står, hvilke dage du kan hente, hvornår du skal bestille, og hvad planen er for levering."
+    "description": "Bestilte varer hentes i Hønsehuset på Torpevej 10 i Herlufmagle. Her står, hvilke dage du kan hente, hvornår du skal bestille, og hvordan du spørger om levering."
   },
   "showInNav": false,
   "navLabel": "Levering",
@@ -15,7 +15,7 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Afhentning og levering",
-      "text": "Det meste af vores brød bliver hentet på gården. Her er, hvordan det foregår, og hvad vi har af planer om levering."
+      "text": "Bestilte varer henter du i Hønsehuset på gården. Her står, hvornår du kan hente, og hvordan du spørger om levering."
     },
     {
       "_type": "pickupInfoSection",
@@ -25,8 +25,8 @@
     {
       "_type": "ctaSection",
       "_key": "pizzavogn",
-      "heading": "Pizzavognen kører til gengæld ud",
-      "text": "Stenovnen står på en trailer, så den kommer gerne hjem til jer og bager pizza på surdej, til alle er mætte.",
+      "heading": "Den rullende pizzavogn",
+      "text": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn. Vi laver og bager pizzaerne på stedet, hos jer.",
       "link": { "label": "Book pizzavognen", "href": "/pizza" },
       "tone": "paper"
     }

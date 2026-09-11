@@ -1,7 +1,7 @@
 {
   "name": "Det lille hus på landet",
   "shortName": "Det lille hus",
-  "tagline": "Surdejsbageri, pizzavogn og lidt af hvert på en gård ved Herlufmagle",
+  "tagline": "Et liv med fokus på familie, økologi, bæredygtighed.",
   "owner": "Kristine Kjær Schmeling",
   "founded": 2009,
   "cvr": "32164579",
@@ -34,7 +34,7 @@
         {
           "days": "Mandag til fredag",
           "time": "7 til 18",
-          "note": "Selvbetjent fryser. Priser står på skiltet, betal med MobilePay på fryserens dør."
+          "note": "Priser på skiltet og betaling via MobilePay (står på fryserens dør)."
         }
       ],
       "pickup": true,
@@ -59,7 +59,7 @@
         }
       ],
       "pickup": false,
-      "notes": "Vi holder i den grønne vogn. Ud over brød har vi kaffe, te og boller med smør."
+      "notes": ""
     }
   ],
   "orderEmailTo": "kristine.k.h@gmail.com"

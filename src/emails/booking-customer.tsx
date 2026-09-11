@@ -3,9 +3,9 @@ import { EmailLayout, EmailRow, emailStyles } from "@/emails/_layout";
 import { site } from "@/lib/site";
 import { bookingRows, type BookingEmailData } from "@/emails/booking-kristine";
 
-/** Same wording on the page, in the email and in the plain-text body. */
+/** Same wording in the email and in the plain-text body. */
 export const BOOKING_NEXT_STEPS =
-  "Det er en forespørgsel, ikke en endelig booking. Kristine vender tilbage inden for to hverdage med en bekræftelse, den samlede pris og oplysninger til betaling af depositum.";
+  "Det er en forespørgsel, ikke en endelig booking. Kristine vender tilbage og bekræfter pris og dato og sender oplysninger til betaling af depositum. Bookingen er først endelig, når depositum er betalt.";
 
 const pre = { whiteSpace: "pre-line" as const };
 

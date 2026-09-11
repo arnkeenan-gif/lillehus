@@ -123,7 +123,7 @@ export function CartDrawer({ note }: Props) {
           aria-modal="true"
           aria-labelledby="kurv-titel"
           tabIndex={-1}
-          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-paper shadow-drawer outline-none sm:rounded-l-lg"
+          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-paper shadow-drawer outline-none"
           {...panelMotion}
         >
           <div className="flex h-16 shrink-0 items-center justify-between border-b border-line pl-5 pr-3 sm:h-[72px]">
@@ -150,13 +150,13 @@ export function CartDrawer({ note }: Props) {
               <ul className="flex flex-col gap-6 py-6">
                 {items.map((item) => (
                   <li key={item.productId} className="flex gap-4">
-                    <div className="relative size-14 shrink-0 overflow-hidden rounded-md bg-paper-2">
+                    <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-paper-2">
                       {item.image ? (
                         <Image
                           src={item.image}
                           alt=""
                           fill
-                          sizes="56px"
+                          sizes="64px"
                           className="object-cover"
                           style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined}
                           unoptimized={!isOptimizable(item.image)}

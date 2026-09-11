@@ -7,7 +7,7 @@ import { field, fieldErrors, gate, invalid, MSG, plainText, sendFailure, str, ty
 import { CONTACT_SUBJECTS, optionLabel, optionValues } from "@/components/forms/options";
 import { ContactKristineEmail, contactRows, type ContactEmailData } from "@/emails/contact-kristine";
 
-const SUCCESS = "Tak for din besked. Kristine svarer normalt inden for to hverdage.";
+const SUCCESS = "Tak for din besked. Kristine svarer, når hun har set den.";
 
 const schema = z.object({
   name: field.name,

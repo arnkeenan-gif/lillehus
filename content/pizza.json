@@ -1,22 +1,18 @@
 {
-  "intro": "Vi kommer med den hjemmebyggede stenovn og bager økologiske surdejspizzaer hos jer, til barnedåb, konfirmation, fødselsdag eller firmafest.",
+  "intro": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn og medvirker til at gøre dagen lidt anderledes.",
   "packages": [
     {
       "id": "ad-libitum",
-      "name": "Pizza ad libitum",
-      "description": "Vi bager i op til to timer, eller til alle er mætte. Minimum 40 voksne.",
+      "name": "Ad libitum",
+      "description": "Ad libitum, dog højst i to timer. Minimum 40 voksne.",
       "pricePerPersonOere": 27500,
       "minGuests": 40,
-      "includes": [
-        "Tre pizzaer efter jeres valg, altid mindst en vegetarisk",
-        "Bagt på stedet i den hjemmebyggede stenovn",
-        "Pavilloner og serveringsbrætter"
-      ]
+      "includes": []
     }
   ],
   "radiusKm": 40,
   "areaNote": "Vi kører på Sjælland, Fyn og Lolland-Falster.",
-  "notes": ["Oplysninger om allergener fås ved forespørgsel."],
+  "notes": ["Oplysninger om allergener kan fås mod forespørgsel."],
   "prices": {
     "childOere": 17500,
     "childAges": "0 til 7 år",
@@ -27,11 +23,11 @@
     "mileageNote": "plus eventuelle bropenge"
   },
   "day": [
-    "Skal du holde barnedåb, konfirmation, fødselsdag eller firmaarrangement, eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn og er med til at gøre dagen lidt anderledes. Vi laver og bager pizzaerne på stedet, hos jer, så de kommer sprøde og varme direkte fra ovnen.",
-    "Ovnen kan være midtpunktet i en hyggelig, uformel fest, eller den kan stå diskret i baggrunden. Det bestemmer I.",
-    "Alle pizzaer er økologiske, bagt på en langtidskoldhævet surdejsbund og toppet med vores eget fyld. I vælger tre varianter fra listen, og der er altid mindst en vegetarisk. Vegansk og glutenfri kan tilkøbes for et lille tillæg pr. kuvert. Pizzaerne er hele tiden under udvikling, så spørg endelig, og kom med ønsker.",
-    "Vi kommer to timer før den ønskede spisetid, tænder op og gør klar. Et kvarters tid før spisetid begynder vi at bage, så de første pizzaer er klar, når I er. Fra vi starter, bager vi to fulde timer, eller til I er mætte før da.",
-    "Af erfaring ved vi, at der er run på serveringsbrætterne den første times tid. Det aftager stille og roligt den næste halve time og ebber næsten ud den sidste. Der er rigeligt pizza til alle, og som regel lidt til overs. Så hav gerne et par bakker klar, hvis I vil have lidt til fryseren eller natmad."
+    "Vi laver og bager pizzaerne på stedet, hos jer, så I får de lækreste, friske, sprøde pizzaer. I kan vælge pizzaovnen som centrum for en hyggelig, uformel fest, eller at den skal være diskret i baggrunden.",
+    "Vi kommer to timer før ønsket spisetid for at tænde op og gøre klar. Vi begynder at bage cirka et kvarter før spisetid, så vi er klar, når I ønsker det. Fra vi starter, bager vi to fulde timer eller til I er mætte før da.",
+    "Vi skal have adgang til vand, toilet og eventuelt strøm. I står for service, servietter og eventuelt håndsprit. Vi har pavilloner og serveringsbrættet med.",
+    "Da traileren med pizzavognen er tung, kræver det, at pladsen, vi skal stå på, kan køres til.",
+    "Vi ved af erfaring, at der den første times tid er meget run på ved serveringsbrætterne. Det aftager stille og roligt den næste halve time for næsten at ebbe ud den sidste halve time. Der er rigelig pizza til alle og oftest alt rigeligt. Så hvis I ønsker lidt til fryseren eller natmad, så hav gerne et par bakker klar, som vi kan stille af på til sidst."
   ],
   "pizzas": [
     { "name": "Tomat, mozzarella og basilikum", "vegetarian": true },
@@ -41,16 +37,17 @@
     { "name": "Tomat, spinat, mozzarella, gorgonzola og bacon" },
     { "name": "Creme fraiche, sødkartoffel, mozzarella, syltede rødløg, salvie, trøffelolie og chili", "vegetarian": true },
     { "name": "Tomat, mozzarella, frisk rucola, citron og parmesan", "vegetarian": true },
-    { "name": "Tomat, mozzarella, frisk rucola, parmaskinke og parmesan, med citron hvis I vil" }
+    { "name": "Tomat, mozzarella, frisk rucola, parmaskinke og parmesan, citron valgfrit" }
   ],
   "desserts": [
     "Pavlova med flødeskum og årstidens frugt",
-    "Brownie med vaniljeis fra Hansen og årstidens frugt",
+    "Brownie med flødevaniljeis fra Hansen og årstidens frugt",
     "Citrontærte"
   ],
   "terms": [
-    "Vi skal have adgang til vand og toilet, og gerne strøm. I sørger for tallerkener, servietter og eventuelt håndsprit. Pavilloner og serveringsbrætter har vi selv med.",
-    "Traileren med ovnen er tung, så pladsen, vi skal stå på, skal kunne nås med bil. Skriv gerne i formularen, hvor I forestiller jer, at vognen kan stå.",
-    "Vi beder om et depositum på en tredjedel af det endelige beløb. Det trækkes fra på dagen, hvor resten betales med straksoverførsel eller MobilePay. Depositum returneres ikke ved afbestilling inden for de sidste 14 dage. Kristine sender betalingsoplysninger sammen med sin bekræftelse."
+    "Vi udbeder os et depositum på en tredjedel af det endelige beløb. Bookingen er først endelig, når depositum er betalt. Depositummet fratrækkes på dagen, hvor den endelige betaling sker.",
+    "Depositummet returneres ikke ved afbestilling inden for de sidste 14 dage.",
+    "Betaling på dagen sker enten som en straksoverførsel eller med MobilePay. Kristine sender betalingsoplysninger sammen med sin bekræftelse.",
+    "Ved yderligere spørgsmål, så tøv ikke med at kontakte os. Vi glæder os til at hygge om jer."
   ]
 }

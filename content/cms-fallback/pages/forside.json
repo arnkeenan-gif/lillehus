@@ -4,7 +4,7 @@
   "slug": "forside",
   "seo": {
     "title": "Det lille hus på landet, bageri og pizzavogn ved Herlufmagle",
-    "description": "Surdejsbrød, rugbrød og kanelsnegle bagt på gården på Torpevej. Køb i fryseren, bestil til afhentning i Hønsehuset eller mød os på Torvedag i Næstved. Book pizzavognen til festen.",
+    "description": "Surdejsbrød, boller og rugbrød fra gården på Torpevej ved Herlufmagle. Fryseren er åben hverdage kl. 7 til 18, Torvedag i Næstved onsdag og lørdag, og bestilte varer afhentes i Hønsehuset. Book den rullende pizzavogn.",
     "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
   },
   "showInNav": false,
@@ -53,13 +53,6 @@
             "x": 0.5,
             "y": 0.5
           }
-        },
-        {
-          "src": "/images/homemade-granola.jpg",
-          "hotspot": {
-            "x": 0.5,
-            "y": 0.5
-          }
         }
       ],
       "interval": 5
@@ -68,8 +61,8 @@
       "_type": "richTextSection",
       "_key": "ugen",
       "body": [
-        "Onsdag og lørdag holder vi på Torvedag i Næstved, **kl. 9 til 14** eller til vi er udsolgt.",
-        "Resten af ugen er fryseren på gården åben **alle hverdage kl. 7 til 18**, og har du bestilt, står brødet klar i Hønsehuset."
+        "Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved, foran Løveapoteket, **kl. 9 til 14** eller til vi er udsolgt.",
+        "Fryseren på gården er åben **hverdage kl. 7 til 18**. Priser på skiltet og betaling via MobilePay (står på fryserens dør). Bestilte varer afhentes i Hønsehuset."
       ],
       "image": "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg",
       "imagePosition": "right",
@@ -78,61 +71,45 @@
     {
       "_type": "priceListSection",
       "_key": "priser",
-      "heading": "Brød og priser",
+      "heading": "Priser",
       "rows": [
         {
           "_key": "surdejsbroed",
-          "name": "Surdejsbrød",
-          "price": "55 kr.",
-          "note": "Hvede med lidt fuldkorn, hævet natten over og bagt i form."
+          "name": "Surdejsbrød/form",
+          "price": "55 kr."
         },
         {
           "_key": "surdejsbroed-sesam",
-          "name": "Surdejsbrød med sesam",
-          "price": "55 kr.",
-          "note": "Rullet i ristede sesamfrø, før det kommer i ovnen."
+          "name": "Surdejsbrød m. sesam",
+          "price": "55 kr."
         },
         {
           "_key": "rugbroed",
-          "name": "Rugbrød med kerner",
-          "price": "55 kr.",
-          "note": "Solsikke, hørfrø og græskarkerner. Bages tirsdag og fredag."
-        },
-        {
-          "_key": "fladbroed",
-          "name": "Fladbrød med sortkommen",
-          "price": "35 kr.",
-          "note": "Tynde surdejsfladbrød med olivenolie og salt. Bages onsdag og fredag."
+          "name": "Rugbrød m. kerner",
+          "price": "55 kr."
         },
         {
           "_key": "boller",
-          "name": "Surdejsboller, 4 stk.",
-          "price": "50 kr."
+          "name": "Surdejsboller plain",
+          "price": "15 kr., 4 for 50 kr."
         },
         {
-          "_key": "boller-sesam-havre",
-          "name": "Surdejsboller med sesam og havre, 4 stk.",
-          "price": "68 kr."
+          "_key": "boller-birkes-sesam",
+          "name": "Surdejsboller m. birkes, sesam",
+          "price": "17 kr."
         },
         {
-          "_key": "kanelsnegl",
-          "name": "Kanelsnegl",
-          "price": "40 kr.",
-          "note": "Bagt samme morgen. Bedst mens den er lun."
+          "_key": "blandede-boller",
+          "name": "4 blandede boller",
+          "price": "55 kr."
         },
         {
-          "_key": "cookies",
-          "name": "Cookies med chokolade og flagesalt, 3 stk.",
-          "price": "45 kr."
-        },
-        {
-          "_key": "granola",
-          "name": "Granola, 400 g",
-          "price": "65 kr.",
-          "note": "Ristet havre med mandler, hasselnødder og lidt honning."
+          "_key": "vaniljesnegl",
+          "name": "Vaniljesnegl",
+          "price": "40 kr."
         }
       ],
-      "footnote": "Bestil på siden senest dagen før kl. 18, og hent i Hønsehuset tirsdag til fredag mellem kl. 7 og 18. I fryseren står priserne på skiltet."
+      "footnote": "Bestil på siden senest dagen før kl. 18, og hent i Hønsehuset tirsdag til fredag kl. 7 til 18. I fryseren står priserne på skiltet."
     },
     {
       "_type": "gallerySection",
@@ -160,7 +137,7 @@
       "_type": "ctaSection",
       "_key": "pizzavogn",
       "heading": "Pizzavognen kommer ud til jer",
-      "text": "Vi kommer med stenovnen på traileren og bager pizza på surdej, til alle er mætte. Til barnedåb, konfirmation, fødselsdag og firmafest, fra 40 voksne.",
+      "text": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn. Vi laver og bager pizzaerne på stedet, hos jer. Minimum 40 voksne.",
       "link": {
         "label": "Book pizzavognen",
         "href": "/pizza"
@@ -182,7 +159,7 @@
       "_key": "det-sker",
       "heading": "Det sker",
       "showWeek": false,
-      "emptyText": "Lige nu er der ingen datoer i kalenderen. Åbent hus i haven og huset holder vi på udvalgte dage, og vi skriver, når vi kender dagen.",
+      "emptyText": "Lige nu er der ingen datoer i kalenderen. På udvalgte dage holder vi “Åben dørene til haven og huset”. Arrangementerne afholdes sporadisk og bliver ikke annonceret lang tid i forvejen.",
       "limit": 3,
       "link": {
         "label": "Se alle arrangementer",
@@ -193,7 +170,8 @@
       "_type": "richTextSection",
       "_key": "familien",
       "body": [
-        "Vi er Kristine og Nicolas. Det lille hus på landet startede i 2009 og er i dag en gård ved Herlufmagle med bageri, køkkenhave og en stenovn på hjul.",
+        "**Kristine & Nicolas**",
+        "Et liv med fokus på familie, økologi, bæredygtighed. Selvfølgelig alt sammen økologisk og hjemmelavet.",
         "[Læs mere om os](/om-os)"
       ],
       "image": {

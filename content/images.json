@@ -12,7 +12,7 @@
       "subject": "brød"
     },
     "/images/cinnamon-buns-and-bread-rolls.jpg": {
-      "alt": "Kanelsnegle og boller i en kurv",
+      "alt": "Snegle og boller i en kurv",
       "w": 1080,
       "h": 1080,
       "use": [
@@ -22,7 +22,7 @@
       "subject": "brød"
     },
     "/images/oat-topped-bread-rolls.jpg": {
-      "alt": "Boller med havregryn og sesam på et bræt",
+      "alt": "Surdejsboller med havregryn og sesam på et bræt",
       "w": 1080,
       "h": 1080,
       "use": [
@@ -41,7 +41,7 @@
       "subject": "brød"
     },
     "/images/homemade-granola.jpg": {
-      "alt": "Hjemmelavet granola på bagepapir med en træske",
+      "alt": "Granola på bagepapir med en træske",
       "w": 1080,
       "h": 1080,
       "use": [
@@ -50,7 +50,7 @@
       "subject": "brød"
     },
     "/images/wood-fired-pizza-oven.jpg": {
-      "alt": "Den hjemmebyggede stenovn med flammer, en person i hvid striktrøje ved siden af",
+      "alt": "Den hjemmebyggede pizzaovn med flammer, en person i hvid striktrøje ved siden af",
       "w": 1080,
       "h": 810,
       "use": [
@@ -176,7 +176,7 @@
       "subject": "mad"
     },
     "/images/kale-burger-on-plate.jpg": {
-      "alt": "Burger i hjemmebagt bolle med grønkål og rødløg",
+      "alt": "Burger i en bolle med grønkål og rødløg",
       "w": 1080,
       "h": 1080,
       "use": [
@@ -185,7 +185,7 @@
       "subject": "mad"
     },
     "/images/facebook/fb-bread-basket.jpg": {
-      "alt": "Kurv med sesamboller og et mørkt rugbrød",
+      "alt": "Kurv med blandede boller og et rugbrød",
       "w": 414,
       "h": 414,
       "use": [
@@ -196,7 +196,7 @@
       "note": "Lille fil fra Facebook, kun til små billeder"
     },
     "/images/facebook/fb-cinnamon-buns.jpg": {
-      "alt": "Kanelsnegle med sukker på bagepapir",
+      "alt": "Snegle med sukker på bagepapir",
       "w": 414,
       "h": 414,
       "use": [
@@ -217,7 +217,7 @@
       "note": "Lille fil fra Facebook"
     },
     "/images/facebook/fb-sourdough-loaves-stacked.jpg": {
-      "alt": "Surdejsbrød stablet, et skåret igennem",
+      "alt": "Surdejsbrød bagt i form, stablet, et skåret igennem",
       "w": 414,
       "h": 414,
       "use": [
@@ -260,7 +260,7 @@
       "note": "Viser det trykte logo med akskrans og den rustrøde farve"
     },
     "/images/instagram/ig-2026-09-11-fredagsfoelelsen-broedprep.jpg": {
-      "alt": "Bagerist med brød klar til fredag",
+      "alt": "Bagerist med brød",
       "w": 482,
       "h": 640,
       "use": [
@@ -279,7 +279,7 @@
       "subject": "gården"
     },
     "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg": {
-      "alt": "Kristine ekspederer fra den grønne vogn på Torvedag i Næstved",
+      "alt": "Den grønne vogn med lugen åben og prislisten på tavlen, en kunde bliver ekspederet",
       "w": 482,
       "h": 640,
       "use": [
@@ -298,7 +298,7 @@
       "subject": "gården"
     },
     "/images/instagram/ig-2026-08-04-tekst.jpg": {
-      "alt": "Den grønne vogn med dagens priser på tavlerne, brød og kaffe",
+      "alt": "Den grønne vogn med tavler med priser på brød og kaffe",
       "w": 482,
       "h": 640,
       "use": [
@@ -306,7 +306,7 @@
         "find-os"
       ],
       "subject": "torvedag",
-      "note": "Kristines vogn på torvet. Prisliste for brød og kaffe på tavlerne."
+      "note": "Kristines vogn. Prisliste for brød og kaffe på tavlerne."
     },
     "/images/instagram/ig-2026-07-25-foto.jpg": {
       "alt": "Den grønne vogn med tavlerne under blommetræet",

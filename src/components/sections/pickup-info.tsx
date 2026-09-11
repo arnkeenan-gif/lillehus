@@ -4,7 +4,7 @@ import { cutoffText, deliveryDaysText, hoursText, pickupDaysText, splitNotes } f
 import { getLocations, getShopSettings, getSiteSettings, type PickupInfoSection } from "@/lib/cms";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/cn";
-import { SectionHeading, textLink } from "./heading";
+import { SectionHeading, SectionIntro, textLink } from "./heading";
 import type { SectionProps } from "./types";
 
 /**
@@ -23,8 +23,12 @@ export async function PickupInfo({ section, level, className }: SectionProps<Pic
     <section className={className}>
       <Container>
         {section.heading ? <SectionHeading as={level}>{section.heading}</SectionHeading> : null}
-        {section.text ? <p className="mt-4 max-w-[62ch] text-lead text-ink-2">{section.text}</p> : null}
-        <div className={cn("prose", hasTop && "mt-8")}>
+        {section.text ? (
+          <SectionIntro level={level} afterHeading={Boolean(section.heading)}>
+            {section.text}
+          </SectionIntro>
+        ) : null}
+        <div className={cn("prose", hasTop && "mt-6")}>
           {section.detail === "kort" ? (
             <>
               <p>
@@ -32,11 +36,11 @@ export async function PickupInfo({ section, level, className }: SectionProps<Pic
                 senest {cutoffText(shop)}.
               </p>
               <p>
-                Brødet står klar med dit navn på i {shop.pickupPlace}, mellem kl. {shop.pickupWindow}. Tag en pose med.
+                Det, du har bestilt, henter du i {shop.pickupPlace}, kl. {shop.pickupWindow}.
               </p>
               {farm ? (
                 <p>
-                  Har du ikke bestilt, kan du købe fra fryseren på gården, {hoursText(farm.hours)}. {farmNotes}
+                  Fryseren på gården er åben {hoursText(farm.hours)}. {farmNotes}
                 </p>
               ) : null}
               {shop.notice ? <p>{shop.notice}</p> : null}
@@ -49,16 +53,10 @@ export async function PickupInfo({ section, level, className }: SectionProps<Pic
                 bestille senest {cutoffText(shop)}.
               </p>
               <p>
-                Brødet står klar i {shop.pickupPlace}, mellem kl. {shop.pickupWindow} på den dag, du har valgt. Det står med
-                dit navn på, så tag det, der er dit, og lad resten stå til de andre.
+                Det, du har bestilt, henter du i {shop.pickupPlace}, kl. {shop.pickupWindow} på den dag, du har valgt.
               </p>
               <p>
-                Tag en pose eller en kurv med. Du behøver ikke vise ordrebekræftelsen, men hav den ved hånden på telefonen,
-                hvis der er tvivl om navnet.
-              </p>
-              <p>
-                Bliver du forhindret, så ring til os på <a href={`tel:${settings.phoneHref}`}>{settings.phone}</a> samme dag,
-                så finder vi en løsning. Brød, der ikke bliver hentet, kan vi ikke tage retur.
+                Bliver du forhindret, så ring til os på <a href={`tel:${settings.phoneHref}`}>{settings.phone}</a>.
               </p>
               {shop.notice ? <p>{shop.notice}</p> : null}
 
@@ -66,8 +64,7 @@ export async function PickupInfo({ section, level, className }: SectionProps<Pic
                 <>
                   <h2>Fryseren</h2>
                   <p>
-                    Har du ikke bestilt, kan du altid købe fra fryseren på gården. Den er åben {hoursText(farm.hours)}.{" "}
-                    {farmNotes}
+                    Fryseren på gården er åben {hoursText(farm.hours)}. {farmNotes}
                   </p>
                 </>
               ) : null}
@@ -83,10 +80,11 @@ export async function PickupInfo({ section, level, className }: SectionProps<Pic
                 </>
               ) : (
                 <>
-                  <p>Vi leverer ikke endnu. {delivery.note}</p>
+                  <p>Bestillinger her på siden er til afhentning. {delivery.note}</p>
                   <p>
-                    Indtil da henter du i Hønsehuset, eller du finder os på Torvedag i Næstved. Vi skriver på Facebook og
-                    Instagram, når vi begynder at køre.
+                    <Link href="/kontakt" className={textLink}>
+                      Skriv til os
+                    </Link>
                   </p>
                 </>
               )}

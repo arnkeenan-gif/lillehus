@@ -9,13 +9,13 @@ export default function Loading() {
     <Section aria-busy="true">
       <Container size="wide">
         <span className="sr-only">Henter varerne</span>
-        <div className="max-w-[40rem]" aria-hidden="true">
-          <div className="h-10 w-80 max-w-full rounded-md bg-paper-2" />
-          <div className="mt-6 h-6 w-full rounded-md bg-paper-2" />
-          <div className="mt-2 h-6 w-4/5 rounded-md bg-paper-2" />
+        <div className="max-w-[44rem]" aria-hidden="true">
+          <div className="h-10 w-80 max-w-full rounded-md bg-paper-2 sm:h-14 sm:w-[28rem]" />
+          <div className="mt-6 h-7 w-full max-w-[46ch] rounded-md bg-paper-2" />
+          <div className="mt-2 h-7 w-4/5 max-w-[40ch] rounded-md bg-paper-2" />
         </div>
-        <div className="mt-14 h-7 w-20 rounded-md bg-paper-2 sm:mt-20" aria-hidden="true" />
-        <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 xl:grid-cols-4" aria-hidden="true">
+        <div className="mt-14 h-8 w-20 rounded-md bg-paper-2 sm:mt-20" aria-hidden="true" />
+        <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:gap-x-6 xl:grid-cols-4" aria-hidden="true">
           {TILES.map((i) => (
             <div key={i} className="flex flex-col">
               <div className="aspect-[4/5] rounded-md bg-paper-2" />
