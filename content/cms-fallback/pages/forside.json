@@ -17,10 +17,10 @@
       "_key": "top",
       "heading": "Surdejsbageri ved Herlufmagle",
       "image": {
-        "src": "/images/family-at-table-in-garden.jpg",
+        "src": "/images/cinnamon-buns-and-bread-rolls.jpg",
         "hotspot": {
-          "x": 0.66,
-          "y": 0.42
+          "x": 0.5,
+          "y": 0.45
         }
       },
       "primaryLink": {
@@ -121,7 +121,7 @@
           "image": "/images/facebook/fb-rye-bread-loaves.jpg"
         },
         {
-          "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
+          "image": "/images/family-at-table-in-garden.jpg"
         }
       ]
     },
