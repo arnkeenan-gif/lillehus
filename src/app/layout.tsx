@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Familjen_Grotesk } from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { site } from "@/lib/site";
 
-const familjen = Familjen_Grotesk({
+const figtree = Figtree({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-familjen",
+  variable: "--font-brand",
   display: "swap",
 });
 
@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="da" className={`${familjen.variable} h-full`}>
+    <html lang="da" className={`${figtree.variable} h-full`}>
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
         <a
           href="#indhold"

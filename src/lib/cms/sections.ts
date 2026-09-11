@@ -97,6 +97,7 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
         heading: h,
         text,
         image: ctx.image(raw.image),
+        variant: oneOf(raw, "variant", ["cover", "stacked"] as const, "stacked"),
         primaryLink: link(raw, "primaryLink"),
         secondaryLink: link(raw, "secondaryLink"),
       };

@@ -15,9 +15,14 @@
     {
       "_type": "heroSection",
       "_key": "top",
-      "heading": "Brød fra gården ved Herlufmagle",
-      "text": "Vi bager surdejsbrød, rugbrød og kanelsnegle på gården og sælger dem på Torvedag i Næstved onsdag og lørdag.",
-      "image": "/images/cinnamon-buns-and-bread-rolls.jpg",
+      "heading": "Surdejsbageri ved Herlufmagle",
+      "image": {
+        "src": "/images/family-at-table-in-garden.jpg",
+        "hotspot": {
+          "x": 0.66,
+          "y": 0.42
+        }
+      },
       "primaryLink": {
         "label": "Bestil brød",
         "href": "/bageri"
@@ -25,7 +30,8 @@
       "secondaryLink": {
         "label": "Book pizzavognen",
         "href": "/pizza"
-      }
+      },
+      "variant": "cover"
     },
     {
       "_type": "richTextSection",
@@ -115,7 +121,7 @@
           "image": "/images/facebook/fb-rye-bread-loaves.jpg"
         },
         {
-          "image": "/images/wood-fired-pizza-oven.jpg"
+          "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
         }
       ]
     },

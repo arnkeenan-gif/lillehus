@@ -22,14 +22,14 @@
   --color-danger-tint: #f6e9e5;
   --color-white: #ffffff;
 
-  --font-sans: var(--font-familjen), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: var(--font-brand), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --text-display: clamp(3.25rem, 1.75rem + 4.6vw, 6rem);
-  --text-display--line-height: 0.98;
-  --text-display--letter-spacing: -0.03em;
-  --text-title: clamp(2rem, 1.4rem + 2vw, 3rem);
-  --text-title--line-height: 1.06;
-  --text-title--letter-spacing: -0.02em;
+  --text-display: clamp(2.25rem, 1.4rem + 2.8vw, 4rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.02em;
+  --text-title: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.015em;
   --text-lead: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem);
   --text-lead--line-height: 1.35;
   --text-lead--letter-spacing: -0.01em;
@@ -62,8 +62,8 @@
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.6;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -106,6 +106,23 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/*
+  Over a full-image hero the header is transparent with white text, then
+  turns to paper once the photo has scrolled past. The hero sets the
+  attributes (see components/site/cover-header-mode.tsx).
+*/
+.site-header {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+html[data-hero-cover="true"]:not([data-hero-scrolled="true"]) .site-header {
+  background-color: transparent;
+  border-color: transparent;
+  color: #ffffff;
+}
+html[data-hero-cover="true"]:not([data-hero-scrolled="true"]) .site-header :is(a, button, span, svg) {
+  color: inherit;
 }
 
 /* Dotted leader between a name and a price, as on a chalkboard list. */

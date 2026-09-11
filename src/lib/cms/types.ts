@@ -214,6 +214,8 @@ export interface HeroSection extends SectionBase {
   heading: string;
   text?: string;
   image?: CmsImage;
+  /** "cover": the photo fills the first screen with the text on it. "stacked": photo first, text below. */
+  variant?: "cover" | "stacked";
   primaryLink?: CmsLink;
   secondaryLink?: CmsLink;
 }

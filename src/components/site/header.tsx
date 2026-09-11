@@ -5,30 +5,30 @@ import { MobileNav } from "@/components/site/mobile-nav";
 import { CartButton } from "@/components/shop/cart-button";
 
 /**
- * One line, 72px: the wordmark, the seven menu items Kristine marked in the
- * Studio, the cart. Below lg the menu folds into the hamburger. The
- * announcement bar sits under the header in rust-tint when it is switched on.
+ * The Copenhagen bakery header: menu items on the left, the wordmark centred,
+ * the cart on the right, 72px. Over a full-image hero it is transparent with
+ * white text (see globals.css and cover-header-mode.tsx). Below lg the menu
+ * folds into the hamburger. The announcement bar sits under it in rust-tint.
  */
 export async function Header() {
   const [nav, settings] = await Promise.all([getNavigation(), getSiteSettings()]);
   const announcement = settings.announcement.enabled ? settings.announcement.text.trim() : "";
+  // Four items sit left of the wordmark, the rest right of it, like the Copenhagen bakeries.
+  const split = Math.min(4, Math.ceil(nav.length / 2));
+  const left = nav.slice(0, split);
+  const right = nav.slice(split);
+  const navLink =
+    "whitespace-nowrap text-[13px] opacity-80 transition-opacity duration-150 ease-out-quart hover:opacity-100";
 
   return (
     <>
-      <header className="no-print sticky top-0 z-40 border-b border-line bg-paper">
-        <Container className="flex h-16 items-center justify-between gap-6 lg:h-[72px]">
-          <Link href="/" className="shrink-0 text-[1.05rem] font-semibold tracking-tight text-ink">
-            {settings.name}
-          </Link>
-
+      <header className="site-header no-print sticky top-0 z-40 border-b border-line bg-paper text-ink">
+        <Container className="flex h-16 items-center justify-between gap-4 lg:grid lg:h-[72px] lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <nav aria-label="Hovedmenu" className="hidden lg:block">
-            <ul className="flex items-center gap-7">
-              {nav.map((item) => (
+            <ul className="flex items-center gap-5">
+              {left.map((item) => (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-[0.95rem] text-ink-2 transition-colors duration-150 ease-out-quart hover:text-ink"
-                  >
+                  <Link href={item.href} className={navLink}>
                     {item.label}
                   </Link>
                 </li>
@@ -36,7 +36,25 @@ export async function Header() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-1">
+          <Link
+            href="/"
+            className="whitespace-nowrap text-[12px] font-bold uppercase tracking-[0.14em] lg:justify-self-center lg:text-[14px] lg:tracking-[0.16em]"
+          >
+            {settings.name}
+          </Link>
+
+          <div className="flex items-center justify-end gap-1 lg:gap-5">
+            <nav aria-label="Mere" className="hidden lg:block">
+              <ul className="flex items-center gap-5">
+                {right.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className={navLink}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
             <CartButton />
             <MobileNav items={nav} />
           </div>

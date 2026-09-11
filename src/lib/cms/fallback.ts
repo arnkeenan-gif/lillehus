@@ -51,8 +51,12 @@ export function fallbackImage(path: string | null | undefined, alt?: string): Cm
 function imageFromRaw(value: unknown, fallbackAlt?: string): CmsImage | undefined {
   if (typeof value === "string") return fallbackImage(value, fallbackAlt);
   if (value && typeof value === "object" && "src" in value) {
-    const v = value as { src?: unknown; alt?: unknown };
-    return fallbackImage(typeof v.src === "string" ? v.src : undefined, typeof v.alt === "string" ? v.alt : fallbackAlt);
+    const v = value as { src?: unknown; alt?: unknown; hotspot?: { x?: unknown; y?: unknown } };
+    const image = fallbackImage(typeof v.src === "string" ? v.src : undefined, typeof v.alt === "string" ? v.alt : fallbackAlt);
+    if (image && v.hotspot && typeof v.hotspot.x === "number" && typeof v.hotspot.y === "number") {
+      return { ...image, hotspot: { x: v.hotspot.x, y: v.hotspot.y } };
+    }
+    return image;
   }
   return undefined;
 }

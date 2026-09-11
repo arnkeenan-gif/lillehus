@@ -15,8 +15,14 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Historien bag Det lille hus på landet",
-      "text": "Kristine, Nicolas og børnene på en gård ved Herlufmagle. Siden 2009.",
-      "image": "/images/family-on-bench-brick-wall.jpg"
+      "image": {
+        "src": "/images/family-on-bench-brick-wall.jpg",
+        "hotspot": {
+          "x": 0.5,
+          "y": 0.45
+        }
+      },
+      "variant": "cover"
     },
     {
       "_type": "richTextSection",
@@ -39,11 +45,22 @@
       "_key": "gaarden",
       "columns": 4,
       "images": [
-        { "image": "/images/barn-interior-wooden-beams.jpg", "caption": "Laden, haven, køkkenhaven og køkkenet på gården." },
-        { "image": "/images/family-at-table-in-garden.jpg" },
-        { "image": "/images/garden-vegetable-harvest.jpg" },
-        { "image": "/images/rhubarb-leaves-harvest.jpg" },
-        { "image": "/images/instagram/ig-2026-09-02-foto.jpg" }
+        {
+          "image": "/images/barn-interior-wooden-beams.jpg",
+          "caption": "Laden, haven, køkkenhaven og køkkenet på gården."
+        },
+        {
+          "image": "/images/family-at-table-in-garden.jpg"
+        },
+        {
+          "image": "/images/garden-vegetable-harvest.jpg"
+        },
+        {
+          "image": "/images/rhubarb-leaves-harvest.jpg"
+        },
+        {
+          "image": "/images/instagram/ig-2026-09-02-foto.jpg"
+        }
       ]
     },
     {
