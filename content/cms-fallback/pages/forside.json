@@ -1,0 +1,75 @@
+{
+  "_readme": "Forsiden som afsnit. Bruges af siden, indtil Sanity er sat op, og lægges ind i Sanity af scripts/seed-sanity.ts. Billeder er stier i public/images; alt-tekster kommer fra content/images.json. Tekst med **fed** og [link](/adresse) bliver til rigtig tekst.",
+  "title": "Forside",
+  "slug": "forside",
+  "seo": {
+    "title": "Det lille hus på landet, bageri og pizzavogn ved Herlufmagle",
+    "description": "Surdejsbrød, rugbrød og kanelsnegle bagt på gården på Torpevej. Køb i fryseren, bestil til afhentning i Hønsehuset eller mød os på Torvedag i Næstved. Book pizzavognen til festen.",
+    "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
+  },
+  "showInNav": false,
+  "navLabel": "Forside",
+  "navOrder": 0,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "heading": "Brød fra gården ved Herlufmagle",
+      "text": "Vi bager surdejsbrød, rugbrød og kanelsnegle på gården og sælger dem på Torvedag i Næstved onsdag og lørdag.",
+      "image": "/images/cinnamon-buns-and-bread-rolls.jpg",
+      "primaryLink": { "label": "Bestil brød", "href": "/bageri" },
+      "secondaryLink": { "label": "Book pizzavognen", "href": "/pizza" }
+    },
+    {
+      "_type": "hoursSection",
+      "heading": "Her får du fat i brødet",
+      "only": "alle",
+      "link": { "label": "Se kort, kalender og hvordan du henter", "href": "/find-os" }
+    },
+    {
+      "_type": "productStripSection",
+      "heading": "Det bager vi",
+      "text": "",
+      "mode": "auto",
+      "limit": 4,
+      "link": { "label": "Bestil brød", "href": "/bageri" }
+    },
+    {
+      "_type": "photoBandSection",
+      "image": "/images/pizza-rocket-parma-ham.jpg",
+      "caption": "Pizza med rucola og parmaskinke, lige ud af stenovnen.",
+      "ratio": "3/2"
+    },
+    {
+      "_type": "ctaSection",
+      "heading": "Pizzavognen kommer ud til jer",
+      "text": "Vi kommer med ovnen på traileren og bager pizza på surdej, til alle er mætte. Det passer til barnedåb, konfirmation, fødselsdag og firmafest, og I skal være mindst 40 voksne.",
+      "link": { "label": "Book pizzavognen", "href": "/pizza" },
+      "tone": "paper"
+    },
+    {
+      "_type": "eventsSection",
+      "heading": "Det sker",
+      "showWeek": false,
+      "emptyText": "Lige nu er der ingen datoer i kalenderen. Åbent hus i haven og huset holder vi på udvalgte dage, og vi skriver på Facebook og Instagram, når vi kender dagen.",
+      "limit": 3,
+      "link": { "label": "Se alle arrangementer", "href": "/arrangementer" }
+    },
+    {
+      "_type": "instagramSection",
+      "linkLabel": "Følg med på Instagram",
+      "limit": 6
+    },
+    {
+      "_type": "richTextSection",
+      "heading": "Familien på Torpevej",
+      "body": [
+        "Vi er Kristine og Nicolas. Det lille hus på landet startede i 2009 og er i dag en gård ved Herlufmagle med bageri, køkkenhave og en stenovn på hjul.",
+        "[Læs mere om os](/om-os)"
+      ],
+      "image": "/images/logo.png",
+      "imagePosition": "left",
+      "tone": "paper"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "title": "Privatlivspolitik",
+  "slug": "privatlivspolitik",
+  "seo": {
+    "title": "Privatlivspolitik",
+    "description": "Hvilke oplysninger Det lille hus på landet gemmer, når du bestiller brød eller skriver til os, hvor længe, hvem vi deler dem med, og hvilke rettigheder du har."
+  },
+  "showInNav": false,
+  "navLabel": "Privatlivspolitik",
+  "navOrder": 140,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "heading": "Privatlivspolitik",
+      "text": "Kort fortalt: vi gemmer kun det, vi skal bruge for at bage dit brød og svare dig, og vi giver ikke oplysninger videre til andre end dem, der hjælper os med det."
+    },
+    {
+      "_type": "richTextSection",
+      "body": [
+        { "h2": "Dataansvarlig" },
+        "Kristine Kjær Schmeling\nDet lille hus på landet\nTorpevej 10, 4160 Herlufmagle\nCVR 32164579\nE-mail [kristine.k.h@gmail.com](mailto:kristine.k.h@gmail.com)\nTelefon [22 59 44 93](tel:+4522594493)",
+        { "h2": "Hvad vi gemmer, og hvorfor" },
+        { "h3": "Når du bestiller brød" },
+        "Når du bestiller i webshoppen, gemmer vi navn, e-mail, telefonnummer, afhentningsdag, det du har bestilt og en eventuel besked til os. Det bruger vi til at bage og pakke din ordre, sende ordrebekræftelsen og kontakte dig, hvis der er spørgsmål. Betalingen sker hos Stripe, som håndterer dine kortoplysninger. Vi ser dem aldrig. Grundlaget er aftalen med dig (databeskyttelsesforordningens artikel 6, stk. 1, litra b).",
+        { "h3": "Når du skriver til os" },
+        "Forespørgsler på pizzavognen, kager, arrangementer og firmaaftaler samt beskeder fra kontaktsiden sendes som e-mail til Kristine gennem tjenesten Resend. Vi gemmer det, du skriver, indtil vi har svaret, og aftalen er afsluttet. Grundlaget er vores interesse i at besvare din henvendelse og en eventuel aftale med dig.",
+        { "h3": "Nyhedsbrev" },
+        "Tilmelder du dig nyhedsbrevet, gemmer vi din e-mailadresse hos Resend, indtil du afmelder dig. Der er et afmeld-link i hvert nyhedsbrev. Grundlaget er dit samtykke.",
+        { "h3": "Kurven i din browser" },
+        "Det, du lægger i kurven, gemmes kun i din egen browser (localStorage), så det stadig ligger der, hvis du kommer tilbage senere. Det sendes ikke til os, før du går til betaling.",
+        { "h3": "Cookies og statistik" },
+        "Vi bruger ingen analyseværktøjer og ingen marketingcookies. Betalingssiden hos Stripe kan sætte de cookies, Stripe skal bruge for at gennemføre betalingen sikkert.",
+        { "h2": "Hvor længe vi gemmer" },
+        "Ordrer gemmer vi i fem år efter udgangen af det regnskabsår, de hører til, fordi bogføringsloven kræver det. Henvendelser sletter vi, når sagen er afsluttet. Nyhedsbrevets adresseliste beholder vi, til du afmelder dig.",
+        { "h2": "Hvem vi deler oplysninger med" },
+        {
+          "ul": [
+            "Stripe, som håndterer betalingen i webshoppen.",
+            "Resend, som sender ordrebekræftelser, forespørgsler og nyhedsbrevet.",
+            "Vercel, som hoster siden."
+          ]
+        },
+        "De tre er databehandlere for os og må kun bruge oplysningerne til at levere deres tjeneste. De er amerikanske virksomheder, og overførsel af oplysninger til dem sker efter EU-Kommissionens regler for overførsel til tredjelande. Vi sælger aldrig oplysninger videre.",
+        { "h2": "Dine rettigheder" },
+        "Du kan altid bede om at få at vide, hvad vi har gemt om dig (indsigt), få det rettet, få det slettet, når vi ikke længere skal gemme det efter loven, og gøre indsigelse mod vores behandling. Skriv til [kristine.k.h@gmail.com](mailto:kristine.k.h@gmail.com), så svarer vi hurtigst muligt.",
+        "Er du utilfreds med, hvordan vi behandler dine oplysninger, kan du klage til Datatilsynet, Carl Jacobsens Vej 35, 2500 Valby, [datatilsynet.dk](https://www.datatilsynet.dk).",
+        { "h2": "Kontakt" },
+        "Spørgsmål om persondata: skriv til [kristine.k.h@gmail.com](mailto:kristine.k.h@gmail.com) eller ring på [22 59 44 93](tel:+4522594493).",
+        "Senest opdateret september 2026."
+      ],
+      "imagePosition": "right",
+      "tone": "paper"
+    }
+  ]
+}

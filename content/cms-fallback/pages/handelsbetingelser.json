@@ -1,0 +1,52 @@
+{
+  "_readme": "Handelsbetingelserne som en lang tekst. Adresse, afhentningsdage og frist står skrevet ind i teksten her; ret dem også, hvis du ændrer dem under Bageri, afhentning og levering.",
+  "title": "Handelsbetingelser",
+  "slug": "handelsbetingelser",
+  "seo": {
+    "title": "Handelsbetingelser",
+    "description": "Betingelser for køb af brød i webshoppen og for forespørgsler på pizzavogn, kager og arrangementer hos Det lille hus på landet."
+  },
+  "showInNav": false,
+  "navLabel": "Handelsbetingelser",
+  "navOrder": 130,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "heading": "Handelsbetingelser",
+      "text": "Gælder for køb i bageriets webshop og for forespørgsler på pizzavogn, kager og arrangementer."
+    },
+    {
+      "_type": "richTextSection",
+      "body": [
+        { "h2": "Virksomhedsoplysninger" },
+        "Det lille hus på landet\nv. Kristine Kjær Schmeling\nTorpevej 10, 4160 Herlufmagle\nCVR 32164579\nTelefon [22 59 44 93](tel:+4522594493)\nE-mail [kristine.k.h@gmail.com](mailto:kristine.k.h@gmail.com)",
+        { "h2": "Priser" },
+        "Alle priser er i danske kroner og inklusive moms. Den pris, der står på siden, når du bestiller, er den, du betaler. Vi tager forbehold for trykfejl og udsolgte varer. Sker det, får du besked og pengene retur for det, vi ikke kan levere.",
+        { "h2": "Bestilling og betaling" },
+        "Brød bestiller du i webshoppen og betaler med det samme med betalingskort eller MobilePay. Betalingen håndteres af Stripe, og vi ser aldrig dine kortoplysninger.",
+        "Din bestilling er bindende, når betalingen er gennemført. Du får en ordrebekræftelse på mail med ordrenummer, afhentningsdag og det, du har bestilt. Beløbet trækkes ved bestillingen, fordi brødet bages til dig.",
+        { "h2": "Afhentning og levering" },
+        "Du henter din bestilling i Hønsehuset, Torpevej 10, 4160 Herlufmagle, på den afhentningsdag du har valgt, mellem kl. 7 til 18. Du kan vælge afhentning tirsdag, onsdag, torsdag og fredag, og fristen for at bestille er dagen før kl. 18.",
+        "Vi leverer ikke i øjeblikket. Alle bestillinger er til afhentning.",
+        "Bliver din bestilling ikke hentet på dagen, kan vi ikke refundere den, fordi brødet er bagt til dig. Kontakt os hurtigst muligt, hvis du bliver forhindret, så finder vi en løsning, hvor det er muligt.",
+        { "h2": "Fortrydelsesret" },
+        "Bagværk er fødevarer, der forringes hurtigt. Derfor gælder den almindelige fortrydelsesret på 14 dage ikke for køb i webshoppen, jf. forbrugeraftalelovens § 18, stk. 2.",
+        "Du kan til gengæld afbestille frit frem til bestillingsfristen, dagen før kl. 18 afhentning. Skriv til [kristine.k.h@gmail.com](mailto:kristine.k.h@gmail.com) eller ring på [22 59 44 93](tel:+4522594493), så refunderer vi hele beløbet til det kort eller den MobilePay-konto, du betalte med. Efter fristen er brødet sat i produktion, og så kan bestillingen ikke fortrydes.",
+        { "h2": "Reklamation" },
+        "Købelovens regler gælder. Er der noget galt med det, du har købt, så kontakt os samme dag, gerne med et billede, så finder vi en løsning: et nyt brød, en anden vare eller pengene retur. Fordi det er fødevarer, skal du sige til inden for rimelig tid, og det vil normalt sige samme dag.",
+        { "h2": "Pizzavogn, kager og arrangementer" },
+        "Pizzavognen, kager og pladser til arrangementer bestiller du via forespørgselsformularerne på siden. En forespørgsel er ikke en bindende aftale. Aftalen er indgået, når Kristine har bekræftet dato, indhold og pris på mail.",
+        "For pizzavognen betaler I et depositum på en tredjedel af det aftalte beløb, når aftalen er bekræftet. Resten betales på dagen. Aflyser I inden for de sidste 14 dage før arrangementet, refunderes depositummet ikke. Aflyser I tidligere, får I depositummet retur.",
+        "For kager og arrangementer aftaler vi betaling i bekræftelsen.",
+        { "h2": "Persondata" },
+        "Vi behandler kun de oplysninger, vi skal bruge for at ekspedere din bestilling eller svare på din henvendelse. Læs mere i vores [privatlivspolitik](/privatlivspolitik).",
+        { "h2": "Klageadgang" },
+        "Er du utilfreds med et køb, så skriv til os først. Det løser vi som regel med det samme. Kan vi ikke blive enige, kan du klage til Center for Klageløsning, Nævnenes Hus, Toldboden 2, 8800 Viborg, via [naevneneshus.dk](https://naevneneshus.dk).",
+        "Senest opdateret september 2026."
+      ],
+      "imagePosition": "right",
+      "tone": "paper"
+    }
+  ]
+}

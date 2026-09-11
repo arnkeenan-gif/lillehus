@@ -1,0 +1,39 @@
+{
+  "title": "Find os",
+  "slug": "find-os",
+  "seo": {
+    "title": "Find os",
+    "description": "Bageriet og fryseren på Torpevej 10 i Herlufmagle, Torvedag i Næstved onsdag og lørdag, og afhentning af bestilt brød i Hønsehuset. Åbningstider og kalender.",
+    "image": "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg"
+  },
+  "showInNav": true,
+  "navLabel": "Find os",
+  "navOrder": 50,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "heading": "Find os",
+      "text": "Bageriet ligger på gården på Torpevej ved Herlufmagle. Onsdag og lørdag holder vi på torvet i Næstved."
+    },
+    {
+      "_type": "hoursSection",
+      "only": "alle"
+    },
+    {
+      "_type": "pickupInfoSection",
+      "heading": "Sådan henter du bestilt brød",
+      "detail": "kort",
+      "link": { "label": "Læs mere om afhentning og levering", "href": "/levering" }
+    },
+    {
+      "_type": "eventsSection",
+      "heading": "Kalender",
+      "text": "Sådan ser en almindelig uge ud.",
+      "showWeek": true,
+      "emptyText": "Ingen faste datoer lige nu. Åbent hus på gården annoncerer vi på Facebook og Instagram, når vi kender dagen.",
+      "limit": 10,
+      "link": { "label": "Se alle arrangementer", "href": "/arrangementer" }
+    }
+  ]
+}

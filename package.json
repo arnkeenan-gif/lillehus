@@ -6,17 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:sanity": "tsx scripts/seed-sanity.ts",
+    "sanity": "sanity"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
+    "@portabletext/react": "^8.0.1",
     "@react-email/components": "^1.0.12",
+    "@sanity/client": "^8.6.1",
+    "@sanity/icons": "^5.2.2",
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/locale-da-dk": "^1.0.33",
+    "@sanity/vision": "^6.13.2",
     "motion": "^13.2.0",
     "next": "16.3.4",
+    "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "resend": "^6.27.0",
+    "sanity": "^6.13.2",
     "stripe": "^22.6.2",
+    "styled-components": "^6.5.3",
     "zod": "^4.6.2"
   },
   "devDependencies": {
@@ -27,6 +38,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }

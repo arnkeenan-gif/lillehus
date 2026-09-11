@@ -1,135 +1,98 @@
 # DESIGN.md
 
-Design rules for the Det lille hus på landet website. Read this before touching any UI. These rules are distilled from the anti-slop taste skill, Emil Kowalski's design-engineering notes and Vercel's web interface guidelines, then fitted to this one client. They are not suggestions.
+Design rules for the Det lille hus på landet website, second pass. Read this before touching any UI. The first pass was correct but anonymous: a stack of equally tall sections, a text-left / photo-right hero, bordered tiles, facts tables, tinted bands. That is the rhythm every template and every language model produces. This pass replaces it. The rules come from studying current Danish bakery sites that feel real (Hart, Juno, Lille, Andersen & Maillard) and from the anti-slop taste skill; where the two disagree, this file wins.
 
-## 1. Design read
+## 1. What the real ones do
 
-Reading this as: a rebuild of a countryside bakery, pizza-wagon and farm-café site for local Danish families who order bread for pickup and book the pizza wagon for a christening or a birthday. Plain-spoken, warm, trust-first small-business commerce. Native CSS through Tailwind v4 tokens, one sans-serif family, real photography, no component library.
+- Photography carries the page. Big, candid, imperfect photos, edge to edge. The interface is nearly invisible around them.
+- One plain grotesk used with confidence. No "artisan" display fonts, no scripts, no serif-for-warmth. Warmth comes from the pictures and the words.
+- One brand colour used flat and boldly: a whole section in it, not just buttons.
+- Practical facts everywhere: hours in the hero copy, in the footer, on the contact page. Nobody has to hunt for when the freezer is open.
+- Fewer boxes. Product tiles are photo, name, price. Lists are lists. Nothing is wrapped in a card unless it has a button in it.
 
-Dials: DESIGN_VARIANCE 5, MOTION_INTENSITY 2, VISUAL_DENSITY 4.
+## 2. Design read
 
-Mode: redesign, overhaul. The Wix site was an untouched template ("Bump & Beyond", teal accent, "Minhjemmeside" title). What we preserve from the client: the name, the hand-drawn logo, the rust colour from her printed loyalty and business cards, her voice, and every real photo.
+Reading this as: a countryside bakery and pizza-wagon site for local Danish families, in the register of a good Copenhagen bakery site but with a farm's warmth and a hand-drawn logo. Photographic, plain-spoken, trust-first commerce. Native CSS through Tailwind v4 tokens. Everything editable in Sanity.
 
-Who it is for: people around Herlufmagle and Næstved on their phones, often early in the morning, often not young. Somebody who has never bought anything online should be able to order rugbrød for Thursday on the first try. Mobile is the primary view.
+Dials: DESIGN_VARIANCE 6, MOTION_INTENSITY 2, VISUAL_DENSITY 3.
 
-## 2. Palette
+## 3. Palette
 
-All tokens live in `src/app/globals.css`. Use only these; the Tailwind default palette is disabled.
+Tokens live in `src/app/globals.css`. Only these exist.
 
 | token | hex | use |
 |---|---|---|
-| paper | #fafaf8 | page background. Near-white like her printed cards. Not cream. |
-| paper-2 | #f1f0ec | tinted sections, footer, disabled inputs |
-| paper-3 | #e6e4de | hover on tinted surfaces |
+| paper | #fafaf8 | page background |
+| paper-2 | #f1f0ec | the one tinted surface (footer, form fields on rust, disabled) |
 | line | #d9d7d0 | hairlines, input borders |
-| ink | #1d1d1b | headings, primary text, the logo |
+| ink | #1d1d1b | text, the logo |
 | ink-2 | #3d3d39 | body paragraphs |
-| muted | #626360 | captions, helper text (5.9:1 on paper) |
-| rust | #a9522b | THE accent. Primary buttons, prose links, focus rings, selected states |
+| muted | #626360 | captions, helper text |
+| rust | #a9522b | the brand colour: primary buttons, links, and ONE full-bleed section per page in solid rust with paper text |
 | rust-deep | #8f4322 | hover |
-| rust-tint | #f5e9e1 | selection, notices, selected pickup day |
+| rust-tint | #f5e9e1 | selected states, the announcement bar |
 | danger / danger-tint | #9a3f2e / #f6e9e5 | form errors only |
-| white | #ffffff | button labels, form controls |
+| white | #ffffff | button labels, controls |
 
-Rules
-- One accent. Rust is justified because it is on the loyalty card in every regular's wallet; it is not a mood choice. Do not add a green, a gold or a second warm colour to the UI. The photographs bring the greens and browns.
-- No gradients, no glows, no glass, no pure black, no coloured shadows. `shadow-soft` (ink-tinted) only on floating UI: the cart drawer, a popover, a sticky order summary.
-- Section backgrounds: `paper` by default, `paper-2` to separate a neighbour at most twice per page, `ink` never for a whole section.
+Rules: no gradients, no glass, no glow, no shadows except `shadow-soft` on the cart drawer. Tinted sections are not a rhythm device any more: at most one `paper-2` section per page besides the footer. The rust block is the colour moment; the rest is paper and photographs.
 
-## 3. Type
+## 4. Type
 
-Familjen Grotesk (Google Fonts, variable 400 to 700, Latin Extended so æ ø å are native). Loaded with next/font in `layout.tsx`. One family for everything; no serif, no mono.
+Familjen Grotesk only (Google, variable 400 to 700, Latin Extended). It stays because it is Scandinavian, unfussy and has enough character in the bold. What changes is how it is used.
 
 | role | utility | notes |
 |---|---|---|
-| display | `text-display font-semibold` | hero headline only, max 2 lines |
-| title | `text-title font-semibold` | page and section headings |
-| body | default 16px / 1.55, `text-ink-2` | paragraphs, max-w 65ch |
-| ui | `text-[0.95rem]` | nav, buttons, table cells |
-| small | `text-sm text-muted` | helper, captions, meta |
-| numbers | add `tnum` | prices, times, order numbers |
+| display | `text-display font-bold tracking-tight` | 56 to 96px (clamp), hero and the rust block. Two lines max. |
+| title | `text-title font-semibold` | 32 to 48px, section headings |
+| lead | `text-xl sm:text-2xl text-ink` | the "this week" block and intro sentences: large body, not a heading |
+| body | 17px / 1.55, `text-ink-2`, max-w 62ch | |
+| ui | 15px | nav, buttons, table cells |
+| small | 14px `text-muted` | captions, helper |
+| numbers | `tnum` | prices, times |
 
-Emphasis is weight or ink vs ink-2, never colour, never italic in headlines.
+No uppercase tracking labels anywhere. No italics in headings. Headings are sentences a person would say ("Her får du fat i brødet"), never category labels ("Produkter").
 
-Danish typography
-- Prices: `formatPrice()` gives "45 kr." and "45,50 kr.". Never "DKK 45.00" in the UI.
-- Times: "kl. 9 til 14" or "9-14" in tables. Dates: "fredag den 11. september". Weekdays are lowercase mid-sentence.
-- No em-dash or en-dash characters anywhere: not in copy, labels, alt text or comments that could render. Use a comma, a period, a colon or a hyphen.
-- Quotation marks: "such" with straight double quotes, sparingly.
+## 5. Layout language
 
-## 4. Shape and surfaces
+- Container 1200px; `size="wide"` 1400px for photo grids; full-bleed for the hero, the rust block and photo bands.
+- The forside is a shop window, not a stack. Section order and content come from Sanity; the section components are:
+  1. `hero`: a full-bleed photo (16:9 on desktop, 4:5 on phones, min 70vh on desktop), then, on paper directly below it, a left-aligned display headline and one sentence with two buttons. Nothing is written over the photo.
+  2. `richText` with `imagePosition`: prose beside a photo; the "this week" block uses this with `lead` size text and no heading.
+  3. `priceList`: the chalkboard as typography. A two-column list on desktop, one on phones, each row "Surdejsbrød .......... 55 kr." with dotted leaders (`border-bottom: 1px dotted` on a flex spacer), tabular prices, a footnote. No photos per row. Kristine edits rows freely.
+  4. `productStrip`: photo (4/5), name, price, nothing else, four across, no borders, no buttons; the whole tile links to the shop.
+  5. `gallery`: a mixed grid, first image spans two columns and two rows, the rest fill (CSS grid, `grid-cols-2 md:grid-cols-4`, `auto-rows`), gap 8px, no captions in the grid, no overlays. This replaces the Instagram strip; Kristine drops in her own photos.
+  6. `photoBand`: one photo full width with a caption below.
+  7. `cta` with `tone: rust`: the full-bleed rust block, display text in paper, one paper-outline button, optional photo bleeding on the right half.
+  8. `hours`: the two locations as large text, not a table: "Torvedag i Næstved, onsdag og lørdag kl. 9 til 14" as a sentence with the hours in bold, then the freezer. A map link each.
+  9. `events`: a list of date, title, place with a hairline between; empty state is one sentence.
+  10. `faq`: `<details>` accordion, hairlines.
+  11. `form`: the booking, request and contact forms.
+  12. `quote`: only for real words from real people.
+- Section spacing is not uniform: hero to the next block 40px; between text blocks 80 to 120px; photo bands can touch each other with 8px gaps.
+- Never two consecutive text-and-photo splits. Never three equal cards. Never a heading on every section: at most half the sections on a page carry a heading.
+- Header: 72px, paper, one line, seven items, cart. Below lg: hamburger to a full-screen list. The announcement bar (from Sanity) sits under the header in `rust-tint` when enabled.
 
-- `rounded-md` (6px) for every button, input, image and card. `rounded-lg` (10px) only for the cart drawer and full-width photo bands. Never pills, never sharp corners.
-- Prefer hairlines and whitespace over cards. A bordered card is allowed only when it groups one interactive unit: a product tile with its add button, an order summary, an event with its sign-up.
-- Hairlines: `border-line`. One divider between rows, never top and bottom on every row.
-- Touch targets 44px minimum (`size-11`, `h-11`).
+## 6. Imagery
 
-## 5. Layout
+- Photos are the design. Use them big. A photo smaller than 320px wide on desktop is a thumbnail and must earn its place.
+- Aspect ratios are fixed per slot (hero 16/9 and 4/5, band 21/9 or 3/2, tiles 4/5, gallery cells 1/1 with one 2x2 cell). `next/image` with `sizes`, `priority` only on the hero.
+- The hand-drawn logo (`/images/logo.png`) is the one handmade element. It appears large: 240 to 320px wide on the om-os page and beside the footer address, never as a tiny icon.
+- Nothing over photos: no text, pills, gradients or icons. Captions go below in `text-sm text-muted`.
+- Real photographs only, ever. Sources: Kristine's own photos uploaded in Sanity, and the real photos already in `public/images` (from her old site, Facebook and Instagram). No generated images, no stock, no illustrations. When a slot has no good photo, the layout drops the photo rather than filling it with something fake.
+- Icons: Phosphor regular, 20 to 24px, only where they carry meaning (map pin, external link, cart, menu, close, plus, minus).
 
-- `Container` 1200px (narrow 760 for prose). `Section` gives 56px / 80px vertical rhythm.
-- Hero: split at lg (text left, photo right), stacked below. Fits the first viewport. Max four text elements: headline, one sentence, one primary and one secondary button. Top padding never more than 6rem.
-- Navigation is one line at lg, 72px tall, sticky, seven items plus cart. Below lg: hamburger to a full-screen list.
-- Layout families available: split text and photo; full-bleed photo band with caption below; product grid (2 / 3 / 4 columns); two-column facts list (hours, locations); single-column prose; photo strip (Instagram); accordion (FAQ); form with a side summary.
-- Use each family at most once per page. Never three identical cards in a row as the "what we offer" move. Never more than two consecutive text-and-photo splits.
-- No eyebrows (small uppercase tracked labels above headings) except at most one per page, and none on the forside.
-- Every multi-column layout declares its mobile fallback in the same component.
+## 7. Motion (level 2)
 
-## 6. Motion (level 2)
-
-- Hover and active: 150ms `ease-out-quart` on colour and transform; buttons `active:scale-[0.98]`.
-- Cart drawer and mobile menu: 240ms slide or fade with `motion` (`import { motion, AnimatePresence } from "motion/react"`), in a `"use client"` leaf.
-- Sections: no scroll animation by default. If a page really benefits, one 12px fade-up on first view with `whileInView` and `viewport={{ once: true }}`; it must be disabled under `prefers-reduced-motion` (`useReducedMotion`).
-- Nothing loops, nothing parallaxes, no marquee, no counters, no cursor effects, no `window.addEventListener("scroll")`.
-
-## 7. Imagery
-
-- Only real photographs from `public/images`. `content/images.json` describes each one; read it before choosing. No stock, no generated images, no illustrations, no decorative SVGs, no icons as decoration.
-- `next/image` with `sizes`; fixed aspect ratios so nothing jumps: 4/5 for product tiles, 3/2 for editorial photos, 16/9 for wide bands, 1/1 for the Instagram strip.
-- Nothing over a photo: no text, no pills, no badges, no gradients. Captions go below in `text-sm text-muted`.
-- Alt text is a plain Danish description of what is in the picture.
-- Icons: `@phosphor-icons/react` only, weight regular, 20 to 24px, always with visible or sr-only text. Server components import from `@phosphor-icons/react/dist/ssr`.
-- The logo (`/images/logo.png`, transparent, ink-coloured) is used large: hero, footer, about. The header uses the text wordmark.
+Hover and active transitions 150ms `ease-out-quart`. The cart drawer and the mobile menu slide 240ms with `motion/react`, disabled under reduced motion. No scroll animations, no parallax, no marquee, nothing that loops.
 
 ## 8. Copy
 
-All user-facing text is Danish, "du"-form, in Kristine's voice: short, warm, concrete, a little dry ("Klar, parat..... Bag!", "Vi glæder os til at hygge om jer"). Write it as she would say it across the counter.
+Danish, "du"-form, in Kristine's voice: short, warm, dry, concrete ("Klar, parat..... Bag!"). Headlines are things she would say. No "Velkommen til", no "oplev", "unik", "eksklusiv", "passion", "skræddersyet", no exclamation-mark marketing, no emojis, no em-dashes or en-dashes anywhere. One label per intent: Bestil brød, Forespørg på kage, Book pizzavognen, Tilmeld dig, Skriv til os, Tilmeld, Kurv, Gå til betaling, Tilbage til bageriet. Every string that Kristine might want to change lives in Sanity, with the JSON fallback carrying the same words.
 
-- Headlines up to 8 words. Sub-paragraphs up to 25 words. No exclamation-mark marketing.
-- Banned words: oplev, unik, eksklusiv, passion, lækkerier as a noun for everything, skræddersyet, "en verden af", plus English filler (elevate, seamless, next-gen).
-- No emojis in the UI. No fake reviews, fake quotes or invented numbers. Real quotes only with permission.
-- One label per intent, everywhere on the site:
+## 9. Forms, print, accessibility
 
-| intent | label |
-|---|---|
-| order bread | Bestil brød |
-| cake request | Forespørg på kage |
-| pizza booking | Book pizzavognen |
-| event sign-up | Tilmeld dig |
-| contact | Skriv til os |
-| newsletter | Tilmeld |
-| cart | Kurv |
-| checkout | Gå til betaling |
-| back to shop | Tilbage til bageriet |
+Unchanged from the first pass: `Field` primitives, label above, error below, honeypot, pending states, calm Danish success copy; the order confirmation prints on one A4 page; `lang="da"`, visible focus, sr-only text on icon buttons, contrast AA, 44px targets, reduced motion honoured, `min-h-[100dvh]` never `h-screen`.
 
-- Before finishing, read every visible string aloud. If it sounds like an advert, rewrite it as a sentence.
+## 10. Forbidden
 
-## 9. Forms
-
-- Use `Field`, `Input`, `Select`, `Textarea`, `Checkbox` from `src/components/ui/field.tsx`. Label above, helper text in markup, error below in `danger`, `aria-invalid` on the control, `aria-describedby` pointing at the error.
-- Required fields marked with `*` and validated with zod in a server action. Show the first error per field, inline. Keep what the user typed.
-- A hidden honeypot field on every public form. Rate-limit by IP in memory.
-- Submit button shows a pending state ("Sender...") and is disabled while pending.
-- Success replaces the form with a plain confirmation that says what happens next and when ("Kristine vender tilbage inden for to hverdage").
-- Missing configuration (no Resend key, no Stripe key) must fail gracefully with a Danish message, never a stack trace.
-
-## 10. Print
-
-`/bageri/tak` (order confirmation) prints on one A4 page: header, footer and buttons carry `no-print`; black on white; order number, pickup day, the lines with quantities and prices, total, customer name and phone, note. Kristine prints these as her baking list.
-
-## 11. Accessibility
-
-`lang="da"`; visible focus ring on everything focusable; every icon-only control has sr-only text; contrast AA or better; reduced motion honoured; forms fully operable by keyboard; headings in order; one h1 per page; `min-h-[100dvh]` never `h-screen`.
-
-## 12. Forbidden list
-
-Em-dashes; eyebrows above every heading; section numbering ("01 / Om os"); three equal feature cards; gradient or blob heroes; glassmorphism; neon, glows or purple; Inter, Geist, Fraunces, Instrument Serif, Playfair; text or labels over photos; decorative dots; scroll cues; "trusted by" strips; fake testimonials; fake precision; version labels; Lorem ipsum; placeholder as label; emoji; `h-screen`; scroll listeners; hand-drawn SVG icons; div-built fake screenshots; dark-mode sections inside a light page.
+Everything in the first pass list, plus: tinted-section alternation as rhythm; facts tables where a sentence would do; bordered product tiles; hairlines under every row; headings on every section; the text-left photo-right hero; eyebrow labels; "artisan" display fonts (Amatic, Caveat, Fraunces, Playfair, Instrument Serif); floating pill navbars; glass; double-bezel cards; blur-fade entrance animations; button-in-button arrows; mesh gradients; anything from the "Awwwards agency" recipe.

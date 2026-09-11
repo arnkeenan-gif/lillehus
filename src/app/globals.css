@@ -24,12 +24,15 @@
 
   --font-sans: var(--font-familjen), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --text-display: clamp(2.5rem, 1.6rem + 3.2vw, 4.25rem);
-  --text-display--line-height: 1.02;
-  --text-display--letter-spacing: -0.02em;
-  --text-title: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
-  --text-title--line-height: 1.1;
-  --text-title--letter-spacing: -0.015em;
+  --text-display: clamp(3.25rem, 1.75rem + 4.6vw, 6rem);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.03em;
+  --text-title: clamp(2rem, 1.4rem + 2vw, 3rem);
+  --text-title--line-height: 1.06;
+  --text-title--letter-spacing: -0.02em;
+  --text-lead: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem);
+  --text-lead--line-height: 1.35;
+  --text-lead--letter-spacing: -0.01em;
 
   --radius-*: initial;
   --radius-sm: 4px;
@@ -59,7 +62,7 @@
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 1rem;
+    font-size: 1.0625rem;
     line-height: 1.55;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -103,6 +106,15 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/* Dotted leader between a name and a price, as on a chalkboard list. */
+@utility leader {
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  margin: 0 0.5rem;
+  border-bottom: 2px dotted var(--color-line);
+  transform: translateY(-0.35em);
 }
 
 /* Tabular figures for prices, times and order numbers. */

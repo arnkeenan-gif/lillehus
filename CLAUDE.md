@@ -35,14 +35,16 @@ content                 JSON and markdown that Kristine can edit
 public/images           real photos (see content/images.json)
 ```
 
-## Ownership lanes
+## Content comes from the CMS
 
-Several people work in parallel. Stay inside your lane; if you need a change elsewhere, write it in your final report instead of editing.
+Kristine edits everything in Sanity Studio at `/studio`. Pages read content through the façade in `src/lib/cms` (`getPage(slug)`, `getSiteSettings()`, `getLocations()`, `getShopSettings()`, `getPizzaSettings()`, `getProducts()`, `getCakes()`, `getEvents()`, `getFaq()`, `getInstagramImages()`, `getNavigation()`), which returns Sanity data when `NEXT_PUBLIC_SANITY_PROJECT_ID` is set and otherwise the JSON in `content/` and `content/cms-fallback/pages/`. Never read `content/*.json` directly from a page; go through the façade so both sources render the same. Pages are lists of sections (`Section` union in `src/lib/cms/types.ts`) rendered by `src/components/sections/render.tsx`.
 
-- Foundation (done): `src/app/layout.tsx`, `globals.css`, `not-found.tsx`, `src/components/ui/**`, `src/components/site/**`, `src/lib/{site,content,format,cn,resend}.ts`, `src/emails/_layout.tsx`, `content/site.json`, `content/images.json`, `content/shop.json` (shop lane may edit values), `DESIGN.md`, this file.
-- Shop lane: `src/app/bageri/**`, `src/app/api/stripe/**`, `src/lib/{stripe,products,cart}*`, `src/components/shop/**` (replace the placeholder `cart-button.tsx`), `src/emails/order-*.tsx`, `content/products.json`.
-- Forms lane: `src/app/{pizza,kager,arrangementer,kontakt,firmaaftaler}/**`, `src/app/actions/**`, `src/lib/rate-limit.ts`, `src/emails/{booking,cake,contact,event,newsletter}-*.tsx`, `src/components/forms/**` (replace the placeholder `newsletter-form.tsx`), `content/{cakes,events,pizza}.json`.
-- Pages lane: `src/app/page.tsx`, `src/app/{om-os,find-os,faq,levering,handelsbetingelser,privatlivspolitik}/**`, `src/components/home/**`, `content/faq.json`, `content/pages/**`.
+## Ownership lanes (second pass)
+
+- CMS lane (done): `sanity.config.ts`, `sanity.cli.ts`, `src/sanity/**`, `src/app/studio/**`, `src/app/api/revalidate/**`, `src/lib/cms/**`, `scripts/**`, `content/cms-fallback/**`.
+- Pages lane: `src/components/sections/**`, `src/components/cms/**`, `src/components/site/**` (header with nav and announcement bar, footer), `src/app/page.tsx`, `src/app/{om-os,find-os,faq,levering,handelsbetingelser,privatlivspolitik,kontakt,pizza,kager,arrangementer,firmaaftaler}/page.tsx`, `src/app/not-found.tsx`, `content/cms-fallback/pages/*.json` (copy and section order), `content/images.json`. Removes `src/components/home/**` once nothing imports it.
+- Shop and forms lane: `src/app/bageri/**`, `src/app/api/stripe/**`, `src/lib/{stripe,products,cart*}.ts`, `src/components/shop/**`, `src/components/forms/**` (keep every export name and prop shape; the pages lane renders them from `formSection`), `src/app/actions/**`, `src/emails/**`, `content/{products,cakes,events,pizza,shop}.json`.
+- Foundation: `src/app/layout.tsx`, `globals.css`, `src/components/ui/**`, `src/lib/{site,content,format,cn,resend}.ts`, `DESIGN.md`, this file.
 
 ## Rules
 

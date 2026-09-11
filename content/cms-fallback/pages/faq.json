@@ -1,0 +1,29 @@
+{
+  "_readme": "Spørgsmålene og svarene ligger i content/faq.json (i Studio: Spørgsmål og svar); afsnittet faqSection henter dem derfra.",
+  "title": "Spørgsmål og svar",
+  "slug": "faq",
+  "seo": {
+    "title": "Spørgsmål og svar",
+    "description": "Svar på det, vi oftest bliver spurgt om: bestilling, afhentning i Hønsehuset, fryseren og MobilePay, Torvedag i Næstved, allergener, pizzavognen og kager."
+  },
+  "showInNav": false,
+  "navLabel": "Spørgsmål og svar",
+  "navOrder": 120,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "heading": "Spørgsmål og svar",
+      "text": "Det, vi oftest bliver spurgt om ved fryseren og på torvet. Mangler dit spørgsmål, så skriv til os."
+    },
+    {
+      "_type": "faqSection",
+      "mode": "all"
+    },
+    {
+      "_type": "ctaSection",
+      "link": { "label": "Skriv til os", "href": "/kontakt" },
+      "tone": "paper"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "_readme": "Afhentningsdage, frist, fryserens tider og levering skrives automatisk fra content/shop.json og content/site.json (i Studio: Bageri, afhentning og levering samt Åbningstider og steder). Ret tallene der, ikke her.",
+  "title": "Levering",
+  "slug": "levering",
+  "seo": {
+    "title": "Afhentning og levering",
+    "description": "Bestilt brød hentes i Hønsehuset på Torpevej 10 i Herlufmagle. Her står, hvilke dage du kan hente, hvornår du skal bestille, og hvad planen er for levering."
+  },
+  "showInNav": false,
+  "navLabel": "Levering",
+  "navOrder": 100,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "heading": "Afhentning og levering",
+      "text": "Det meste af vores brød bliver hentet på gården. Her er, hvordan det foregår, og hvad vi har af planer om levering."
+    },
+    {
+      "_type": "pickupInfoSection",
+      "detail": "udførlig"
+    },
+    {
+      "_type": "ctaSection",
+      "heading": "Pizzavognen kører ud",
+      "text": "Pizzavognen kører derimod gerne ud til jer med stenovnen på traileren.",
+      "link": { "label": "Book pizzavognen", "href": "/pizza" },
+      "tone": "paper"
+    }
+  ]
+}

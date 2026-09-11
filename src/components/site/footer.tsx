@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { FacebookLogo, InstagramLogo } from "@phosphor-icons/react/dist/ssr";
 import { FOOTER_LINKS, NAV, site, fullAddress } from "@/lib/site";
@@ -11,6 +12,13 @@ export function Footer() {
     <footer className="no-print border-t border-line bg-paper-2">
       <Container className="grid gap-12 py-14 sm:py-16 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-4">
+          <Image
+            src="/images/logo-640.png"
+            alt={`${site.name}, håndtegnet logo`}
+            width={640}
+            height={539}
+            className="mb-6 w-52 sm:w-60"
+          />
           <p className="text-lg font-semibold tracking-tight">{site.name}</p>
           <address className="mt-3 text-[0.95rem] not-italic leading-relaxed text-ink-2">
             {fullAddress()}
