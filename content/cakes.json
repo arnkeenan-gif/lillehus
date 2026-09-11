@@ -1,0 +1,13 @@
+[
+  {
+    "id": "kagemand",
+    "slug": "kagemand",
+    "name": "Kagemand eller kagekone",
+    "description": "Den klassiske til børnefødselsdagen. Vi pynter med det, fødselaren bedst kan lide.",
+    "fromPriceOere": 45000,
+    "servings": "15 til 25 personer",
+    "leadTimeDays": 5,
+    "image": "",
+    "options": ["Klassisk med slik", "Med frugt og bær", "Uden nødder"]
+  }
+]

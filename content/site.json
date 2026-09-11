@@ -1,0 +1,66 @@
+{
+  "name": "Det lille hus på landet",
+  "shortName": "Det lille hus",
+  "tagline": "Surdejsbageri, pizzavogn og lidt af hvert på en gård ved Herlufmagle",
+  "owner": "Kristine Kjær Schmeling",
+  "founded": 2009,
+  "cvr": "32164579",
+  "address": {
+    "street": "Torpevej 10",
+    "postalCode": "4160",
+    "city": "Herlufmagle",
+    "country": "Danmark"
+  },
+  "phone": "22 59 44 93",
+  "phoneHref": "+4522594493",
+  "email": "kristine.k.h@gmail.com",
+  "url": "https://www.detlillehuspaalandet.net",
+  "social": {
+    "facebook": "https://www.facebook.com/dlhpl",
+    "instagram": "https://www.instagram.com/detlillehuspaalandet/",
+    "instagramHandle": "detlillehuspaalandet",
+    "pinterest": "https://www.pinterest.dk/kkh77",
+    "linktree": "https://linktr.ee/detlillehuspaalandet"
+  },
+  "smileyUrl": "https://www.findsmiley.dk/1221266",
+  "locations": [
+    {
+      "id": "bageriet",
+      "name": "Bageriet og Hønsehuset",
+      "subtitle": "På gården",
+      "address": "Torpevej 10, 4160 Herlufmagle",
+      "mapsUrl": "https://maps.google.com/?q=Torpevej+10,+4160+Herlufmagle",
+      "hours": [
+        {
+          "days": "Mandag til fredag",
+          "time": "7 til 18",
+          "note": "Selvbetjent fryser. Priser står på skiltet, betal med MobilePay på fryserens dør."
+        }
+      ],
+      "pickup": true,
+      "notes": "Bestilte varer afhentes i Hønsehuset."
+    },
+    {
+      "id": "naestved",
+      "name": "Torvedag i Næstved",
+      "subtitle": "Axeltorv, foran Løveapoteket",
+      "address": "Axeltorv, 4700 Næstved",
+      "mapsUrl": "https://maps.google.com/?q=Axeltorv,+4700+N%C3%A6stved",
+      "hours": [
+        {
+          "days": "Onsdag",
+          "time": "9 til 14",
+          "note": "Eller til vi er udsolgt"
+        },
+        {
+          "days": "Lørdag",
+          "time": "9 til 14",
+          "note": "Eller til vi er udsolgt"
+        }
+      ],
+      "pickup": false,
+      "notes": ""
+    }
+  ],
+  "orderEmailTo": "kristine.k.h@gmail.com"
+}

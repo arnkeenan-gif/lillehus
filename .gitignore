@@ -1,25 +1,34 @@
-# macOS
-.DS_Store
-._*
-.Spotlight-V100
-.Trashes
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
 
-# Editors
-.vscode/
-.idea/
-*.swp
+# next.js
+/.next/
+/out/
+/build
+*.tsbuildinfo
+next-env.d.ts
 
-# Dependencies / build output
-node_modules/
-dist/
-build/
-.cache/
-
-# Env
-.env
-.env.*
+# env files
+.env*
 !.env.example
 
-# Logs
+# vercel
+.vercel
+
+# testing / tooling
+/coverage
+/playwright-report
+/test-results
+
+# macOS / editors
+.DS_Store
+._*
+.idea/
+.vscode/
+*.swp
+
+# logs
 *.log
 npm-debug.log*

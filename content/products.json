@@ -1,0 +1,14 @@
+[
+  {
+    "id": "surdejsbroed",
+    "slug": "surdejsbroed",
+    "name": "Surdejsbrød",
+    "description": "Langtidshævet på hvede og lidt fuldkorn. Bagt samme morgen som du henter det.",
+    "priceOere": 5500,
+    "image": "",
+    "category": "brød",
+    "days": [],
+    "allergens": ["gluten"],
+    "active": true
+  }
+]
