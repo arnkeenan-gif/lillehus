@@ -13,8 +13,8 @@
     },
     "/images/cinnamon-buns-and-bread-rolls.jpg": {
       "alt": "Snegle og boller i en kurv",
-      "w": 1080,
-      "h": 1080,
+      "w": 2400,
+      "h": 2400,
       "use": [
         "forside",
         "bageri"
@@ -23,8 +23,8 @@
     },
     "/images/oat-topped-bread-rolls.jpg": {
       "alt": "Surdejsboller med havregryn og sesam på et bræt",
-      "w": 1080,
-      "h": 1080,
+      "w": 2400,
+      "h": 2400,
       "use": [
         "bageri"
       ],
@@ -32,8 +32,8 @@
     },
     "/images/rustic-bread-loaves-and-flatbread.jpg": {
       "alt": "Brød, boller og fladbrød drysset med mel",
-      "w": 1080,
-      "h": 1080,
+      "w": 2400,
+      "h": 2400,
       "use": [
         "bageri",
         "firmaaftaler"
@@ -383,6 +383,26 @@
       ],
       "subject": "logo",
       "note": "Gennemsigtig PNG i blækfarve. logo-640.png er den lille udgave."
+    },
+    "/images/surdejsboller-plain.jpg": {
+      "alt": "Surdejsboller med mel på skorpen",
+      "w": 480,
+      "h": 600,
+      "use": [
+        "bageri produkt"
+      ],
+      "subject": "brød",
+      "note": "Udsnit af billedet med kanelsnegle og boller."
+    },
+    "/images/surdejsboller-plain-4-stk.jpg": {
+      "alt": "Flere surdejsboller med mel på skorpen",
+      "w": 480,
+      "h": 600,
+      "use": [
+        "bageri produkt"
+      ],
+      "subject": "brød",
+      "note": "Udsnit af billedet med brød og fladbrød."
     }
   }
 }
