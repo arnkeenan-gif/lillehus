@@ -10,14 +10,14 @@ const buttonClass =
 
 /**
  * Header cart button. Inside the shop it opens the cart drawer (mounted in
- * src/app/bageri/layout.tsx); elsewhere it links to the shop. The count comes
+ * src/app/bagvaerk/layout.tsx); elsewhere it links to the shop. The count comes
  * from the localStorage store, which reports 0 on the server, so the HTML
  * matches on hydration and the real count arrives right after.
  */
 export function CartButton() {
   const count = useCartCount();
   const pathname = usePathname();
-  const inShop = pathname === "/bageri" || pathname.startsWith("/bageri/");
+  const inShop = pathname === "/bagvaerk" || pathname.startsWith("/bagvaerk/");
   const label = count === 0 ? "Kurv, tom" : count === 1 ? "Kurv, 1 vare" : `Kurv, ${count} varer`;
 
   const content = (
@@ -46,7 +46,7 @@ export function CartButton() {
   }
 
   return (
-    <Link href="/bageri" className={buttonClass}>
+    <Link href="/bagvaerk" className={buttonClass}>
       {content}
     </Link>
   );

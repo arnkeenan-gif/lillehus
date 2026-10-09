@@ -205,8 +205,8 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
     payment_intent_data: {
       description: `${orderNo}, ${isDelivery ? "levering" : "afhentning"} ${dayLabel}`,
     },
-    success_url: `${origin}/bageri/tak?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/bageri/kasse`,
+    success_url: `${origin}/bagvaerk/tak?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/bagvaerk/kasse`,
   };
 
   if (isDelivery && deliveryFee !== null) {

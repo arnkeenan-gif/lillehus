@@ -239,7 +239,7 @@ export const productStripSection = defineType({
       initialValue: 4,
       validation: (rule) => rule.required().integer().min(1).max(12),
     }),
-    defineField({ name: "link", title: "Knap under varerne", type: "link", description: 'Fx "Bestil brød" til /bageri.' }),
+    defineField({ name: "link", title: "Knap under varerne", type: "link", description: 'Fx "Bestil brød" til /bagvaerk.' }),
   ],
   preview: sectionPreview("Brød fra bageriet"),
 });

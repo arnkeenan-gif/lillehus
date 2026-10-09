@@ -1,14 +1,14 @@
 {
   "_readme": "Bageriets side (webshoppen) bygges af shop-koden, ikke af afsnit. Dokumentet her giver siden en plads i menuen og en tekst til søgemaskiner.",
-  "title": "Bageri",
-  "slug": "bageri",
+  "title": "Bagværk",
+  "slug": "bagvaerk",
   "seo": {
     "title": "Bestil brød",
     "description": "Bestil surdejsbrød, boller, rugbrød og vaniljesnegle til afhentning i Hønsehuset på Torpevej 10 i Herlufmagle. Betal med kort eller MobilePay.",
     "image": "/images/scored-sourdough-loaf.jpg"
   },
   "showInNav": true,
-  "navLabel": "Bageri",
+  "navLabel": "Bagværk",
   "navOrder": 10,
   "hidden": false,
   "sections": []

@@ -60,7 +60,7 @@ export default async function ThanksPage({ searchParams }: Props) {
         title="Betalingen er ikke gået igennem endnu"
         text="Vi har ikke fået besked om betalingen. Gå tilbage til kassen og prøv igen, eller ring til os."
         phone={settings.phone}
-        backHref="/bageri/kasse"
+        backHref="/bagvaerk/kasse"
         backLabel="Tilbage til kassen"
       />
     );
@@ -73,7 +73,7 @@ function Calm({
   title,
   text,
   phone,
-  backHref = "/bageri",
+  backHref = "/bagvaerk",
   backLabel = "Tilbage til bageriet",
 }: {
   title: string;
@@ -192,7 +192,7 @@ function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSet
 
         <div className="no-print mt-10 flex flex-wrap gap-3">
           <PrintButton />
-          <Button href="/bageri" variant="secondary">
+          <Button href="/bagvaerk" variant="secondary">
             Tilbage til bageriet
           </Button>
         </div>

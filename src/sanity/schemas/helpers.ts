@@ -15,7 +15,7 @@ export function formatOere(oere: number | undefined | null): string {
 }
 
 export const HREF_HELP =
-  'En side på dette site, fx "/bageri" eller "#book", eller en hel adresse, der begynder med https://. En mailadresse skrives mailto:navn@adresse.dk og et telefonnummer tel:+4522594493.';
+  'En side på dette site, fx "/bagvaerk" eller "#book", eller en hel adresse, der begynder med https://. En mailadresse skrives mailto:navn@adresse.dk og et telefonnummer tel:+4522594493.';
 
 export function isValidHref(href: string | undefined): boolean {
   if (!href) return false;

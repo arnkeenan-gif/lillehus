@@ -7,7 +7,7 @@
     "description": "Kagemand eller kagekone, dåbskage og kagetapas. Send en forespørgsel, så svarer Kristine.",
     "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
   },
-  "showInNav": true,
+  "showInNav": false,
   "navLabel": "Kager",
   "navOrder": 20,
   "hidden": false,

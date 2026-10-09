@@ -85,7 +85,7 @@ export function CartDrawer({ note }: Props) {
   }, [open, close]);
 
   const subtotal = cartSubtotal(items);
-  const inShopRoot = pathname === "/bageri";
+  const inShopRoot = pathname === "/bagvaerk";
 
   const panelMotion = reduceMotion
     ? {
@@ -199,7 +199,7 @@ export function CartDrawer({ note }: Props) {
             {note ? <p className="mt-2 text-sm text-muted">{note}</p> : null}
             <div className="mt-5 flex flex-col gap-2">
               {items.length > 0 ? (
-                <Button href="/bageri/kasse" size="lg" onClick={close} className="w-full">
+                <Button href="/bagvaerk/kasse" size="lg" onClick={close} className="w-full">
                   Gå til betaling
                 </Button>
               ) : null}
@@ -208,7 +208,7 @@ export function CartDrawer({ note }: Props) {
                   Tilbage til bageriet
                 </Button>
               ) : (
-                <Button href="/bageri" variant="secondary" size="lg" onClick={close} className="w-full">
+                <Button href="/bagvaerk" variant="secondary" size="lg" onClick={close} className="w-full">
                   Tilbage til bageriet
                 </Button>
               )}

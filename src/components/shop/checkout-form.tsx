@@ -6,7 +6,7 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { OrderSummary } from "@/components/shop/order-summary";
 import { controlAria } from "@/components/forms/form-state";
 import { Radio } from "@/components/forms/form-status";
-import { createCheckoutSession } from "@/app/bageri/kasse/actions";
+import { createCheckoutSession } from "@/app/bagvaerk/kasse/actions";
 import { cartSubtotal, openCart, removeManyFromCart, useCart } from "@/lib/cart";
 import { INITIAL_CHECKOUT_STATE, type Fulfilment } from "@/lib/cart-order";
 import {
@@ -91,7 +91,7 @@ export function CheckoutForm({ days, stripeReady, delivery, minOrderOere, pickup
         <p className="text-lead text-ink">Din kurv er tom.</p>
         <p className="mt-2 text-ink-2">Læg noget i kurven i bageriet, så kan du betale her.</p>
         <div className="mt-6">
-          <Button href="/bageri">Tilbage til bageriet</Button>
+          <Button href="/bagvaerk">Tilbage til bageriet</Button>
         </div>
       </div>
     );

@@ -8,7 +8,7 @@ export const site: SiteConfig = siteJson;
 
 /** Main navigation. Keep to one line at desktop; seven short Danish labels. */
 export const NAV = [
-  { href: "/bageri", label: "Bageri" },
+  { href: "/bagvaerk", label: "Bageri" },
   { href: "/kager", label: "Kager" },
   { href: "/pizza", label: "Pizzavogn" },
   { href: "/arrangementer", label: "Arrangementer" },

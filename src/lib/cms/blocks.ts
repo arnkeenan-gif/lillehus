@@ -5,7 +5,7 @@
  * The fallback JSON files write rich text in a small shorthand so nobody has to
  * hand-write Portable Text blocks:
  *
- *   "En almindelig afsnit med **fed tekst** og [et link](/bageri)."
+ *   "En almindelig afsnit med **fed tekst** og [et link](/bagvaerk)."
  *   { "h2": "En overskrift" }
  *   { "h3": "En mindre overskrift" }
  *   { "ul": ["Punkt", "Punkt"] }

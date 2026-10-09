@@ -5,7 +5,7 @@
  * runs outside Next and does not know the @content alias.
  */
 import arrangementer from "../../../content/cms-fallback/pages/arrangementer.json";
-import bageri from "../../../content/cms-fallback/pages/bageri.json";
+import bagvaerk from "../../../content/cms-fallback/pages/bagvaerk.json";
 import faq from "../../../content/cms-fallback/pages/faq.json";
 import findOs from "../../../content/cms-fallback/pages/find-os.json";
 import firmaaftaler from "../../../content/cms-fallback/pages/firmaaftaler.json";
@@ -32,7 +32,7 @@ export interface RawPage {
 
 export const FALLBACK_PAGES: Record<string, RawPage> = {
   forside,
-  bageri,
+  bagvaerk,
   kager,
   pizza,
   arrangementer,

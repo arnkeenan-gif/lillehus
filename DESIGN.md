@@ -87,7 +87,7 @@ Hover and active transitions 150ms `ease-out-quart`. The cart drawer and the mob
 
 ## 8. Copy
 
-Danish, "du"-form, in Kristine's voice: short, warm, dry, concrete ("Klar, parat..... Bag!"). Headlines are things she would say. No "Velkommen til", no "oplev", "unik", "eksklusiv", "passion", "skræddersyet", no exclamation-mark marketing, no emojis, no em-dashes or en-dashes anywhere. One label per intent: Bestil brød, Forespørg på kage, Book pizzavognen, Tilmeld dig, Skriv til os, Tilmeld, Kurv, Gå til betaling, Tilbage til bageriet. Every string that Kristine might want to change lives in Sanity, with the JSON fallback carrying the same words.
+Danish, "du"-form, in Kristine's voice: short, warm, dry, concrete ("Klar, parat..... Bag!"). Headlines are things she would say. No "Velkommen til", no "oplev", "unik", "eksklusiv", "passion", "skræddersyet", no exclamation-mark marketing, no emojis, no em-dashes or en-dashes anywhere. One label per intent: Bestil bagværk, Forespørg på kage, Book pizzavognen, Tilmeld dig, Skriv til os, Tilmeld, Kurv, Gå til betaling, Tilbage til bageriet. Every string that Kristine might want to change lives in Sanity, with the JSON fallback carrying the same words.
 
 ## 9. Forms, print, accessibility
 

@@ -33,7 +33,7 @@ export interface CmsImage {
 
 export interface CmsLink {
   label: string;
-  /** A path on the site ("/bageri", "#book") or a full https:, mailto: or tel: URL. */
+  /** A path on the site ("/bagvaerk", "#book") or a full https:, mailto: or tel: URL. */
   href: string;
 }
 

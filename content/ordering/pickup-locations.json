@@ -1,0 +1,13 @@
+{
+  "_readme": "Afhentningssteder til bestilling af bagværk og kager. Kun gården er aktiv ved opstart. Datoerne sættes i Sanity Studio; uden Sanity viser siden onsdage og lørdage fire uger frem på de aktive steder. Afhentningstider aftales med Kristine.",
+  "locations": [
+    { "id": "gaarden", "name": "Gården", "address": "Torpevej 10, 4160 Herlufmagle", "note": "Hønsehuset", "mapsUrl": "https://maps.google.com/?q=Torpevej+10,+4160+Herlufmagle", "active": true, "sort": 1, "dates": [] },
+    { "id": "naestved-torv", "name": "Næstved Torv", "address": "", "note": "", "mapsUrl": "", "active": false, "sort": 2, "dates": [] },
+    { "id": "soroe", "name": "Sorø", "address": "", "note": "", "mapsUrl": "", "active": false, "sort": 3, "dates": [] },
+    { "id": "ringsted", "name": "Ringsted", "address": "", "note": "", "mapsUrl": "", "active": false, "sort": 4, "dates": [] },
+    { "id": "haslev", "name": "Haslev", "address": "", "note": "", "mapsUrl": "", "active": false, "sort": 5, "dates": [] }
+  ],
+  "fallbackWeekdays": [3, 6],
+  "fallbackWeeksAhead": 4,
+  "defaultDeadline": { "daysBefore": 2, "hour": 18 }
+}

@@ -4,19 +4,9 @@
  * lists Kristine adds to.
  */
 import type { StructureResolver } from "sanity/structure";
-import {
-  BasketIcon,
-  CalendarIcon,
-  ClockIcon,
-  CogIcon,
-  DocumentsIcon,
-  HelpCircleIcon,
-  HomeIcon,
-  IceCreamIcon,
-  ImagesIcon,
-  PackageIcon,
-  TrolleyIcon,
-} from "./icons";
+import { ClockIcon, CogIcon, DocumentsIcon, HelpCircleIcon, HomeIcon, ImagesIcon, TrolleyIcon } from "./icons";
+import { orderingListItems, orderingSettingsItems } from "./desk/ordering";
+import { eventListItems } from "./desk/events";
 import { FORSIDE_ID } from "./schemas/constants";
 
 export const structure: StructureResolver = (S) =>
@@ -38,11 +28,7 @@ export const structure: StructureResolver = (S) =>
         .title("Åbningstider og steder")
         .icon(ClockIcon)
         .child(S.document().schemaType("hours").documentId("hours")),
-      S.listItem()
-        .id("shopSettings")
-        .title("Bageri, afhentning og levering")
-        .icon(PackageIcon)
-        .child(S.document().schemaType("shopSettings").documentId("shopSettings")),
+      ...orderingSettingsItems(S),
       S.listItem()
         .id("pizzaSettings")
         .title("Pizzavogn")
@@ -60,32 +46,8 @@ export const structure: StructureResolver = (S) =>
               { field: "title", direction: "asc" },
             ]),
         ),
-      S.documentTypeListItem("product")
-        .title("Brød og varer")
-        .icon(BasketIcon)
-        .child(
-          S.documentTypeList("product")
-            .title("Brød og varer")
-            .defaultOrdering([
-              { field: "sort", direction: "asc" },
-              { field: "name", direction: "asc" },
-            ]),
-        ),
-      S.documentTypeListItem("cake")
-        .title("Kager på bestilling")
-        .icon(IceCreamIcon)
-        .child(
-          S.documentTypeList("cake")
-            .title("Kager på bestilling")
-            .defaultOrdering([
-              { field: "sort", direction: "asc" },
-              { field: "name", direction: "asc" },
-            ]),
-        ),
-      S.documentTypeListItem("event")
-        .title("Arrangementer og kurser")
-        .icon(CalendarIcon)
-        .child(S.documentTypeList("event").title("Arrangementer og kurser").defaultOrdering([{ field: "start", direction: "desc" }])),
+      ...orderingListItems(S),
+      ...eventListItems(S),
       S.documentTypeListItem("faqItem")
         .title("Spørgsmål og svar")
         .icon(HelpCircleIcon)

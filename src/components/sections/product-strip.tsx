@@ -45,7 +45,7 @@ export async function ProductStrip({ section, level, className }: SectionProps<P
         <ul className={cn("grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10", hasTop && afterIntro)}>
           {products.map(({ product, photo }) => (
             <li key={product.id}>
-              <Link href="/bageri" className="group block">
+              <Link href="/bagvaerk" className="group block">
                 <CmsPhoto image={photo} ratio="4/5" sizes="(min-width: 1264px) 272px, (min-width: 1024px) 23vw, 45vw" />
                 <p className="mt-3 font-medium text-ink group-hover:underline group-hover:underline-offset-[3px]">{product.name}</p>
                 <p className="tnum text-[0.95rem] text-ink-2">{formatPrice(product.priceOere)}</p>
