@@ -1,0 +1,56 @@
+{
+  "_readme": "Kager på bestilling (Kristines mail: kagemand/dame, dåbskage, kagetapas). basePriceOere i øre; 0 betyder Pris aftales, så siden sender en forespørgsel i stedet for at lægge i kurven. optionGroups er valgene på kagens side: type er dropdown (rullemenu, vælg én), radio (knapper, vælg én), addons (tilvalg, flere kan vælges) eller text (kunden skriver). Hvert valg har label, priceOere (tillæg) og default. images er stier i public/images; den første vises på oversigten. sections er afsnittene under kagen: { \"heading\": \"...\", \"body\": \"tekst\" }. En kage kan få sin egen frist med \"deadline\": { \"daysBefore\": 5, \"hour\": 18 }. Valg, priser og frister aftales med Kristine. I Sanity Studio: Kager.",
+  "cakes": [
+    {
+      "id": "kagemand",
+      "name": "Kagemand eller kagekone",
+      "intro": "",
+      "basePriceOere": 0,
+      "images": [],
+      "optionGroups": [
+        {
+          "id": "figur",
+          "title": "Kagemand eller kagekone",
+          "type": "dropdown",
+          "required": true,
+          "helper": "",
+          "choices": [
+            { "id": "kagemand", "label": "Kagemand", "priceOere": 0, "default": false },
+            { "id": "kagekone", "label": "Kagekone", "priceOere": 0, "default": false }
+          ]
+        }
+      ],
+      "minQuantity": 1,
+      "maxQuantity": 10,
+      "sections": [],
+      "active": true,
+      "sort": 10
+    },
+    {
+      "id": "daabskage",
+      "name": "Dåbskage",
+      "intro": "",
+      "basePriceOere": 0,
+      "images": [],
+      "optionGroups": [],
+      "minQuantity": 1,
+      "maxQuantity": 10,
+      "sections": [],
+      "active": true,
+      "sort": 20
+    },
+    {
+      "id": "kagetapas",
+      "name": "Kagetapas",
+      "intro": "",
+      "basePriceOere": 0,
+      "images": [],
+      "optionGroups": [],
+      "minQuantity": 1,
+      "maxQuantity": 10,
+      "sections": [],
+      "active": true,
+      "sort": 30
+    }
+  ]
+}

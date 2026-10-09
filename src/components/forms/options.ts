@@ -35,7 +35,7 @@ export const CAKE_DELIVERY: readonly Option[] = [
 ];
 
 export const CONTACT_SUBJECTS: readonly Option[] = [
-  { value: "bestilling", label: "Bestilling af brød" },
+  { value: "bestilling", label: "Bestilling af bagværk" },
   { value: "pizzavogn", label: "Pizzavognen" },
   { value: "kage", label: "Kage" },
   { value: "firmaaftale", label: "Firmaaftale" },

@@ -8,8 +8,8 @@
  */
 import { headers } from "next/headers";
 import { z, type ZodError } from "zod";
-import type { CakeType, EventItem, PizzaContent } from "@/lib/content";
-import { formatDateLong, formatTime } from "@/lib/format";
+import type { CakeType, PizzaContent } from "@/lib/content";
+import { formatDateLong } from "@/lib/format";
 import { site } from "@/lib/site";
 import { rateLimit } from "@/lib/rate-limit";
 import { HONEYPOT_FIELD, type FormState, type FormValues } from "@/components/forms/form-state";
@@ -227,13 +227,6 @@ export function formatClock(hhmm: string): string {
   return hhmm.replace(":", ".");
 }
 
-/** "lørdag den 3. oktober 2026 kl. 10.00"; the clock is left out for a midnight start. */
-export function formatEventWhen(event: EventItem): string {
-  const day = formatDayLong(event.start);
-  const clock = formatTime(event.start);
-  return clock === "00.00" ? day : `${day} kl. ${clock}`;
-}
-
 /* ------------------------------------------------------------------ */
 /* Plain-text email body                                               */
 /* ------------------------------------------------------------------ */
@@ -278,7 +271,7 @@ export interface PizzaContentExt extends PizzaContent {
   terms: string[];
 }
 
-/** content/cakes.json entries may carry a unit for the price ("pr. person"). */
+/** A cake may carry a unit for its price ("pr. person"). */
 export interface CakeTypeExt extends CakeType {
   priceNote?: string;
 }

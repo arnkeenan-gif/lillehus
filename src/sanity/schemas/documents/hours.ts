@@ -11,7 +11,8 @@ export const hours = defineType({
       name: "locations",
       title: "Steder",
       type: "array",
-      description: "Gården og torvedagen. Tiderne her vises på forsiden, under Find os, i sidefoden og på kontaktsiden.",
+      description:
+        "Fryseren på gården og torvedagen. Tiderne her vises på forsiden, på fryserens side, under Find os, i sidefoden og på kontaktsiden. Hvor bestilte varer hentes, sættes under Afhentningssteder, ikke her.",
       of: [
         defineArrayMember({
           name: "location",
@@ -23,7 +24,7 @@ export const hours = defineType({
               name: "id",
               title: "Kort navn til siden",
               type: "string",
-              description: 'Ændr det ikke: "bageriet" og "naestved" bruges af siden til at vide, hvor der hentes brød.',
+              description: 'Ændr det ikke: "bageriet" er fryseren på gården og "naestved" torvedagen. Siden bruger dem til at vise det rigtige sted, fx på fryserens side.',
               validation: (rule) =>
                 rule
                   .required()
@@ -60,10 +61,12 @@ export const hours = defineType({
               validation: (rule) => rule.min(1).error("Skriv mindst en tid."),
             }),
             defineField({
+              // Superseded by the ordering's pickup locations; hidden, kept so old documents stay valid.
               name: "pickup",
-              title: "Bestilt brød hentes her",
+              title: "Bestilte varer hentes her",
               type: "boolean",
               initialValue: false,
+              hidden: true,
             }),
             defineField({ name: "notes", title: "Bemærkning", type: "text", rows: 2, description: "En linje under tiderne, fx om MobilePay eller kaffe. Kan stå tom.", validation: (rule) => rule.max(300) }),
           ],
@@ -76,6 +79,6 @@ export const hours = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Åbningstider og steder", subtitle: "Gården, fryseren og torvedagen" }),
+    prepare: () => ({ title: "Åbningstider og steder", subtitle: "Fryseren på gården og torvedagen" }),
   },
 });

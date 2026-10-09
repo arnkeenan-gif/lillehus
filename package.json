@@ -18,6 +18,7 @@
     "@sanity/icons": "^5.2.2",
     "@sanity/image-url": "^2.1.1",
     "@sanity/locale-da-dk": "^1.0.33",
+    "@sanity/ui": "^4.4.0",
     "@sanity/vision": "^6.13.2",
     "motion": "^13.2.0",
     "next": "16.3.4",

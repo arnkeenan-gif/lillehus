@@ -1,7 +1,7 @@
 {
   "name": "Det lille hus på landet",
   "shortName": "Det lille hus",
-  "tagline": "Et liv med fokus på familie, økologi, bæredygtighed.",
+  "tagline": "Surdejsbageri ved Herlufmagle",
   "owner": "Kristine Kjær Schmeling",
   "founded": 2009,
   "cvr": "32164579",
@@ -26,8 +26,8 @@
   "locations": [
     {
       "id": "bageriet",
-      "name": "Bageriet og Hønsehuset",
-      "subtitle": "På gården",
+      "name": "Fryseren på gården",
+      "subtitle": "",
       "address": "Torpevej 10, 4160 Herlufmagle",
       "mapsUrl": "https://maps.google.com/?q=Torpevej+10,+4160+Herlufmagle",
       "hours": [
@@ -37,8 +37,8 @@
           "note": "Priser på skiltet og betaling via MobilePay (står på fryserens dør)."
         }
       ],
-      "pickup": true,
-      "notes": "Bestilte varer afhentes i Hønsehuset."
+      "pickup": false,
+      "notes": ""
     },
     {
       "id": "naestved",

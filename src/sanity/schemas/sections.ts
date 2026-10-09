@@ -4,6 +4,7 @@
  * src/lib/cms/types.ts for the shape the renderer gets.
  */
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { DashboardIcon } from "@sanity/icons/Dashboard";
 import {
   BasketIcon,
   BillIcon,
@@ -24,7 +25,7 @@ import {
   UserIcon,
 } from "../icons";
 import { FORM_KIND_OPTIONS, LOCATION_FILTER_OPTIONS, TONE_OPTIONS } from "./constants";
-import { sectionPreview, type PreviewMedia } from "./helpers";
+import { HREF_HELP, hrefValidation, sectionPreview, type PreviewMedia } from "./helpers";
 
 const heading = (description = "Overskriften på afsnittet. Kan stå tom.") =>
   defineField({ name: "heading", title: "Overskrift", type: "string", description, validation: (rule) => rule.max(80) });
@@ -80,10 +81,99 @@ export const heroSection = defineType({
       validation: (rule) => rule.min(3).max(15).integer(),
       hidden: ({ parent }) => parent?.variant !== "cover",
     }),
-    defineField({ name: "primaryLink", title: "Knap", type: "link", description: 'Den vigtigste knap, fx "Bestil brød".' }),
+    defineField({ name: "primaryLink", title: "Knap", type: "link", description: 'Den vigtigste knap, fx "Bestil bagværk".' }),
     defineField({ name: "secondaryLink", title: "Knap nummer to", type: "link", description: "En mindre knap ved siden af. Kan udelades." }),
   ],
   preview: sectionPreview("Toppen af siden"),
+});
+
+/** The text of the first paragraph of a rich text value, for previews. */
+function firstText(blocks: unknown): string | undefined {
+  if (!Array.isArray(blocks)) return undefined;
+  for (const block of blocks as { _type?: string; children?: { text?: string }[] }[]) {
+    if (block?._type !== "block") continue;
+    const text = (block.children ?? []).map((c) => c.text ?? "").join("").trim();
+    if (text) return text.length > 70 ? `${text.slice(0, 70)}...` : text;
+  }
+  return undefined;
+}
+
+export const entriesSection = defineType({
+  name: "entriesSection",
+  title: "Tre indgange",
+  type: "object",
+  icon: DashboardIcon,
+  description:
+    "Store billeder med en overskrift, der fører videre til en side, fx Bagværk, Pizzavogn og Arrangementer. Under hver overskrift kan der stå små links.",
+  fields: [
+    heading("Står over billederne. Kan stå tom."),
+    defineField({
+      name: "entries",
+      title: "Indgange",
+      type: "array",
+      description: "Tre ser bedst ud. Træk i dem for at bytte om.",
+      of: [
+        defineArrayMember({
+          name: "entry",
+          title: "Indgang",
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Overskrift",
+              type: "string",
+              description: 'Fx "Bagværk".',
+              validation: (rule) => rule.required().error("Skriv en overskrift.").max(40),
+            }),
+            defineField({
+              name: "text",
+              title: "Tekst",
+              type: "text",
+              rows: 2,
+              description: "En kort linje under overskriften. Kan stå tom.",
+              validation: (rule) => rule.max(200),
+            }),
+            defineField({
+              name: "image",
+              title: "Billede",
+              type: "photo",
+              description: "Et stort, skarpt billede, gerne 1200 px eller mere. Det vises højt på en computer og bredt på en telefon.",
+              validation: (rule) => rule.required().warning("Indgangen ser bedst ud med et billede."),
+            }),
+            defineField({
+              name: "href",
+              title: "Fører til",
+              type: "string",
+              description: `Den side, billedet og overskriften fører til. ${HREF_HELP}`,
+              validation: hrefValidation,
+            }),
+            defineField({
+              name: "links",
+              title: "Små links under overskriften",
+              type: "array",
+              of: [defineArrayMember({ type: "link" })],
+              description: 'Fx "Bestil bagværk", "Fryser" og "Kager og specialbestillinger". Kan stå tom.',
+              validation: (rule) => rule.max(5),
+            }),
+          ],
+          preview: {
+            select: { title: "title", href: "href", media: "image" },
+            prepare({ title, href, media }: { title?: string; href?: string; media?: PreviewMedia }) {
+              return { title: title || "Indgang", subtitle: href, media };
+            },
+          },
+        }),
+      ],
+      validation: (rule) => rule.min(1).error("Læg mindst en indgang ind.").max(4).error("Højst fire indgange, så billederne bliver store nok."),
+    }),
+  ],
+  preview: {
+    select: { heading: "heading", t0: "entries.0.title", t1: "entries.1.title", t2: "entries.2.title", t3: "entries.3.title", media: "entries.0.image" },
+    prepare({ heading, t0, t1, t2, t3, media }: { heading?: string; t0?: string; t1?: string; t2?: string; t3?: string; media?: PreviewMedia }) {
+      const titles = [t0, t1, t2, t3].filter(Boolean).join(" · ");
+      return { title: heading || titles || "Tre indgange", subtitle: heading ? `Tre indgange: ${titles}` : "Tre indgange", media };
+    },
+  },
 });
 
 export const richTextSection = defineType({
@@ -97,7 +187,8 @@ export const richTextSection = defineType({
       name: "body",
       title: "Tekst",
       type: "richText",
-      validation: (rule) => rule.required().error("Skriv noget tekst i afsnittet."),
+      description: "Et tomt afsnit vises ikke på siden, så det kan stå klar, til du har skrevet teksten.",
+      validation: (rule) => rule.required().warning("Afsnittet er tomt og vises ikke på siden, før du skriver noget."),
     }),
     defineField({ name: "image", title: "Billede", type: "photo", description: "Et billede ved siden af teksten. Kan udelades." }),
     defineField({
@@ -115,7 +206,14 @@ export const richTextSection = defineType({
     }),
     tone,
   ],
-  preview: sectionPreview("Tekst"),
+  preview: {
+    select: { heading: "heading", body: "body", media: "image" },
+    prepare({ heading, body, media }: { heading?: string; body?: unknown; media?: PreviewMedia }) {
+      const first = firstText(body);
+      if (!heading && !first) return { title: "Tekst, tom", subtitle: "Vises ikke på siden, før du skriver noget", media };
+      return { title: heading || first, subtitle: heading ? "Tekst" : undefined, media };
+    },
+  },
 });
 
 export const photoBandSection = defineType({
@@ -182,7 +280,20 @@ export const gallerySection = defineType({
           },
         }),
       ],
-      validation: (rule) => rule.min(1).error("Læg mindst et billede i galleriet."),
+      validation: (rule) => rule.min(1).warning("Galleriet er tomt, så det vises ikke på siden. Læg billeder ind, når du har dem."),
+    }),
+    defineField({
+      name: "layout",
+      title: "Udseende",
+      type: "string",
+      options: {
+        list: [
+          { title: "Blandet galleri: det første billede stort, de andre små", value: "grid" },
+          { title: "Trin for trin: billederne i rækkefølge med teksten under hvert billede, fx til at finde vej", value: "steps" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "grid",
     }),
     defineField({
       name: "columns",
@@ -201,17 +312,24 @@ export const gallerySection = defineType({
       description: "På en telefon står de altid i en eller to kolonner.",
     }),
   ],
-  preview: sectionPreview("Billedgalleri"),
+  preview: {
+    select: { heading: "heading", layout: "layout", first: "images.0.image", key: "images.0._key" },
+    prepare({ heading, layout, first, key }: { heading?: string; layout?: string; first?: PreviewMedia; key?: string }) {
+      const kind = layout === "steps" ? "Billeder trin for trin" : "Billedgalleri";
+      return { title: heading || kind, subtitle: key ? (heading ? kind : undefined) : `${kind}, tomt: vises ikke, før der er billeder`, media: first };
+    },
+  },
 });
 
 export const productStripSection = defineType({
   name: "productStripSection",
-  title: "Brød fra bageriet",
+  title: "Bagværk med priser",
   type: "object",
   icon: BasketIcon,
+  description: "Billede, navn og pris på bageriets varer. Priserne retter du på selve varen, så de kun skal rettes ét sted.",
   fields: [
     heading('Fx "Det bager vi".'),
-    text("Står den tom, viser siden selv bestillingsfrist og afhentningsdage fra Bageri, afhentning og levering."),
+    text("Et par linjer over varerne, fx om bestillingsfristen. Står feltet tomt, skriver siden selv en linje om bestilling."),
     defineField({
       name: "mode",
       title: "Hvilke varer",
@@ -239,9 +357,9 @@ export const productStripSection = defineType({
       initialValue: 4,
       validation: (rule) => rule.required().integer().min(1).max(12),
     }),
-    defineField({ name: "link", title: "Knap under varerne", type: "link", description: 'Fx "Bestil brød" til /bagvaerk.' }),
+    defineField({ name: "link", title: "Knap under varerne", type: "link", description: 'Fx "Bestil bagværk" til /bagvaerk.' }),
   ],
-  preview: sectionPreview("Brød fra bageriet"),
+  preview: sectionPreview("Bagværk med priser"),
 });
 
 export const priceListSection = defineType({
@@ -481,12 +599,12 @@ export const quoteSection = defineType({
 
 export const cakeListSection = defineType({
   name: "cakeListSection",
-  title: "Kager med fra-priser",
+  title: "Kager",
   type: "object",
   icon: IceCreamIcon,
-  description: "Viser alle kager fra Kager på bestilling. Ret kagerne der, ikke her.",
+  description: "Viser alle kager fra Kager i menuen til venstre. Ret kagerne der, ikke her.",
   fields: [heading('Fx "Det kan du bestille".'), text()],
-  preview: sectionPreview("Kager med fra-priser"),
+  preview: sectionPreview("Kager"),
 });
 
 export const pizzaSection = defineType({
@@ -502,9 +620,11 @@ export const pizzaSection = defineType({
       type: "string",
       options: {
         list: [
+          { title: "Indledningen (den første tekst om vognen)", value: "intro" },
           { title: "Sådan foregår det (teksten om dagen)", value: "day" },
+          { title: "Steder og datoer, hvor vognen står (vises kun, når der er nogen)", value: "schedule" },
           { title: "Priser pr. kuvert og betingelser", value: "prices" },
-          { title: "Pizzaerne og desserterne", value: "menu" },
+          { title: "Pizzaerne og desserterne med billeder og priser", value: "menu" },
           { title: "Praktisk (betingelserne)", value: "terms" },
         ],
         layout: "radio",
@@ -517,7 +637,14 @@ export const pizzaSection = defineType({
   preview: {
     select: { heading: "heading", part: "part" },
     prepare({ heading, part }: { heading?: string; part?: string }) {
-      const parts: Record<string, string> = { day: "Sådan foregår det", prices: "Priser", menu: "Pizzaer og desserter", terms: "Praktisk" };
+      const parts: Record<string, string> = {
+        intro: "Indledning",
+        day: "Sådan foregår det",
+        schedule: "Steder og datoer",
+        prices: "Priser",
+        menu: "Pizzaer og desserter",
+        terms: "Praktisk",
+      };
       const partTitle = parts[part ?? ""] ?? "Pizzavogn";
       return { title: heading || partTitle, subtitle: `Pizzavogn: ${partTitle}` };
     },
@@ -529,7 +656,8 @@ export const pickupInfoSection = defineType({
   title: "Sådan henter du",
   type: "object",
   icon: PackageIcon,
-  description: "Skriver selv afhentningsdage, frist, fryser og levering ud fra Bageri, afhentning og levering og Åbningstider og steder.",
+  description:
+    "Skriver selv afhentningsstederne, de næste åbne datoer og bestillingsfristen ud fra Afhentningssteder, og fryserens tider ud fra Åbningstider og steder.",
   fields: [
     heading('Fx "Sådan henter du bestilt brød".'),
     defineField({
@@ -563,6 +691,7 @@ export const contactSection = defineType({
 
 export const sectionTypes = [
   heroSection,
+  entriesSection,
   richTextSection,
   photoBandSection,
   gallerySection,

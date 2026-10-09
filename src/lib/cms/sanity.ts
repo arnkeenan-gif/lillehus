@@ -7,24 +7,18 @@
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { MAX_IMAGE_WIDTH, urlFor } from "@/sanity/lib/image";
 import {
-  CAKES_QUERY,
-  EVENTS_QUERY,
   FAQ_QUERY,
   HOURS_QUERY,
   INSTAGRAM_QUERY,
   PAGE_QUERY,
   PAGES_QUERY,
   PIZZA_SETTINGS_QUERY,
-  PRODUCTS_QUERY,
-  SHOP_SETTINGS_QUERY,
   SITE_SETTINGS_QUERY,
 } from "@/sanity/lib/queries";
 import { isPortableText, plainText } from "./blocks";
 import { buildSections, type SectionContext } from "./sections";
 import type {
-  CakeType,
   CmsImage,
-  EventItem,
   FaqItem,
   InstagramImage,
   Location,
@@ -33,7 +27,6 @@ import type {
   PizzaSettings,
   Product,
   ProductCategory,
-  ShopSettings,
   SiteSettings,
   Weekday,
 } from "./types";
@@ -179,54 +172,6 @@ function mapProduct(value: unknown): Product | undefined {
   };
 }
 
-function mapCake(value: unknown): CakeType | undefined {
-  const raw = value as Raw | null;
-  if (!raw || typeof raw !== "object") return undefined;
-  const slug = opt(raw, "slug");
-  const name = opt(raw, "name");
-  if (!slug || !name) return undefined;
-  const photo = mapImage(raw.image, name);
-  return {
-    id: slug,
-    slug,
-    name,
-    description: s(raw, "description"),
-    fromPriceOere: n(raw, "fromPriceOere", 0),
-    priceNote: opt(raw, "priceNote"),
-    servings: s(raw, "servings"),
-    leadTimeDays: n(raw, "leadTimeDays", 5),
-    image: photo?.src,
-    photo,
-    options: strings(raw, "options"),
-    sort: optNum(raw, "sort"),
-  };
-}
-
-function mapEvent(value: unknown): EventItem | undefined {
-  const raw = value as Raw | null;
-  if (!raw || typeof raw !== "object") return undefined;
-  const slug = opt(raw, "slug");
-  const title = opt(raw, "title");
-  const start = opt(raw, "start");
-  if (!slug || !title || !start) return undefined;
-  const photo = mapImage(raw.image, title);
-  return {
-    id: slug,
-    slug,
-    title,
-    start,
-    end: opt(raw, "end"),
-    place: s(raw, "place"),
-    description: s(raw, "description"),
-    priceOere: optNum(raw, "priceOere"),
-    signup: b(raw, "signup", false),
-    capacity: optNum(raw, "capacity"),
-    image: photo?.src,
-    photo,
-    kind: s(raw, "kind", "arrangement"),
-  };
-}
-
 function mapFaq(value: unknown): FaqItem | undefined {
   const raw = value as Raw | null;
   if (!raw || typeof raw !== "object") return undefined;
@@ -287,6 +232,7 @@ export async function sanitySiteSettings(): Promise<SiteSettings | null> {
     },
     smileyUrl: opt(raw, "smileyUrl"),
     logo: mapImage(raw.logo, `${s(raw, "name")}, logo`),
+    logoLight: mapImage(raw.logoLight, `${s(raw, "name")}, logo`),
     announcement: { enabled: b(announcement, "enabled", false), text: s(announcement, "text") },
     footerText: opt(raw, "footerText"),
     orderEmailTo: s(raw, "orderEmailTo") || s(raw, "email"),
@@ -319,31 +265,6 @@ export async function sanityLocations(): Promise<Location[] | null> {
   return locations.length > 0 ? locations : null;
 }
 
-export async function sanityShopSettings(): Promise<ShopSettings | null> {
-  const raw = await sanityFetch<Raw | null>({ query: SHOP_SETTINGS_QUERY, tags: ["shopSettings"] });
-  if (!raw) return null;
-  const delivery = obj(raw, "delivery");
-  return {
-    pickupDays: strings(raw, "pickupDays") as Weekday[],
-    pickupWindow: s(raw, "pickupWindow"),
-    pickupPlace: s(raw, "pickupPlace"),
-    cutoffHour: n(raw, "cutoffHour", 18),
-    cutoffDaysBefore: n(raw, "cutoffDaysBefore", 1),
-    maxDaysAhead: n(raw, "maxDaysAhead", 14),
-    minOrderOere: n(raw, "minOrderOere", 0),
-    delivery: {
-      enabled: b(delivery, "enabled", false),
-      feeOere: n(delivery, "feeOere", 0),
-      freeAboveOere: n(delivery, "freeAboveOere", 0),
-      radiusKm: n(delivery, "radiusKm", 0),
-      days: strings(delivery, "days") as Weekday[],
-      note: s(delivery, "note"),
-    },
-    closedDates: strings(raw, "closedDates"),
-    notice: s(raw, "notice"),
-  };
-}
-
 export async function sanityPizzaSettings(): Promise<PizzaSettings | null> {
   const raw = await sanityFetch<Raw | null>({ query: PIZZA_SETTINGS_QUERY, tags: ["pizzaSettings"] });
   if (!raw) return null;
@@ -356,9 +277,35 @@ export async function sanityPizzaSettings(): Promise<PizzaSettings | null> {
     minGuests: n(p, "minGuests", 40),
     includes: strings(p, "includes"),
   }));
-  const pizzas = (Array.isArray(raw.pizzas) ? (raw.pizzas as Raw[]) : [])
-    .filter((p) => opt(p, "name"))
-    .map((p) => ({ name: s(p, "name"), vegetarian: b(p, "vegetarian", false) || undefined }));
+  // Only what Kristine marked available reaches the site; a string is an old-style dessert.
+  const menuItems = (key: string): Raw[] =>
+    (Array.isArray(raw[key]) ? (raw[key] as unknown[]) : [])
+      .map((item): Raw | null => (typeof item === "string" ? { name: item } : item && typeof item === "object" ? (item as Raw) : null))
+      .filter((item): item is Raw => item !== null && Boolean(opt(item, "name")) && b(item, "available", true));
+  const pizzas = menuItems("pizzas").map((p) => ({
+    name: s(p, "name"),
+    description: opt(p, "description"),
+    image: mapImage(p.image, s(p, "name")),
+    priceOere: optNum(p, "priceOere"),
+    vegetarian: b(p, "vegetarian", false) || undefined,
+  }));
+  const desserts = menuItems("desserts").map((d) => ({
+    name: s(d, "name"),
+    description: opt(d, "description"),
+    image: mapImage(d.image, s(d, "name")),
+    priceOere: optNum(d, "priceOere"),
+  }));
+  const schedule = (Array.isArray(raw.schedule) ? (raw.schedule as Raw[]) : [])
+    .filter((stop) => opt(stop, "place") && /^\d{4}-\d{2}-\d{2}$/.test(s(stop, "date")))
+    .map((stop, i) => ({
+      _key: s(stop, "_key") || `stop-${i}`,
+      place: s(stop, "place"),
+      date: s(stop, "date"),
+      from: opt(stop, "from"),
+      to: opt(stop, "to"),
+      note: opt(stop, "note"),
+    }))
+    .sort((x, y) => x.date.localeCompare(y.date));
   return {
     intro: s(raw, "intro"),
     packages,
@@ -376,24 +323,10 @@ export async function sanityPizzaSettings(): Promise<PizzaSettings | null> {
     },
     day: strings(raw, "day"),
     pizzas,
-    desserts: strings(raw, "desserts"),
+    desserts,
+    schedule,
     terms: strings(raw, "terms"),
   };
-}
-
-export async function sanityProducts(): Promise<Product[]> {
-  const raw = await sanityFetch<unknown[] | null>({ query: PRODUCTS_QUERY, tags: ["product"] });
-  return (raw ?? []).map(mapProduct).filter((p): p is Product => Boolean(p));
-}
-
-export async function sanityCakes(): Promise<CakeType[]> {
-  const raw = await sanityFetch<unknown[] | null>({ query: CAKES_QUERY, tags: ["cake"] });
-  return (raw ?? []).map(mapCake).filter((c): c is CakeType => Boolean(c));
-}
-
-export async function sanityEvents(): Promise<EventItem[]> {
-  const raw = await sanityFetch<unknown[] | null>({ query: EVENTS_QUERY, tags: ["event"] });
-  return (raw ?? []).map(mapEvent).filter((e): e is EventItem => Boolean(e));
 }
 
 export async function sanityFaq(): Promise<FaqItem[]> {

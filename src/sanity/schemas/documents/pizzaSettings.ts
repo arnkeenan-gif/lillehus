@@ -1,6 +1,72 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
-import { TrolleyIcon } from "../../icons";
-import { formatOere } from "../helpers";
+import { CalendarIcon, TrolleyIcon } from "../../icons";
+import { formatOere, type PreviewMedia } from "../helpers";
+
+/** "11.00", "9.30" or "11:00". */
+const CLOCK = /^([01]?\d|2[0-3])[.:][0-5]\d$/;
+
+/** Name, description, photo, price and whether it is on the menu: shared by pizzas and desserts. */
+function menuItemFields(kind: "pizza" | "dessert") {
+  const pizza = kind === "pizza";
+  return [
+    defineField({
+      name: "name",
+      title: pizza ? "Pizza" : "Dessert",
+      type: "string",
+      description: pizza ? 'Fyldet, adskilt med komma, fx "Tomat, mozzarella og basilikum".' : 'Fx "Citrontærte".',
+      validation: (rule) => rule.required().error(pizza ? "Skriv, hvad der er på pizzaen." : "Skriv dessertens navn.").max(140),
+    }),
+    defineField({
+      name: "description",
+      title: "Beskrivelse",
+      type: "text",
+      rows: 2,
+      description: "Et par ord mere, hvis der er brug for det. Kan stå tom.",
+      validation: (rule) => rule.max(300),
+    }),
+    defineField({
+      name: "image",
+      title: "Billede",
+      type: "photo",
+      description: "Vises over listen på pizzavognens side. Kan udelades.",
+    }),
+    defineField({
+      name: "priceOere",
+      title: pizza ? "Pris pr. pizza i øre" : "Pris pr. kuvert i øre",
+      type: "number",
+      description: pizza
+        ? "Kun hvis pizzaen har sin egen pris. Skriv 9500 for 95 kr. Til arrangementer er prisen pr. kuvert, så feltet kan stå tomt."
+        : "Skriv 7500 for 75 kr. Står feltet tomt, gælder dessertprisen under Priser.",
+      validation: (rule) => rule.integer().min(0),
+    }),
+    ...(pizza ? [defineField({ name: "vegetarian", title: "Vegetarisk", type: "boolean", initialValue: false })] : []),
+    defineField({
+      name: "available",
+      title: "Tilgængelig",
+      type: "boolean",
+      initialValue: true,
+      description: pizza
+        ? "Slå fra for at skjule pizzaen på siden og i bookingformularen uden at slette den."
+        : "Slå fra for at skjule desserten på siden og i bookingformularen uden at slette den.",
+    }),
+  ];
+}
+
+function menuItemPreview(fallbackTitle: string) {
+  return {
+    select: { title: "name", vegetarian: "vegetarian", price: "priceOere", available: "available", media: "image" },
+    prepare({ title, vegetarian, price, available, media }: { title?: string; vegetarian?: boolean; price?: number; available?: boolean; media?: PreviewMedia }) {
+      const notes = [vegetarian ? "vegetarisk" : null, typeof price === "number" ? formatOere(price) : null, available === false ? "skjult" : null];
+      return { title: title ?? fallbackTitle, subtitle: notes.filter(Boolean).join(", ") || undefined, media };
+    },
+  };
+}
+
+/** "lørdag den 17. oktober 2026" for previews. */
+function previewDate(iso: string | undefined): string {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
+  return new Intl.DateTimeFormat("da-DK", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
+}
 
 export const pizzaSettings = defineType({
   name: "pizzaSettings",
@@ -11,6 +77,7 @@ export const pizzaSettings = defineType({
     { name: "tekst", title: "Tekster", default: true },
     { name: "priser", title: "Priser" },
     { name: "menu", title: "Pizzaer og desserter" },
+    { name: "steder", title: "Steder og datoer" },
     { name: "praktisk", title: "Praktisk" },
   ],
   fields: [
@@ -106,21 +173,14 @@ export const pizzaSettings = defineType({
       title: "Pizzaer",
       type: "array",
       group: "menu",
+      description: "Pizzaerne på siden og i bookingformularen, i den rækkefølge de står her. Man vælger tre til et arrangement.",
       of: [
         defineArrayMember({
           name: "pizzaItem",
           title: "Pizza",
           type: "object",
-          fields: [
-            defineField({ name: "name", title: "Pizza", type: "string", description: "Fyldet, adskilt med komma.", validation: (rule) => rule.required().error("Skriv, hvad der er på pizzaen.") }),
-            defineField({ name: "vegetarian", title: "Vegetarisk", type: "boolean", initialValue: false }),
-          ],
-          preview: {
-            select: { title: "name", vegetarian: "vegetarian" },
-            prepare({ title, vegetarian }: { title?: string; vegetarian?: boolean }) {
-              return { title: title ?? "Pizza", subtitle: vegetarian ? "vegetarisk" : undefined };
-            },
-          },
+          fields: menuItemFields("pizza"),
+          preview: menuItemPreview("Pizza"),
         }),
       ],
       validation: (rule) => rule.min(1).error("Skriv mindst en pizza."),
@@ -130,7 +190,65 @@ export const pizzaSettings = defineType({
       title: "Desserter",
       type: "array",
       group: "menu",
-      of: [defineArrayMember({ type: "string" })],
+      description: "Desserter, der kan tilkøbes til pizzaerne.",
+      of: [
+        defineArrayMember({
+          name: "dessertItem",
+          title: "Dessert",
+          type: "object",
+          fields: menuItemFields("dessert"),
+          preview: menuItemPreview("Dessert"),
+        }),
+      ],
+    }),
+
+    defineField({
+      name: "schedule",
+      title: "Steder og datoer",
+      type: "array",
+      group: "steder",
+      description:
+        "Hvor og hvornår pizzavognen står, så man kan komme forbi. Listen vises på pizzavognens side, når der står noget i den, og datoer, der er passeret, forsvinder af sig selv.",
+      of: [
+        defineArrayMember({
+          name: "pizzaStop",
+          title: "Sted og dato",
+          type: "object",
+          icon: CalendarIcon,
+          fields: [
+            defineField({ name: "place", title: "Sted", type: "string", description: "Fx navnet på markedet og byen.", validation: (rule) => rule.required().error("Skriv stedet.").max(120) }),
+            defineField({
+              name: "date",
+              title: "Dato",
+              type: "date",
+              options: { dateFormat: "D. MMMM YYYY" },
+              validation: (rule) => rule.required().error("Vælg en dato."),
+            }),
+            defineField({
+              name: "from",
+              title: "Åbner kl.",
+              type: "string",
+              description: 'Fx "11.00". Kan stå tom.',
+              validation: (rule) => rule.custom((v) => (!v || CLOCK.test(v) ? true : 'Skriv tiden som "11.00".')),
+            }),
+            defineField({
+              name: "to",
+              title: "Lukker kl.",
+              type: "string",
+              description: 'Fx "15.00". Kan stå tom.',
+              validation: (rule) => rule.custom((v) => (!v || CLOCK.test(v) ? true : 'Skriv tiden som "15.00".')),
+            }),
+            defineField({ name: "note", title: "Note", type: "string", description: 'Fx "Eller til vi er udsolgt". Kan stå tom.', validation: (rule) => rule.max(160) }),
+          ],
+          preview: {
+            select: { place: "place", date: "date", from: "from", to: "to" },
+            prepare({ place, date, from, to }: { place?: string; date?: string; from?: string; to?: string }) {
+              const time = from ? ` kl. ${from}${to ? ` til ${to}` : ""}` : "";
+              return { title: place || "Sted", subtitle: `${previewDate(date)}${time}` || undefined };
+            },
+          },
+        }),
+      ],
     }),
 
     defineField({
@@ -143,6 +261,6 @@ export const pizzaSettings = defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Pizzavogn", subtitle: "Priser, pizzaer, desserter og betingelser" }),
+    prepare: () => ({ title: "Pizzavogn", subtitle: "Priser, pizzaer, desserter, steder og datoer" }),
   },
 });

@@ -1,0 +1,11 @@
+{
+  "_readme": "Kategorierne i bagværket, i den rækkefølge de står på siden (lavt sort først). En kategori uden varer vises ikke. I Sanity Studio: Bagværk, Kategorier. Vil en kategori have sin egen bestillingsfrist, så tilføj fx \"deadline\": { \"daysBefore\": 3, \"hour\": 18 }; uden deadline gælder den almindelige frist i content/shop.json.",
+  "categories": [
+    { "id": "broed", "title": "Brød", "description": "", "sort": 10 },
+    { "id": "rugbroed", "title": "Rugbrød", "description": "", "sort": 20 },
+    { "id": "boller", "title": "Boller", "description": "", "sort": 30 },
+    { "id": "soedt-bagvaerk", "title": "Sødt bagværk", "description": "", "sort": 40 },
+    { "id": "croissanter-og-wienerbroed", "title": "Croissanter og wienerbrød", "description": "", "sort": 50 },
+    { "id": "cookies-og-andet-soedt", "title": "Cookies og andet sødt", "description": "", "sort": 60 }
+  ]
+}

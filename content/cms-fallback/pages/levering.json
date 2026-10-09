@@ -1,10 +1,10 @@
 {
-  "_readme": "Afhentningsdage, frist, fryserens tider og levering skrives automatisk fra content/shop.json og content/site.json (i Studio: Bageri, afhentning og levering samt Åbningstider og steder). Ret tallene der, ikke her.",
+  "_readme": "Afhentningssteder, de næste afhentningsdage og bestillingsfristen skrives automatisk fra bestillingen (i Studio: Afhentningssteder), og fryserens tider fra Åbningstider og steder. Ret tallene der, ikke her. Teksten om levering står i afsnittet Levering herunder.",
   "title": "Levering",
   "slug": "levering",
   "seo": {
     "title": "Afhentning og levering",
-    "description": "Bestilte varer hentes i Hønsehuset på Torpevej 10 i Herlufmagle. Her står, hvilke dage du kan hente, hvornår du skal bestille, og hvordan du spørger om levering."
+    "description": "Bestilte varer henter du på det afhentningssted og den dato, du vælger, når du bestiller. Her står, hvor og hvornår du kan hente, hvornår du skal bestille, og hvordan du spørger om levering."
   },
   "showInNav": false,
   "navLabel": "Levering",
@@ -15,7 +15,7 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Afhentning og levering",
-      "text": "Bestilte varer henter du i Hønsehuset på gården. Her står, hvornår du kan hente, og hvordan du spørger om levering."
+      "text": "Bestilte varer henter du på det afhentningssted og den dato, du vælger, når du bestiller. Her står, hvor og hvornår du kan hente, og hvordan du spørger om levering."
     },
     {
       "_type": "pickupInfoSection",
@@ -23,11 +23,24 @@
       "detail": "udførlig"
     },
     {
+      "_type": "richTextSection",
+      "_key": "levering",
+      "heading": "Levering",
+      "body": [
+        "Bestillinger her på siden er til afhentning. Vil du spørge om levering, så skriv til os gennem [kontaktformularen](/kontakt)."
+      ],
+      "imagePosition": "right",
+      "tone": "paper"
+    },
+    {
       "_type": "ctaSection",
       "_key": "pizzavogn",
       "heading": "Den rullende pizzavogn",
       "text": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn. Vi laver og bager pizzaerne på stedet, hos jer.",
-      "link": { "label": "Book pizzavognen", "href": "/pizza" },
+      "link": {
+        "label": "Book pizzavognen",
+        "href": "/pizza"
+      },
       "tone": "paper"
     }
   ]

@@ -1,0 +1,93 @@
+{
+  "_readme": "Varerne i bagværket. Navne og priser er fra tavlen på vognen; priser i øre (5500 = 55 kr.). category er id'et fra categories.json. active: vises på siden. orderable: kan bestilles på siden (false viser varen med pris, men uden kurv). description vises under navnet, når den er udfyldt. image er en sti i public/images (alt-tekst fra content/images.json), eller tom. En vare kan få sin egen frist med \"deadline\": { \"daysBefore\": 3, \"hour\": 18 }. I Sanity Studio: Bagværk, Alle varer.",
+  "products": [
+    {
+      "id": "surdejsbroed",
+      "name": "Surdejsbrød/form",
+      "category": "broed",
+      "description": "",
+      "priceOere": 5500,
+      "image": "/images/facebook/fb-sourdough-loaves-stacked.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 10
+    },
+    {
+      "id": "surdejsbroed-sesam",
+      "name": "Surdejsbrød m. sesam",
+      "category": "broed",
+      "description": "",
+      "priceOere": 5500,
+      "image": "/images/facebook/fb-loyalty-card-and-bread.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 20
+    },
+    {
+      "id": "rugbroed-kerner",
+      "name": "Rugbrød m. kerner",
+      "category": "rugbroed",
+      "description": "",
+      "priceOere": 5500,
+      "image": "/images/facebook/fb-rye-bread-loaves.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 10
+    },
+    {
+      "id": "surdejsboller-plain",
+      "name": "Surdejsboller plain",
+      "category": "boller",
+      "description": "",
+      "priceOere": 1500,
+      "image": "/images/surdejsboller-plain.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 10
+    },
+    {
+      "id": "surdejsboller-plain-4",
+      "name": "Surdejsboller plain, 4 stk.",
+      "category": "boller",
+      "description": "",
+      "priceOere": 5000,
+      "image": "/images/surdejsboller-plain-4-stk.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 20
+    },
+    {
+      "id": "surdejsboller-birkes-sesam",
+      "name": "Surdejsboller m. birkes, sesam",
+      "category": "boller",
+      "description": "",
+      "priceOere": 1700,
+      "image": "/images/oat-topped-bread-rolls.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 30
+    },
+    {
+      "id": "blandede-boller-4",
+      "name": "4 blandede boller",
+      "category": "boller",
+      "description": "",
+      "priceOere": 5500,
+      "image": "/images/facebook/fb-bread-basket.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 40
+    },
+    {
+      "id": "vaniljesnegl",
+      "name": "Vaniljesnegl",
+      "category": "soedt-bagvaerk",
+      "description": "",
+      "priceOere": 4000,
+      "image": "/images/cinnamon-buns-and-bread-rolls.jpg",
+      "active": true,
+      "orderable": true,
+      "sort": 10
+    }
+  ]
+}

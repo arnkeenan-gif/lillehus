@@ -3,16 +3,19 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { groupHours, lowerFirst } from "@/components/cms/text";
 import { getEvents, getLocations, getSiteSettings, type EventsSection, type Location } from "@/lib/cms";
-import { formatDateLong, formatPrice, formatTime, ucfirst } from "@/lib/format";
+import { priceLabel, whenShort } from "@/lib/events/dates";
 import { cn } from "@/lib/cn";
 import { SectionHeading, SectionIntro, afterIntro, listMeasure, textLink, textMeasure } from "./heading";
 import type { SectionProps } from "./types";
 
 /**
- * Coming dates as rows (date, title, place) with a hairline between them:
- * the date in a fixed tabular column from sm, above the title on phones.
+ * "Det sker" on the forside and find-os: the next dates as rows with a
+ * hairline between them, the date and time in a fixed tabular column from
+ * sm (above the title on phones), then the title, the place, the category
+ * and the price. Each row links to the event's own page.
  * `showWeek` first says how an ordinary week goes, built from the locations.
  * With nothing in the calendar, one paragraph and the two places we post.
+ * The full calendar lives on /arrangementer.
  */
 function WeekSentence({ locations }: { locations: Location[] }) {
   const places = locations.filter((l) => l.hours.length > 0);
@@ -45,6 +48,8 @@ export async function Events({ section, level, className }: SectionProps<EventsS
   const list = events.slice(0, section.limit);
   const hasTop = Boolean(section.heading || section.text);
   const hasLead = hasTop || section.showWeek;
+  // Under the section's heading each title is one level down; without a heading the rows carry none.
+  const ItemHeading = section.heading ? (level === "h1" ? "h2" : "h3") : "p";
 
   return (
     <section className={className}>
@@ -64,18 +69,25 @@ export async function Events({ section, level, className }: SectionProps<EventsS
         {list.length > 0 ? (
           <ul className={cn("divide-y divide-line border-y border-line", listMeasure, hasLead && afterIntro)}>
             {list.map((event) => {
-              const clock = formatTime(event.start);
+              const when = whenShort(event);
+              const meta = [event.category?.title, priceLabel(event)].filter(Boolean);
               return (
-                <li key={event.id} className="grid gap-1 py-5 sm:grid-cols-[13rem_1fr] sm:gap-8">
+                <li key={event.id} className="group relative grid gap-1 py-5 sm:grid-cols-[13rem_1fr] sm:gap-8">
                   <p className="tnum text-ink-2">
-                    {ucfirst(formatDateLong(event.start))}
-                    {clock !== "00.00" ? `, kl. ${clock}` : ""}
+                    <time dateTime={event.start}>{when.date}</time>
+                    {when.time ? <span className="block text-muted">{when.time}</span> : null}
                   </p>
                   <div className="min-w-0">
-                    <p className="font-medium text-ink">{event.title}</p>
-                    <p className="text-ink-2">{event.place}</p>
-                    {event.description ? <p className="mt-2 max-w-[60ch] text-ink-2">{event.description}</p> : null}
-                    {event.priceOere ? <p className="tnum mt-1 text-ink-2">{formatPrice(event.priceOere)} pr. person</p> : null}
+                    <ItemHeading className="font-semibold text-ink">
+                      <Link
+                        href={`/arrangementer/${event.slug}`}
+                        className="transition-colors duration-150 ease-out-quart after:absolute after:inset-0 group-hover:text-rust"
+                      >
+                        {event.title}
+                      </Link>
+                    </ItemHeading>
+                    {event.place ? <p className="text-ink-2">{event.place}</p> : null}
+                    {meta.length > 0 ? <p className="tnum mt-1 text-sm text-muted">{meta.join(" · ")}</p> : null}
                   </div>
                 </li>
               );

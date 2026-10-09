@@ -11,6 +11,7 @@ import { visionTool } from "@sanity/vision";
 import { daDKLocale } from "@sanity/locale-da-dk";
 // Relative imports on purpose: the Sanity CLI (`npx sanity schema validate`) reads this file too and does not know the "@/" alias.
 import { apiVersion, dataset, projectId, studioBasePath, studioTitle } from "./src/sanity/env";
+import { orderingDocumentActions } from "./src/sanity/actions";
 import { schemaTypes } from "./src/sanity/schemas";
 import { isSingleton } from "./src/sanity/schemas/constants";
 import { structure } from "./src/sanity/structure";
@@ -30,11 +31,14 @@ export default defineConfig({
   ],
   schema: { types: schemaTypes },
   document: {
-    // Singletons can be edited and published but never deleted, duplicated or unpublished.
-    actions: (prev, context) =>
-      isSingleton(context.schemaType)
-        ? prev.filter(({ action }) => !action || !["delete", "duplicate", "unpublish"].includes(action))
-        : prev,
+    // "Åbn datoer" on pickup locations (ordering lane). Singletons can be edited and published but
+    // never deleted, duplicated or unpublished.
+    actions: (prev, context) => {
+      const actions = orderingDocumentActions(prev, context);
+      return isSingleton(context.schemaType)
+        ? actions.filter(({ action }) => !action || !["delete", "duplicate", "unpublish"].includes(action))
+        : actions;
+    },
     // Keep singletons out of the "new document" menu; they already exist.
     newDocumentOptions: (prev) => prev.filter((template) => !isSingleton(template.templateId)),
   },

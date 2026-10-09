@@ -6,11 +6,11 @@ import { Section } from "@/components/ui/section";
 import { ClearCart } from "@/components/shop/clear-cart";
 import { PrintButton } from "@/components/shop/print-button";
 import { cn } from "@/lib/cn";
-import { getSiteSettings, type ShopSettings, type SiteSettings } from "@/lib/cms";
+import { getPickupLocations, getSiteSettings, type SiteSettings } from "@/lib/cms";
 import { orderFromSession, type OrderDetails } from "@/lib/cart-order";
-import { noonUtc, pickupDaysLabel, pickupHours } from "@/lib/cart-pickup";
-import { formatDateLong, formatPrice } from "@/lib/format";
-import { getShop } from "@/lib/products";
+import { locationDetails } from "@/lib/cart-pickup";
+import { formatPrice } from "@/lib/format";
+import { formatDayDate, pickupTimeText } from "@/lib/ordering/dates";
 import { getStripe } from "@/lib/stripe";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default async function ThanksPage({ searchParams }: Props) {
   const params = await searchParams;
   const sessionId = typeof params.session_id === "string" ? params.session_id : "";
   const stripe = getStripe();
-  const [shop, settings] = await Promise.all([getShop(), getSiteSettings()]);
+  const settings = await getSiteSettings();
 
   if (!stripe || !sessionId) {
     return (
@@ -38,7 +38,7 @@ export default async function ThanksPage({ searchParams }: Props) {
 
   let session: Stripe.Checkout.Session | null = null;
   try {
-    session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["line_items", "payment_intent"] });
+    session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["line_items.data.price.product"] });
   } catch (err) {
     console.error("[tak] kunne ikke hente Stripe-session", err);
   }
@@ -66,7 +66,11 @@ export default async function ThanksPage({ searchParams }: Props) {
     );
   }
 
-  return <Receipt order={orderFromSession(session, session.line_items?.data ?? [])} shop={shop} settings={settings} />;
+  const order = orderFromSession(session, session.line_items?.data ?? []);
+  const location = order.locationId
+    ? (await getPickupLocations({ includeInactive: true })).find((l) => l.id === order.locationId)
+    : undefined;
+  return <Receipt order={order} address={location ? locationDetails(location) : ""} settings={settings} />;
 }
 
 function Calm({
@@ -74,7 +78,7 @@ function Calm({
   text,
   phone,
   backHref = "/bagvaerk",
-  backLabel = "Tilbage til bageriet",
+  backLabel = "Tilbage til bagværket",
 }: {
   title: string;
   text: string;
@@ -107,11 +111,12 @@ function Fact({ label, value, tnum = false }: { label: string; value: string; tn
   );
 }
 
-/** The confirmation. Prints on one A4 page: header, footer and buttons are hidden by no-print. */
-function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSettings; settings: SiteSettings }) {
-  const day = order.pickupDate ? formatDateLong(noonUtc(order.pickupDate)) : "";
-  const hours = pickupHours(shop.pickupWindow);
-  const isDelivery = order.fulfilment === "delivery";
+/** The confirmation. Prints on one A4 page: header, footer and buttons are hidden by no-print. Kristine prints it as her baking list. */
+function Receipt({ order, address, settings }: { order: OrderDetails; address: string; settings: SiteSettings }) {
+  const day = order.pickupDate ? formatDayDate(order.pickupDate, { year: true }) : "";
+  const time = pickupTimeText(order.pickupFrom, order.pickupTo);
+  const place = order.locationName || "det valgte sted";
+  const sentence = `Du henter din bestilling: ${place}, ${day || "den valgte dag"}${time ? `, ${time}` : ""}.`;
 
   return (
     <Section className="print:py-0">
@@ -120,18 +125,16 @@ function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSet
         <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink print:text-2xl">
           Tak for din bestilling
         </h1>
-        <p className="mt-5 max-w-[46ch] text-lead text-ink-2 print:mt-3 print:text-base print:text-[#000]">
-          {isDelivery
-            ? `Vi leverer ${day || "den aftalte dag"}.`
-            : `Du henter i ${shop.pickupPlace}, ${day || "den valgte dag"} mellem kl. ${hours}.`}
-        </p>
+        <p className="mt-5 max-w-[46ch] text-lead text-ink-2 print:mt-3 print:text-base print:text-[#000]">{sentence}</p>
         {order.email ? (
           <p className="mt-3 max-w-[60ch] text-ink-2 print:text-[#000]">Vi har sendt en kvittering til {order.email}.</p>
         ) : null}
 
-        <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 text-[0.95rem] sm:grid-cols-4 print:mt-6 print:grid-cols-4">
+        <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 text-[0.95rem] sm:grid-cols-3 print:mt-6 print:grid-cols-3">
           <Fact label="Ordrenummer" value={order.orderNo} tnum />
-          <Fact label={isDelivery ? "Levering" : "Afhentning"} value={day || "Ukendt dag"} />
+          <Fact label="Afhentning" value={day || "Ukendt dag"} />
+          {time ? <Fact label="Tidspunkt" value={time} tnum /> : null}
+          <Fact label="Sted" value={address ? `${place}, ${address}` : place} />
           <Fact label="Navn" value={order.customerName || "Ikke oplyst"} />
           <Fact label="Telefon" value={order.phone || "Ikke oplyst"} tnum />
         </dl>
@@ -155,17 +158,15 @@ function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSet
             {order.lines.map((line, i) => (
               <tr key={i}>
                 <td className="tnum py-2.5 pr-3 align-top text-lg font-semibold text-ink print:text-[#000]">{line.qty}</td>
-                <td className="py-2.5 pr-3 align-top text-ink print:text-[#000]">{line.name}</td>
+                <td className="py-2.5 pr-3 align-top text-ink print:text-[#000]">
+                  {line.name}
+                  {line.options.length > 0 ? (
+                    <span className="mt-0.5 block text-sm text-ink-2 print:text-[#000]">{line.options.join(". ")}</span>
+                  ) : null}
+                </td>
                 <td className="tnum py-2.5 text-right align-top text-ink print:text-[#000]">{formatPrice(line.totalOere)}</td>
               </tr>
             ))}
-            {order.deliveryOere !== null ? (
-              <tr>
-                <td className="py-2.5 pr-3" />
-                <td className="py-2.5 pr-3 text-ink print:text-[#000]">Levering</td>
-                <td className="tnum py-2.5 text-right text-ink print:text-[#000]">{formatPrice(order.deliveryOere)}</td>
-              </tr>
-            ) : null}
           </tbody>
           <tfoot>
             <tr className="border-t border-line font-semibold text-ink print:border-[#000] print:text-[#000]">
@@ -184,16 +185,13 @@ function Receipt({ order, shop, settings }: { order: OrderDetails; shop: ShopSet
         ) : null}
 
         <p className="mt-8 max-w-[60ch] text-ink-2 print:text-[#000]">
-          {isDelivery
-            ? shop.delivery.note
-            : `Bestilte varer hentes i ${shop.pickupPlace}, ${pickupDaysLabel(shop.pickupDays)} kl. ${shop.pickupWindow}.`}{" "}
           Spørgsmål? Ring på <span className="tnum">{settings.phone}</span>.
         </p>
 
         <div className="no-print mt-10 flex flex-wrap gap-3">
           <PrintButton />
           <Button href="/bagvaerk" variant="secondary">
-            Tilbage til bageriet
+            Tilbage til bagværket
           </Button>
         </div>
       </Container>

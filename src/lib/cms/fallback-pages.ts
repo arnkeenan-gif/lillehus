@@ -10,6 +10,7 @@ import faq from "../../../content/cms-fallback/pages/faq.json";
 import findOs from "../../../content/cms-fallback/pages/find-os.json";
 import firmaaftaler from "../../../content/cms-fallback/pages/firmaaftaler.json";
 import forside from "../../../content/cms-fallback/pages/forside.json";
+import fryser from "../../../content/cms-fallback/pages/fryser.json";
 import handelsbetingelser from "../../../content/cms-fallback/pages/handelsbetingelser.json";
 import kager from "../../../content/cms-fallback/pages/kager.json";
 import kontakt from "../../../content/cms-fallback/pages/kontakt.json";
@@ -36,6 +37,7 @@ export const FALLBACK_PAGES: Record<string, RawPage> = {
   kager,
   pizza,
   arrangementer,
+  fryser,
   "find-os": findOs,
   "om-os": omOs,
   kontakt,

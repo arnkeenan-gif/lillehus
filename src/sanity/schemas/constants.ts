@@ -24,13 +24,6 @@ export const WEEKDAY_OPTIONS = [
   { title: "søndag", value: "søn" },
 ];
 
-export const CATEGORY_OPTIONS = [
-  { title: "Brød", value: "brød" },
-  { title: "Boller", value: "boller" },
-  { title: "Kager", value: "kager" },
-  { title: "Andet", value: "andet" },
-];
-
 /** The 14 allergens that must be declared, in the order they usually appear on a Danish label. */
 export const ALLERGEN_OPTIONS = [
   { title: "Gluten", value: "gluten" },
@@ -64,15 +57,9 @@ export const FORM_KIND_OPTIONS = [
   { title: "Tilmelding til arrangement", value: "event" },
 ];
 
-export const EVENT_KIND_OPTIONS = [
-  { title: "Arrangement", value: "arrangement" },
-  { title: "Åbent hus", value: "åbent hus" },
-  { title: "Kursus", value: "kursus" },
-  { title: "Marked", value: "marked" },
-];
 
 export const LOCATION_FILTER_OPTIONS = [
   { title: "Alle steder", value: "alle" },
-  { title: "Kun bageriet og Hønsehuset", value: "bageriet" },
+  { title: "Kun fryseren på gården", value: "bageriet" },
   { title: "Kun Torvedag i Næstved", value: "naestved" },
 ];

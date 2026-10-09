@@ -1,91 +1,65 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Trash, X } from "@phosphor-icons/react";
+import { X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { QuantityStepper } from "@/components/shop/quantity-stepper";
-import { isOptimizable } from "@/components/shop/product-photo";
-import { OPEN_CART_EVENT, cartSubtotal, removeFromCart, setCartQty, useCart } from "@/lib/cart";
-import { formatPrice } from "@/lib/format";
+import { OrderLines, OrderTotal, PickupFacts } from "@/components/shop/order-summary";
+import { requestPickupChooser } from "@/components/ordering/order-flow";
+import { useModal } from "@/components/ordering/use-modal";
+import { useNow } from "@/components/ordering/use-now";
+import { OPEN_CART_EVENT, useCart, useCartPickup } from "@/lib/cart";
+import { expiredLines, resolvePickup, type ClientLocation } from "@/lib/cart-pickup";
+import { copenhagenDate } from "@/lib/ordering/dates";
 
 /*
-  Slide-in cart. Opens on the "dlh:open-cart" event from the header button,
-  240ms from the right on ease-out-quart; reduced motion swaps the slide for a
-  short fade. Escape and the backdrop close it, focus moves into the panel and
-  back to the trigger afterwards, and Tab stays inside while it is open.
+  Slide-in "Din bestilling". Opens on the "dlh:open-cart" event from the
+  header button, 240ms from the right on ease-out-quart; reduced motion
+  swaps the slide for a short fade. Escape and the backdrop close it, focus
+  moves into the panel and back to the trigger afterwards, and Tab stays
+  inside while it is open. Shows the pickup (place, date, time), the lines
+  with their options and the total.
 */
 
 const EASE_OUT_QUART = [0.25, 1, 0.5, 1] as const;
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-function trapTab(e: KeyboardEvent, root: HTMLElement | null) {
-  if (!root) return;
-  const focusable = root.querySelectorAll<HTMLElement>(FOCUSABLE);
-  if (focusable.length === 0) {
-    e.preventDefault();
-    return;
-  }
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  const active = document.activeElement;
-  if (e.shiftKey && (active === first || active === root)) {
-    e.preventDefault();
-    last.focus();
-  } else if (!e.shiftKey && active === last) {
-    e.preventDefault();
-    first.focus();
-  }
-}
 
 type Props = {
-  /** One line under the total: where to pick up and how to pay. From the shop settings. */
-  note?: string;
+  /** Active pickup locations with their open dates, for the names and times. */
+  locations: ClientLocation[];
+  renderedAt: number;
 };
 
-export function CartDrawer({ note }: Props) {
+export function CartDrawer({ locations, renderedAt }: Props) {
   const [open, setOpen] = useState(false);
   const items = useCart();
+  const stored = useCartPickup();
+  const now = useNow(renderedAt);
   const reduceMotion = useReducedMotion();
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
-  const returnFocusTo = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => setOpen(false), []);
+  useModal(open, close, panelRef);
 
   useEffect(() => {
-    const onOpen = () => {
-      returnFocusTo.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      setOpen(true);
-    };
+    const onOpen = () => setOpen(true);
     window.addEventListener(OPEN_CART_EVENT, onOpen);
     return () => window.removeEventListener(OPEN_CART_EVENT, onOpen);
   }, []);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        close();
-      } else if (e.key === "Tab") {
-        trapTab(e, panelRef.current);
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    panelRef.current?.focus();
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-      returnFocusTo.current?.focus();
-    };
-  }, [open, close]);
+  const pickup = resolvePickup(stored, locations, copenhagenDate(now));
+  const expired = new Set(pickup ? expiredLines(items, pickup.date.date, now).map((l) => l.key) : []);
+  const onShopPage = pathname === "/bagvaerk";
 
-  const subtotal = cartSubtotal(items);
-  const inShopRoot = pathname === "/bagvaerk";
+  // On the bagværk page "Skift" opens the pickup dialog right there; elsewhere the link goes to it.
+  function changePickup(event: React.MouseEvent<HTMLAnchorElement>) {
+    close();
+    if (onShopPage) {
+      event.preventDefault();
+      requestPickupChooser();
+    }
+  }
 
   const panelMotion = reduceMotion
     ? {
@@ -128,7 +102,7 @@ export function CartDrawer({ note }: Props) {
         >
           <div className="flex h-16 shrink-0 items-center justify-between border-b border-line pl-5 pr-3 sm:h-[72px]">
             <h2 id="kurv-titel" className="text-xl font-semibold text-ink">
-              Kurv
+              Din bestilling
             </h2>
             <button
               type="button"
@@ -147,69 +121,35 @@ export function CartDrawer({ note }: Props) {
                 <p className="mt-2 text-ink-2">Læg noget i kurven, så står det her.</p>
               </div>
             ) : (
-              <ul className="flex flex-col gap-6 py-6">
-                {items.map((item) => (
-                  <li key={item.productId} className="flex gap-4">
-                    <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-paper-2">
-                      {item.image ? (
-                        <Image
-                          src={item.image}
-                          alt=""
-                          fill
-                          sizes="64px"
-                          className="object-cover"
-                          style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined}
-                          unoptimized={!isOptimizable(item.image)}
-                        />
-                      ) : null}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline justify-between gap-3">
-                        <p className="font-medium leading-snug text-ink">{item.name}</p>
-                        <p className="tnum shrink-0 font-medium text-ink">{formatPrice(item.priceOere * item.qty)}</p>
-                      </div>
-                      <p className="tnum mt-0.5 text-sm text-muted">{formatPrice(item.priceOere)} pr. stk.</p>
-                      <div className="mt-3 flex items-center justify-between gap-3">
-                        <QuantityStepper
-                          value={item.qty}
-                          onChange={(q) => setCartQty(item.productId, q)}
-                          label={item.name}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeFromCart(item.productId)}
-                          className="flex size-11 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-out-quart hover:bg-paper-2 hover:text-ink"
-                        >
-                          <Trash size={20} aria-hidden="true" />
-                          <span className="sr-only">Fjern {item.name}</span>
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <PickupFacts pickup={pickup} stale={Boolean(stored) && !pickup} onNavigate={changePickup} className="border-b border-line py-5" />
+                <div className="py-6">
+                  <OrderLines items={items} expired={expired} pickupDate={pickup?.date.date} editable />
+                </div>
+              </>
             )}
           </div>
 
           <div className="shrink-0 border-t border-line px-5 py-5">
-            <div className="flex items-baseline justify-between gap-4 text-lead">
-              <span className="text-ink">I alt</span>
-              <span className="tnum font-semibold text-ink">{formatPrice(subtotal)}</span>
-            </div>
-            {note ? <p className="mt-2 text-sm text-muted">{note}</p> : null}
+            {items.length > 0 ? (
+              <>
+                <OrderTotal items={items} large />
+                <p className="mt-2 text-sm text-muted">Du betaler med kort eller MobilePay.</p>
+              </>
+            ) : null}
             <div className="mt-5 flex flex-col gap-2">
               {items.length > 0 ? (
                 <Button href="/bagvaerk/kasse" size="lg" onClick={close} className="w-full">
                   Gå til betaling
                 </Button>
               ) : null}
-              {inShopRoot ? (
+              {onShopPage ? (
                 <Button type="button" variant="secondary" size="lg" onClick={close} className="w-full">
-                  Tilbage til bageriet
+                  Tilbage til bagværket
                 </Button>
               ) : (
                 <Button href="/bagvaerk" variant="secondary" size="lg" onClick={close} className="w-full">
-                  Tilbage til bageriet
+                  Tilbage til bagværket
                 </Button>
               )}
             </div>

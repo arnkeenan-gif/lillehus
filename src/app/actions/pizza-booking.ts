@@ -20,7 +20,15 @@ import {
   type FormState,
 } from "@/lib/forms";
 import { DESSERT_NONE, PIZZA_EVENT_TYPES, SOURCES, optionLabel, optionValues } from "@/components/forms/options";
-import { depositLine, estimateLine, estimatePizza, pizzaRates } from "@/components/forms/pizza-estimate";
+import {
+  depositLine,
+  dessertRate,
+  estimateLine,
+  estimatePizza,
+  pizzaCountWord,
+  pizzaRates,
+  requiredPizzas,
+} from "@/components/forms/pizza-estimate";
 import { BookingKristineEmail, bookingRows, type BookingEmailData } from "@/emails/booking-kristine";
 import { BookingCustomerEmail, BOOKING_NEXT_STEPS } from "@/emails/booking-customer";
 
@@ -37,9 +45,15 @@ function optional<T extends z.ZodType>(schema: T) {
   return z.preprocess(blankToUndefined, schema.optional());
 }
 
-/** Built per request because the pizza list comes from the pizza settings (Sanity or content/pizza.json). */
+/**
+ * Built per request because the pizza list comes from the pizza settings
+ * (Sanity or content/pizza.json). The façade only returns the pizzas and
+ * desserts Kristine marked available, so a hidden one cannot be booked.
+ */
 function buildSchema(pizza: PizzaSettings) {
   const pizzaNames = new Set(pizza.pizzas.map((p) => p.name));
+  const required = requiredPizzas(pizza.pizzas.length);
+  const countMessage = required === 1 ? "Vælg en pizza." : `Vælg præcis ${pizzaCountWord(required)} pizzaer.`;
 
   return z.object({
     date: field.isoDate.refine((d) => d >= todayIso(), { error: MSG.pastDate }),
@@ -49,9 +63,9 @@ function buildSchema(pizza: PizzaSettings) {
     postalCity: field.requiredText(120),
     pizzas: z
       .array(z.string())
-      .length(3, { error: "Vælg præcis tre pizzaer." })
+      .length(required, { error: countMessage })
       .refine((names) => new Set(names).size === names.length && names.every((n) => pizzaNames.has(n)), {
-        error: "Vælg tre forskellige pizzaer fra listen.",
+        error: "Vælg forskellige pizzaer fra listen.",
       }),
     name: field.name,
     email: field.email,
@@ -74,7 +88,7 @@ function buildSchema(pizza: PizzaSettings) {
 function dessertErrors(formData: FormData, pizza: PizzaSettings): Record<string, string> {
   const dessert = str(formData, "dessert") || DESSERT_NONE;
   if (dessert === DESSERT_NONE) return {};
-  if (!pizza.desserts.includes(dessert)) return { dessert: MSG.choose };
+  if (!pizza.desserts.some((d) => d.name === dessert)) return { dessert: MSG.choose };
 
   const covers = str(formData, "dessertCovers");
   const min = pizza.prices.dessertMinCovers;
@@ -112,8 +126,10 @@ export async function submitPizzaBooking(_prev: FormState, formData: FormData): 
 
   const v = parsed.data;
   const minAdults = pizza.packages[0]?.minGuests ?? 40;
-  const rates = pizzaRates(pizza);
   const hasDessert = v.dessert !== DESSERT_NONE;
+  const baseRates = pizzaRates(pizza);
+  // A dessert with its own price per cover replaces the general dessert price, as in the form.
+  const rates = hasDessert ? { ...baseRates, dessertOere: dessertRate(baseRates, pizza.desserts, v.dessert) } : baseRates;
   const estimate = estimatePizza(rates, {
     adults: v.adults,
     children: v.children ?? 0,

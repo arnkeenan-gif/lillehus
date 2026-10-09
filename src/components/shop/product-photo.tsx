@@ -27,9 +27,11 @@ type Props = {
   alt: string;
   sizes: string;
   className?: string;
+  /** Load at once instead of lazily: for the first photos on the page, which are above the fold. */
+  eager?: boolean;
 };
 
-export function ProductPhoto({ photo, src, alt, sizes, className }: Props) {
+export function ProductPhoto({ photo, src, alt, sizes, className, eager = false }: Props) {
   const source = photo?.src ?? src;
   if (!source) return null;
   const position = hotspotPosition(photo);
@@ -44,6 +46,7 @@ export function ProductPhoto({ photo, src, alt, sizes, className }: Props) {
       placeholder={photo?.lqip ? "blur" : "empty"}
       blurDataURL={photo?.lqip}
       unoptimized={!isOptimizable(source)}
+      loading={eager ? "eager" : undefined}
     />
   );
 }

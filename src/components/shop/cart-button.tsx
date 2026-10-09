@@ -9,15 +9,16 @@ const buttonClass =
   "relative flex size-11 items-center justify-center rounded-md text-ink transition-colors duration-150 ease-out-quart hover:bg-paper-2";
 
 /**
- * Header cart button. Inside the shop it opens the cart drawer (mounted in
- * src/app/bagvaerk/layout.tsx); elsewhere it links to the shop. The count comes
+ * Header cart button. Inside the shop and on the cake pages it opens the
+ * cart drawer (mounted in src/app/bagvaerk/layout.tsx and
+ * src/app/kager/layout.tsx); elsewhere it links to the shop. The count comes
  * from the localStorage store, which reports 0 on the server, so the HTML
  * matches on hydration and the real count arrives right after.
  */
 export function CartButton() {
   const count = useCartCount();
   const pathname = usePathname();
-  const inShop = pathname === "/bagvaerk" || pathname.startsWith("/bagvaerk/");
+  const inShop = ["/bagvaerk", "/kager"].some((root) => pathname === root || pathname.startsWith(`${root}/`));
   const label = count === 0 ? "Kurv, tom" : count === 1 ? "Kurv, 1 vare" : `Kurv, ${count} varer`;
 
   const content = (

@@ -4,22 +4,16 @@
  * safety net when Sanity has no document for something.
  */
 import siteJson from "@content/site.json";
-import shopJson from "@content/shop.json";
 import pizzaJson from "@content/pizza.json";
-import productsJson from "@content/products.json";
-import cakesJson from "@content/cakes.json";
-import eventsJson from "@content/events.json";
 import faqJson from "@content/faq.json";
 import imagesJson from "@content/images.json";
 import forsideImages from "@content/pages/forside.json";
-import type { Product as BaseProduct, CakeType as BaseCakeType, EventItem as BaseEventItem } from "@/lib/content";
-import { toPortableText } from "./blocks";
+import { plainText, toPortableText } from "./blocks";
 import { FALLBACK_PAGES } from "./fallback-pages";
 import { buildSections, type SectionContext } from "./sections";
+import { fallbackBakeryProducts } from "./ordering-fallback";
 import type {
-  CakeType,
   CmsImage,
-  EventItem,
   FaqItem,
   InstagramImage,
   Location,
@@ -27,9 +21,7 @@ import type {
   PageSummary,
   PizzaSettings,
   Product,
-  ShopSettings,
   SiteSettings,
-  Weekday,
 } from "./types";
 
 type PhotoMeta = { alt: string; w: number; h: number };
@@ -82,6 +74,7 @@ export function fallbackSiteSettings(): SiteSettings {
     social: { ...siteJson.social },
     smileyUrl: siteJson.smileyUrl,
     logo: fallbackImage("/images/logo.png"),
+    logoLight: fallbackImage("/images/logo-light.png"),
     announcement: { enabled: false, text: "" },
     footerText: undefined,
     orderEmailTo: siteJson.orderEmailTo,
@@ -92,7 +85,7 @@ export function fallbackLocations(): Location[] {
   return siteJson.locations.map((loc) => ({
     id: loc.id,
     name: loc.name,
-    subtitle: loc.subtitle,
+    subtitle: loc.subtitle || undefined,
     address: loc.address,
     mapsUrl: loc.mapsUrl,
     hours: loc.hours.map((h) => ({ days: h.days, time: h.time, note: h.note || undefined })),
@@ -101,22 +94,43 @@ export function fallbackLocations(): Location[] {
   }));
 }
 
-export function fallbackShopSettings(): ShopSettings {
-  return {
-    pickupDays: shopJson.pickupDays as Weekday[],
-    pickupWindow: shopJson.pickupWindow,
-    pickupPlace: shopJson.pickupPlace,
-    cutoffHour: shopJson.cutoffHour,
-    cutoffDaysBefore: shopJson.cutoffDaysBefore,
-    maxDaysAhead: shopJson.maxDaysAhead,
-    minOrderOere: shopJson.minOrderOere,
-    delivery: { ...shopJson.delivery, days: shopJson.delivery.days as Weekday[] },
-    closedDates: shopJson.closedDates as string[],
-    notice: shopJson.notice,
-  };
+/** A pizza or dessert as content/pizza.json writes it. */
+interface RawMenuItem {
+  name?: string;
+  description?: string;
+  image?: string;
+  priceOere?: number | null;
+  vegetarian?: boolean;
+  available?: boolean;
+}
+
+interface RawStop {
+  place?: string;
+  date?: string;
+  from?: string;
+  to?: string;
+  note?: string;
+}
+
+/** The photo's own alt text from content/images.json, or the item's name when the photo is not listed there. */
+function menuPhoto(path: string | undefined, name: string): CmsImage | undefined {
+  const image = fallbackImage(path);
+  return image && !image.alt ? { ...image, alt: name } : image;
+}
+
+function availableItems(raw: unknown): (RawMenuItem & { name: string })[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item): RawMenuItem => (typeof item === "string" ? { name: item } : ((item ?? {}) as RawMenuItem)))
+    .filter((item): item is RawMenuItem & { name: string } => typeof item.name === "string" && item.name.trim() !== "" && item.available !== false);
 }
 
 export function fallbackPizzaSettings(): PizzaSettings {
+  const schedule = (Array.isArray(pizzaJson.schedule) ? (pizzaJson.schedule as RawStop[]) : [])
+    .filter((s): s is RawStop & { place: string; date: string } => Boolean(s.place?.trim() && s.date && /^\d{4}-\d{2}-\d{2}$/.test(s.date)))
+    .map((s, i) => ({ _key: `stop-${i}`, place: s.place, date: s.date, from: s.from || undefined, to: s.to || undefined, note: s.note || undefined }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
   return {
     intro: pizzaJson.intro,
     packages: pizzaJson.packages.map((p) => ({ ...p, includes: [...p.includes] })),
@@ -125,55 +139,48 @@ export function fallbackPizzaSettings(): PizzaSettings {
     notes: [...pizzaJson.notes],
     prices: { ...pizzaJson.prices },
     day: [...pizzaJson.day],
-    pizzas: pizzaJson.pizzas.map((p) => ({ name: p.name, vegetarian: "vegetarian" in p ? Boolean(p.vegetarian) : undefined })),
-    desserts: [...pizzaJson.desserts],
+    pizzas: availableItems(pizzaJson.pizzas).map((p) => ({
+      name: p.name,
+      description: p.description || undefined,
+      image: menuPhoto(p.image, p.name),
+      priceOere: typeof p.priceOere === "number" ? p.priceOere : undefined,
+      vegetarian: p.vegetarian || undefined,
+    })),
+    desserts: availableItems(pizzaJson.desserts).map((d) => ({
+      name: d.name,
+      description: d.description || undefined,
+      image: menuPhoto(d.image, d.name),
+      priceOere: typeof d.priceOere === "number" ? d.priceOere : undefined,
+    })),
+    schedule,
     terms: [...pizzaJson.terms],
   };
 }
 
-function toProduct(p: BaseProduct, index: number): Product {
-  return {
-    ...p,
-    image: p.image || undefined,
-    photo: fallbackImage(p.image, p.name),
-    sort: (index + 1) * 10,
-  };
-}
-
-/** Every product in content/products.json, active or not, in file order. */
+/** Shown bakery products in the older Product shape, for product strips that pick products by hand. */
 export function fallbackAllProducts(): Product[] {
-  return (productsJson as BaseProduct[]).map(toProduct);
-}
-
-export function fallbackProducts(): Product[] {
-  return fallbackAllProducts().filter((p) => p.active);
-}
-
-export function fallbackCakes(): CakeType[] {
-  return (cakesJson as (BaseCakeType & { priceNote?: string })[]).map((c, index) => ({
-    ...c,
-    image: c.image || undefined,
-    photo: fallbackImage(c.image, c.name),
-    sort: (index + 1) * 10,
+  return fallbackBakeryProducts().map((p, i) => ({
+    id: p.id,
+    slug: p.id,
+    name: p.name,
+    description: p.description ?? "",
+    priceOere: p.priceOere,
+    image: p.photo?.src,
+    photo: p.photo,
+    category: "andet",
+    days: [],
+    allergens: [],
+    active: true,
+    sort: (i + 1) * 10,
   }));
-}
-
-/** All events, oldest first. The façade filters out past ones. */
-export function fallbackEvents(): EventItem[] {
-  return (eventsJson as BaseEventItem[])
-    .map((e) => ({ ...e, image: e.image || undefined, photo: fallbackImage(e.image, e.title) }))
-    .sort((a, b) => a.start.localeCompare(b.start));
 }
 
 export function fallbackFaq(): FaqItem[] {
-  return (faqJson as { q: string; a: string; group?: string }[]).map((item, index) => ({
-    id: faqId(index),
-    q: item.q,
-    a: item.a,
-    group: item.group ?? "Andet",
-    sort: (index + 1) * 10,
-    answer: toPortableText(item.a, `${faqId(index)}-`),
-  }));
+  return (faqJson as { q: string; a: string; group?: string }[]).map((item, index) => {
+    const answer = toPortableText(item.a, `${faqId(index)}-`);
+    // Plain text, as from Sanity: the [link](/adresse) shorthand reads as its words.
+    return { id: faqId(index), q: item.q, a: plainText(answer), group: item.group ?? "Andet", sort: (index + 1) * 10, answer };
+  });
 }
 
 export function fallbackInstagram(): InstagramImage[] {

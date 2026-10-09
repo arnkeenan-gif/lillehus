@@ -13,6 +13,6 @@ export async function generateMetadata(): Promise<Metadata> {
 /** Rendered from the CMS page "faq": the sections Kristine ordered in the Studio, or the JSON fallback. */
 export default async function FaqPage() {
   const page = await getPage(SLUG);
-  if (!page) notFound();
+  if (!page || page.hidden) notFound();
   return <Sections page={page} />;
 }

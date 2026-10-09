@@ -2,8 +2,8 @@ import Stripe from "stripe";
 
 /*
   Lazy Stripe client. Nothing here touches the network at import time, so the
-  shop still renders from content/products.json when STRIPE_SECRET_KEY is
-  missing. The API version is left to the SDK's pinned default.
+  shop still renders its products when STRIPE_SECRET_KEY is missing. The API
+  version is left to the SDK's pinned default.
 */
 
 let client: Stripe | null = null;

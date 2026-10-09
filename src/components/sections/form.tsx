@@ -30,8 +30,8 @@ async function renderForm(section: FormSection): Promise<React.ReactNode> {
       const pizza = await getPizzaSettings();
       return (
         <PizzaBookingForm
-          pizzas={pizza.pizzas}
-          desserts={pizza.desserts}
+          pizzas={pizza.pizzas.map((p) => ({ name: p.name, vegetarian: p.vegetarian }))}
+          desserts={pizza.desserts.map((d) => ({ name: d.name, priceOere: d.priceOere }))}
           minAdults={pizza.packages[0]?.minGuests ?? 40}
           dessertMinCovers={pizza.prices.dessertMinCovers}
           childAges={pizza.prices.childAges}

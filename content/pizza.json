@@ -1,4 +1,5 @@
 {
+  "_readme": "Pizzavognen (i Studio: Pizzavogn). Priser i øre: 27500 er 275 kr. Hver pizza og dessert har navn, beskrivelse, billede (en sti i public/images, tom for intet billede) og available: false skjuler den på siden og i bookingformularen. En pizza eller dessert kan få sin egen pris med \"priceOere\"; uden den gælder priserne pr. kuvert. schedule er steder og datoer, hvor vognen står: { \"place\": \"Stedets navn\", \"date\": \"2026-10-24\", \"from\": \"11.00\", \"to\": \"15.00\", \"note\": \"\" }. Listen vises kun, når der står noget i den, og passerede datoer forsvinder af sig selv.",
   "intro": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn og medvirker til at gøre dagen lidt anderledes.",
   "packages": [
     {
@@ -12,7 +13,9 @@
   ],
   "radiusKm": 40,
   "areaNote": "Vi kører på Sjælland, Fyn og Lolland-Falster.",
-  "notes": ["Oplysninger om allergener kan fås mod forespørgsel."],
+  "notes": [
+    "Oplysninger om allergener kan fås mod forespørgsel."
+  ],
   "prices": {
     "childOere": 17500,
     "childAges": "0 til 7 år",
@@ -30,20 +33,84 @@
     "Vi ved af erfaring, at der den første times tid er meget run på ved serveringsbrætterne. Det aftager stille og roligt den næste halve time for næsten at ebbe ud den sidste halve time. Der er rigelig pizza til alle og oftest alt rigeligt. Så hvis I ønsker lidt til fryseren eller natmad, så hav gerne et par bakker klar, som vi kan stille af på til sidst."
   ],
   "pizzas": [
-    { "name": "Tomat, mozzarella og basilikum", "vegetarian": true },
-    { "name": "Tomat, mozzarella og chorizo" },
-    { "name": "Creme fraiche, kartoffel, mozzarella, rosmarin og pesto", "vegetarian": true },
-    { "name": "Tomat, spinat, mozzarella, gedefeta og bacon" },
-    { "name": "Tomat, spinat, mozzarella, gorgonzola og bacon" },
-    { "name": "Creme fraiche, sødkartoffel, mozzarella, syltede rødløg, salvie, trøffelolie og chili", "vegetarian": true },
-    { "name": "Tomat, mozzarella, frisk rucola, citron og parmesan", "vegetarian": true },
-    { "name": "Tomat, mozzarella, frisk rucola, parmaskinke og parmesan, citron valgfrit" }
+    {
+      "name": "Tomat, mozzarella og basilikum",
+      "description": "",
+      "image": "",
+      "vegetarian": true,
+      "available": true
+    },
+    {
+      "name": "Tomat, mozzarella og chorizo",
+      "description": "",
+      "image": "",
+      "vegetarian": false,
+      "available": true
+    },
+    {
+      "name": "Creme fraiche, kartoffel, mozzarella, rosmarin og pesto",
+      "description": "",
+      "image": "",
+      "vegetarian": true,
+      "available": true
+    },
+    {
+      "name": "Tomat, spinat, mozzarella, gedefeta og bacon",
+      "description": "",
+      "image": "",
+      "vegetarian": false,
+      "available": true
+    },
+    {
+      "name": "Tomat, spinat, mozzarella, gorgonzola og bacon",
+      "description": "",
+      "image": "",
+      "vegetarian": false,
+      "available": true
+    },
+    {
+      "name": "Creme fraiche, sødkartoffel, mozzarella, syltede rødløg, salvie, trøffelolie og chili",
+      "description": "",
+      "image": "",
+      "vegetarian": true,
+      "available": true
+    },
+    {
+      "name": "Tomat, mozzarella, frisk rucola, citron og parmesan",
+      "description": "",
+      "image": "",
+      "vegetarian": true,
+      "available": true
+    },
+    {
+      "name": "Tomat, mozzarella, frisk rucola, parmaskinke og parmesan, citron valgfrit",
+      "description": "",
+      "image": "/images/pizza-rocket-parma-ham.jpg",
+      "vegetarian": false,
+      "available": true
+    }
   ],
   "desserts": [
-    "Pavlova med flødeskum og årstidens frugt",
-    "Brownie med flødevaniljeis fra Hansen og årstidens frugt",
-    "Citrontærte"
+    {
+      "name": "Pavlova med flødeskum og årstidens frugt",
+      "description": "",
+      "image": "",
+      "available": true
+    },
+    {
+      "name": "Brownie med flødevaniljeis fra Hansen og årstidens frugt",
+      "description": "",
+      "image": "",
+      "available": true
+    },
+    {
+      "name": "Citrontærte",
+      "description": "",
+      "image": "",
+      "available": true
+    }
   ],
+  "schedule": [],
   "terms": [
     "Vi udbeder os et depositum på en tredjedel af det endelige beløb. Bookingen er først endelig, når depositum er betalt. Depositummet fratrækkes på dagen, hvor den endelige betaling sker.",
     "Depositummet returneres ikke ved afbestilling inden for de sidste 14 dage.",

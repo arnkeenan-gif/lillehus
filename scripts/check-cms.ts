@@ -14,8 +14,9 @@ import {
   getPage,
   getPages,
   getPizzaSettings,
+  getOrderingSettings,
+  getPickupLocations,
   getProducts,
-  getShopSettings,
   getSiteSettings,
 } from "../src/lib/cms";
 
@@ -34,7 +35,8 @@ async function main() {
   const site = await getSiteSettings();
   console.log(`indstillinger: ${site.name}, ${site.phone} (${site.phoneHref}), logo ${site.logo?.src ?? "mangler"}`);
   console.log(`steder: ${(await getLocations()).map((l) => `${l.name} (${l.hours.length} tider)`).join("; ")}`);
-  console.log(`bageri: afhentning ${(await getShopSettings()).pickupDays.join(", ")}`);
+  const { defaultDeadline } = await getOrderingSettings();
+  console.log(`bagværk: frist kl. ${defaultDeadline.hour} ${defaultDeadline.daysBefore} dage før; afhentning ${(await getPickupLocations()).map((l) => `${l.name} (${l.dates.length} datoer)`).join("; ")}`);
   console.log(`pizzavogn: ${(await getPizzaSettings()).pizzas.length} pizzaer`);
   console.log(`varer: ${(await getProducts()).length}, kager: ${(await getCakes()).length}, spørgsmål: ${(await getFaq()).length}, instagram: ${(await getInstagramImages()).length}`);
   console.log(`menu: ${(await getNavigation()).map((n) => `${n.label} ${n.href}`).join(" | ")}`);

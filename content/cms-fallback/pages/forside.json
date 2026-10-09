@@ -1,5 +1,5 @@
 {
-  "_readme": "Forsiden som afsnit. Bruges af siden, indtil Sanity er sat op, og lægges ind i Sanity af scripts/seed-sanity.ts. Billeder er stier i public/images; alt-tekster kommer fra content/images.json. Tekst med **fed** og [link](/adresse) bliver til rigtig tekst. Prislisten er Kristines egen tavle: ret navne, priser og noter her eller i Studio.",
+  "_readme": "Forsiden som afsnit. Bruges af siden, indtil Sanity er sat op, og lægges ind i Sanity af scripts/seed-sanity.ts. Billeder er stier i public/images; alt-tekster kommer fra content/images.json. Tekst med **fed** og [link](/adresse) bliver til rigtig tekst. De tre indgange (entriesSection) står lige under toppen. Priserne under Det bager vi kommer fra varerne i bestillingen, så de kun rettes ét sted.",
   "title": "Forside",
   "slug": "forside",
   "seo": {
@@ -24,7 +24,7 @@
         }
       },
       "primaryLink": {
-        "label": "Bestil brød",
+        "label": "Bestil bagværk",
         "href": "/bagvaerk"
       },
       "secondaryLink": {
@@ -58,58 +58,72 @@
       "interval": 5
     },
     {
+      "_type": "entriesSection",
+      "_key": "indgange",
+      "entries": [
+        {
+          "_key": "bagvaerk",
+          "title": "Bagværk",
+          "image": "/images/scored-sourdough-loaf.jpg",
+          "href": "/bagvaerk",
+          "links": [
+            {
+              "label": "Bestil bagværk",
+              "href": "/bagvaerk"
+            },
+            {
+              "label": "Fryser",
+              "href": "/fryser"
+            },
+            {
+              "label": "Kager og specialbestillinger",
+              "href": "/kager"
+            }
+          ]
+        },
+        {
+          "_key": "pizzavogn",
+          "title": "Pizzavogn",
+          "image": "/images/pizza-rocket-parma-ham.jpg",
+          "href": "/pizza",
+          "links": []
+        },
+        {
+          "_key": "arrangementer",
+          "title": "Arrangementer",
+          "image": {
+            "src": "/images/family-at-table-in-garden.jpg",
+            "hotspot": {
+              "x": 0.55,
+              "y": 0.5
+            }
+          },
+          "href": "/arrangementer",
+          "links": []
+        }
+      ]
+    },
+    {
       "_type": "richTextSection",
       "_key": "ugen",
       "body": [
         "Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved, foran Løveapoteket, **kl. 9 til 14** eller til vi er udsolgt.",
-        "Fryseren på gården er åben **hverdage kl. 7 til 18**. Priser på skiltet og betaling via MobilePay (står på fryserens dør). Bestilte varer afhentes i Hønsehuset."
+        "[Fryseren](/fryser) på gården er åben **hverdage kl. 7 til 18**. Priser på skiltet og betaling via MobilePay (står på fryserens dør). Bestilte varer afhentes i Hønsehuset."
       ],
       "image": "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg",
       "imagePosition": "right",
       "tone": "paper"
     },
     {
-      "_type": "priceListSection",
+      "_type": "productStripSection",
       "_key": "priser",
-      "heading": "Priser",
-      "rows": [
-        {
-          "_key": "surdejsbroed",
-          "name": "Surdejsbrød/form",
-          "price": "55 kr."
-        },
-        {
-          "_key": "surdejsbroed-sesam",
-          "name": "Surdejsbrød m. sesam",
-          "price": "55 kr."
-        },
-        {
-          "_key": "rugbroed",
-          "name": "Rugbrød m. kerner",
-          "price": "55 kr."
-        },
-        {
-          "_key": "boller",
-          "name": "Surdejsboller plain",
-          "price": "15 kr., 4 for 50 kr."
-        },
-        {
-          "_key": "boller-birkes-sesam",
-          "name": "Surdejsboller m. birkes, sesam",
-          "price": "17 kr."
-        },
-        {
-          "_key": "blandede-boller",
-          "name": "4 blandede boller",
-          "price": "55 kr."
-        },
-        {
-          "_key": "vaniljesnegl",
-          "name": "Vaniljesnegl",
-          "price": "40 kr."
-        }
-      ],
-      "footnote": "Bestil på siden senest dagen før kl. 18, og hent i Hønsehuset tirsdag til fredag kl. 7 til 18. I fryseren står priserne på skiltet."
+      "heading": "Det bager vi",
+      "mode": "auto",
+      "limit": 4,
+      "link": {
+        "label": "Bestil bagværk",
+        "href": "/bagvaerk"
+      }
     },
     {
       "_type": "gallerySection",
@@ -171,7 +185,7 @@
       "_key": "familien",
       "body": [
         "**Kristine & Nicolas**",
-        "Et liv med fokus på familie, økologi, bæredygtighed. Selvfølgelig alt sammen økologisk og hjemmelavet.",
+        "Et liv med fokus på familie og bæredygtighed.",
         "[Læs mere om os](/om-os)"
       ],
       "image": {

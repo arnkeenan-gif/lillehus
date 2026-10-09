@@ -1,0 +1,23 @@
+{
+  "_readme": "Kategorierne under Arrangementer, når siden kører uden Sanity (i Studio: Arrangementer, Kategorier). slug er adressen /arrangementer/kategori/<slug>; sort bestemmer rækkefølgen, lavest først. Selve arrangementerne ligger i content/events.json som en liste af { slug, title, category (en kategoris slug), summary, description (afsnit adskilt af en tom linje), image (sti under /images), start og end (ISO 8601 med tidszone, fx 2026-11-14T10:00:00+01:00), place, priceOere (pris pr. person i øre, 0 eller tom er ingen pris), signup, payment, capacity, signupDeadline, hidden, id (samme som slug) og kind (samme som category) }.",
+  "categories": [
+    {
+      "slug": "paa-gaarden",
+      "title": "Arrangementer på gården",
+      "intro": "",
+      "sort": 10
+    },
+    {
+      "slug": "kurser",
+      "title": "Kurser",
+      "intro": "",
+      "sort": 20
+    },
+    {
+      "slug": "oevrige",
+      "title": "Øvrige arrangementer",
+      "intro": "",
+      "sort": 30
+    }
+  ]
+}

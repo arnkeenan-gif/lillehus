@@ -1,17 +1,23 @@
 /**
  * Seeds the Sanity dataset with everything in /content: settings, opening
- * hours, shop and pizza settings, products, cakes, events, FAQ, the Instagram
- * strip and every page in content/cms-fallback/pages. Photos referenced from
- * public/images are uploaded once and remembered in scripts/.seed-assets.json.
+ * hours, pizza settings, FAQ, the Instagram strip and every page in
+ * content/cms-fallback/pages, then hands over to scripts/seed-ordering.ts
+ * (bagværk, cakes, pickup locations, the deadline) and scripts/seed-events.ts
+ * (events and their categories). Photos referenced from public/images are
+ * uploaded once and remembered in scripts/.seed-assets.json.
  *
  *   npm run seed:sanity
+ *   npm run seed:sanity -- --dry-run
  *
  * Needs NEXT_PUBLIC_SANITY_PROJECT_ID and SANITY_API_WRITE_TOKEN (a token with
  * Editor rights, created in sanity.io/manage under API, Tokens). Reads them
  * from .env.local when they are not already in the environment.
  *
- * Safe to run again: every document has a stable _id and is replaced in
- * place, keys are deterministic, and unchanged photos are not re-uploaded.
+ * Safe to run again: every document has a stable _id and keys are
+ * deterministic, so nothing is doubled and unchanged photos are not
+ * re-uploaded. Settings, opening hours, pizza, FAQ, Instagram and pages are
+ * replaced from /content (so a re-run undoes edits made in the Studio);
+ * the ordering and event documents that already exist are left alone.
  */
 import { createClient, type SanityClient } from "@sanity/client";
 import { createHash } from "node:crypto";
@@ -21,14 +27,12 @@ import { fileURLToPath } from "node:url";
 import { toPortableText, type RichTextInput } from "../src/lib/cms/blocks";
 import { FALLBACK_PAGES } from "../src/lib/cms/fallback-pages";
 import siteJson from "../content/site.json";
-import shopJson from "../content/shop.json";
 import pizzaJson from "../content/pizza.json";
-import productsJson from "../content/products.json";
-import cakesJson from "../content/cakes.json";
-import eventsJson from "../content/events.json";
 import faqJson from "../content/faq.json";
 import imagesJson from "../content/images.json";
 import forsideImages from "../content/pages/forside.json";
+import { seedEvents } from "./seed-events";
+import { seedOrdering } from "./seed-ordering";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ASSET_MAP_FILE = resolve(ROOT, "scripts/.seed-assets.json");
@@ -142,12 +146,15 @@ async function photoValue(path: string | undefined | null, alt?: string, extra: 
   };
 }
 
-/** Image values in the fallback JSON are a path or { src, alt }. */
+/** Image values in the fallback JSON are a path or { src, alt, hotspot }. The hotspot becomes Kristine's focus point in the Studio. */
 async function photoFromRaw(value: unknown): Promise<Raw | undefined> {
   if (typeof value === "string") return photoValue(value);
   if (value && typeof value === "object" && "src" in value) {
-    const v = value as { src?: unknown; alt?: unknown };
-    return photoValue(typeof v.src === "string" ? v.src : undefined, typeof v.alt === "string" ? v.alt : undefined);
+    const v = value as { src?: unknown; alt?: unknown; hotspot?: { x?: unknown; y?: unknown } };
+    const x = v.hotspot?.x;
+    const y = v.hotspot?.y;
+    const extra = typeof x === "number" && typeof y === "number" ? { hotspot: { _type: "sanity.imageHotspot", x, y, width: 1, height: 1 } } : {};
+    return photoValue(typeof v.src === "string" ? v.src : undefined, typeof v.alt === "string" ? v.alt : undefined, extra);
   }
   return undefined;
 }
@@ -205,6 +212,30 @@ async function convertSection(raw: Raw, index: number): Promise<Raw | null> {
         if (image) images.push(clean({ _type: "galleryImage", _key: `${key}-${i}`, image, caption: typeof e.caption === "string" ? e.caption : undefined }));
       }
       out.images = images;
+    } else if (field === "entries" && Array.isArray(value)) {
+      const entries: Raw[] = [];
+      for (const [i, entry] of value.entries()) {
+        if (!entry || typeof entry !== "object") continue;
+        const e = entry as Raw;
+        const entryKey = typeof e._key === "string" && e._key ? e._key : `${key}-${i}`;
+        const links: Raw[] = [];
+        for (const [j, l] of (Array.isArray(e.links) ? e.links : []).entries()) {
+          const link = withLink(l);
+          if (link) links.push({ ...link, _key: `${entryKey}-${j}` });
+        }
+        entries.push(
+          clean({
+            _type: "entry",
+            _key: entryKey,
+            title: e.title,
+            text: typeof e.text === "string" && e.text ? e.text : undefined,
+            image: await photoFromRaw(e.image),
+            href: e.href,
+            links: links.length > 0 ? links : undefined,
+          }),
+        );
+      }
+      out.entries = entries;
     } else if (field === "body") {
       out.body = toPortableText(value as RichTextInput, `${key}-`);
     } else if (field === "products" && Array.isArray(value)) {
@@ -252,6 +283,7 @@ async function buildDocuments(): Promise<SanityDoc[]> {
       smileyUrl: siteJson.smileyUrl,
       social: { ...siteJson.social },
       logo: await photoValue("/images/logo.png"),
+      logoLight: await photoValue("/images/logo-light.png"),
       announcement: { enabled: false, text: "" },
       orderEmailTo: siteJson.orderEmailTo,
     }),
@@ -267,7 +299,7 @@ async function buildDocuments(): Promise<SanityDoc[]> {
         _key: loc.id,
         id: loc.id,
         name: loc.name,
-        subtitle: loc.subtitle,
+        subtitle: loc.subtitle || undefined,
         address: loc.address,
         mapsUrl: loc.mapsUrl,
         hours: loc.hours.map((h, i) => clean({ _type: "openingHours", _key: `${loc.id}-${i}`, days: h.days, time: h.time, note: h.note || undefined })),
@@ -277,23 +309,27 @@ async function buildDocuments(): Promise<SanityDoc[]> {
     ),
   });
 
-  // Bageri, afhentning og levering
-  docs.push({
-    _id: "shopSettings",
-    _type: "shopSettings",
-    pickupDays: shopJson.pickupDays,
-    pickupWindow: shopJson.pickupWindow,
-    pickupPlace: shopJson.pickupPlace,
-    cutoffHour: shopJson.cutoffHour,
-    cutoffDaysBefore: shopJson.cutoffDaysBefore,
-    maxDaysAhead: shopJson.maxDaysAhead,
-    minOrderOere: shopJson.minOrderOere,
-    delivery: { ...shopJson.delivery },
-    closedDates: shopJson.closedDates,
-    notice: shopJson.notice,
-  });
-
   // Pizzavogn
+  type MenuItemJson = { name: string; description?: string; image?: string; priceOere?: number | null; vegetarian?: boolean; available?: boolean };
+  async function menuItem(item: MenuItemJson, type: "pizzaItem" | "dessertItem", key: string): Promise<Raw> {
+    return clean({
+      _type: type,
+      _key: key,
+      name: item.name,
+      description: item.description || undefined,
+      image: await photoValue(item.image || undefined, undefined),
+      priceOere: typeof item.priceOere === "number" ? item.priceOere : undefined,
+      vegetarian: type === "pizzaItem" ? Boolean(item.vegetarian) : undefined,
+      available: item.available !== false,
+    });
+  }
+  const pizzas: Raw[] = [];
+  for (const [i, p] of (pizzaJson.pizzas as MenuItemJson[]).entries()) pizzas.push(await menuItem(p, "pizzaItem", `pizza-${i}`));
+  const desserts: Raw[] = [];
+  for (const [i, d] of (pizzaJson.desserts as MenuItemJson[]).entries()) desserts.push(await menuItem(d, "dessertItem", `dessert-${i}`));
+  const schedule = (pizzaJson.schedule as { place?: string; date?: string; from?: string; to?: string; note?: string }[]).map((stop, i) =>
+    clean({ _type: "pizzaStop", _key: `stop-${i}`, place: stop.place, date: stop.date, from: stop.from || undefined, to: stop.to || undefined, note: stop.note || undefined }),
+  );
   docs.push({
     _id: "pizzaSettings",
     _type: "pizzaSettings",
@@ -304,74 +340,11 @@ async function buildDocuments(): Promise<SanityDoc[]> {
     notes: pizzaJson.notes,
     prices: { ...pizzaJson.prices },
     day: pizzaJson.day,
-    pizzas: pizzaJson.pizzas.map((p, i) => ({ _type: "pizzaItem", _key: `pizza-${i}`, name: p.name, vegetarian: "vegetarian" in p ? Boolean(p.vegetarian) : false })),
-    desserts: pizzaJson.desserts,
+    pizzas,
+    desserts,
+    schedule,
     terms: pizzaJson.terms,
   });
-
-  // Brød og varer
-  for (const [i, p] of productsJson.entries()) {
-    docs.push(
-      clean({
-        _id: `product-${p.slug}`,
-        _type: "product",
-        name: p.name,
-        slug: slug(p.slug),
-        description: p.description,
-        priceOere: p.priceOere,
-        image: await photoValue(p.image || undefined, photoMeta[p.image]?.alt ?? p.name),
-        category: p.category,
-        days: p.days,
-        allergens: p.allergens,
-        active: p.active,
-        sort: (i + 1) * 10,
-        stripePriceId: "stripePriceId" in p ? (p as { stripePriceId?: string }).stripePriceId : undefined,
-      }),
-    );
-  }
-
-  // Kager på bestilling
-  for (const [i, c] of cakesJson.entries()) {
-    const cake = c as Raw & { slug: string; name: string; image?: string; priceNote?: string; options?: string[] };
-    docs.push(
-      clean({
-        _id: `cake-${cake.slug}`,
-        _type: "cake",
-        name: cake.name,
-        slug: slug(cake.slug),
-        description: cake.description,
-        fromPriceOere: cake.fromPriceOere,
-        priceNote: cake.priceNote,
-        servings: cake.servings,
-        leadTimeDays: cake.leadTimeDays,
-        image: await photoValue(cake.image || undefined, cake.name),
-        options: cake.options,
-        sort: (i + 1) * 10,
-      }),
-    );
-  }
-
-  // Arrangementer og kurser
-  for (const e of eventsJson as Raw[]) {
-    if (typeof e.slug !== "string" || typeof e.title !== "string") continue;
-    docs.push(
-      clean({
-        _id: `event-${e.slug}`,
-        _type: "event",
-        title: e.title,
-        slug: slug(e.slug),
-        kind: e.kind ?? "arrangement",
-        start: e.start,
-        end: e.end,
-        place: e.place,
-        description: e.description,
-        priceOere: e.priceOere,
-        signup: e.signup ?? false,
-        capacity: e.capacity,
-        image: await photoValue(typeof e.image === "string" ? e.image : undefined, e.title),
-      }),
-    );
-  }
 
   // Spørgsmål og svar
   for (const [i, item] of (faqJson as { q: string; a: string; group?: string }[]).entries()) {
@@ -463,12 +436,8 @@ async function main() {
   const labels: Record<string, string> = {
     siteSettings: "indstillinger",
     hours: "åbningstider",
-    shopSettings: "bageri-indstillinger",
     pizzaSettings: "pizzavogn",
     page: "sider",
-    product: "varer",
-    cake: "kager",
-    event: "arrangementer",
     faqItem: "spørgsmål",
     instagramPost: "instagram-billeder",
   };
@@ -478,6 +447,14 @@ async function main() {
 
   console.log("");
   console.log(dryRun ? `Ville lægge ind i Sanity (dry run): ${summary}.` : `Lagt ind i Sanity (seeded): ${summary}.`);
+  // Places and dates already in Sanity are left alone; an active place without dates (Gården on the first run) gets the same weeks the site shows without Sanity.
+  console.log("");
+  console.log("Bagværk, kager, afhentningssteder og bestillingsfrist:");
+  await seedOrdering({ client, dryRun, assetIdFor, openDates: true });
+  console.log("");
+  console.log("Arrangementer og kategorier:");
+  await seedEvents({ client, dryRun, photo: (path, alt) => photoValue(path, alt) });
+  console.log("");
   console.log(
     dryRun
       ? `Billeder: ${stats.uploaded} ville blive lagt op, ${stats.reused} genbrugt fra scripts/.seed-assets.json.`

@@ -105,7 +105,7 @@ export function HeroSlideshow({ slides, intervalSeconds }: { slides: CmsImage[];
           type="button"
           onClick={() => setPaused((p) => !p)}
           aria-pressed={paused}
-          className="absolute bottom-5 right-5 z-10 flex size-11 items-center justify-center rounded-full bg-black/35 text-white transition-colors duration-150 ease-out-quart hover:bg-black/55 sm:bottom-6 sm:right-6"
+          className="absolute bottom-5 right-5 z-10 flex size-11 items-center justify-center rounded-full bg-ink/35 text-white transition-colors duration-150 ease-out-quart hover:bg-ink/55 sm:bottom-6 sm:right-6"
         >
           {paused ? <Play size={18} weight="fill" aria-hidden="true" /> : <Pause size={18} weight="fill" aria-hidden="true" />}
           <span className="sr-only">{paused ? "Start billedskift" : "Stop billedskift"}</span>

@@ -1,10 +1,10 @@
 {
-  "_readme": "Kagesiden. Kagetyperne ligger i content/cakes.json (i Studio: Kager på bestilling); formularen henter dem derfra. Priser og antal personer aftales i Kristines svar, så de står ikke på siden.",
+  "_readme": "Kagesiden: kagerne (fra content/ordering/cakes.json, i Studio: Kager) og nederst formularen til alt andet. Hver kage har sin egen side, /kager/<id>, med valgene, afhentningssted og dato, og prisen eller Pris aftales.",
   "title": "Kager",
   "slug": "kager",
   "seo": {
-    "title": "Kager på bestilling",
-    "description": "Kagemand eller kagekone, dåbskage og kagetapas. Send en forespørgsel, så svarer Kristine.",
+    "title": "Kager og specialbestillinger",
+    "description": "Kagemand eller kagekone, dåbskage og kagetapas. Vælg kage, afhentningssted og dato, eller send en forespørgsel på noget andet.",
     "image": "/images/cinnamon-buns-and-bread-rolls.jpg"
   },
   "showInNav": false,
@@ -15,8 +15,7 @@
     {
       "_type": "heroSection",
       "_key": "top",
-      "heading": "Kager på bestilling",
-      "text": "Kagemand eller kagekone, dåbskage og kagetapas. Send en forespørgsel med dato og antal, så svarer Kristine, når hun har set den.",
+      "heading": "Kager og specialbestillinger",
       "primaryLink": {
         "label": "Forespørg på kage",
         "href": "#forespoerg"
@@ -31,7 +30,7 @@
       "_key": "forespoerg",
       "kind": "cake",
       "heading": "Forespørg på kage",
-      "text": "Skriv, hvad du har brug for, og hvornår. Det er en forespørgsel, ikke en bestilling.",
+      "text": "Skal du bruge noget andet, så skriv, hvad du har brug for, og hvornår. Det er en forespørgsel, ikke en bestilling.",
       "steps": [
         "Du sender forespørgslen her på siden.",
         "Kristine svarer, når hun har set den, og bekræfter dato og pris.",

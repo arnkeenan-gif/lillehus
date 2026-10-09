@@ -1,13 +1,26 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import { Field, Input } from "@/components/ui/field";
+import { Field, Input, Textarea } from "@/components/ui/field";
 import { submitEventSignup } from "@/app/actions/event-signup";
 import { INITIAL_FORM_STATE, controlAria, fieldError, formValues, valueOf } from "@/components/forms/form-state";
 import { FormGroup, FormMessage, FormSuccess, Honeypot, SubmitButton, formClass } from "@/components/forms/form-status";
 
-/** Several of these can sit on one page, so ids come from useId. */
-export function EventSignupForm({ eventId, eventTitle }: { eventId: string; eventTitle: string }) {
+/**
+ * The free sign-up for one event: number of people, name, e-mail, phone and
+ * a message. Kristine gets it by mail and the guest a copy. Several of these
+ * can sit on one page, so ids come from useId.
+ */
+export function EventSignupForm({
+  eventId,
+  eventTitle,
+  maxPersons = 50,
+}: {
+  eventId: string;
+  eventTitle: string;
+  /** The most people one sign-up may cover: the event's capacity, at most 50. */
+  maxPersons?: number;
+}) {
   const [state, formAction, pending] = useActionState(submitEventSignup, INITIAL_FORM_STATE);
   const uid = useId();
   const id = (name: string) => `${uid}-${name}`;
@@ -33,12 +46,14 @@ export function EventSignupForm({ eventId, eventTitle }: { eventId: string; even
               type="number"
               inputMode="numeric"
               min={1}
+              max={maxPersons}
               required
-              defaultValue={valueOf(values, "persons") || "1"}
+              defaultValue={"persons" in values ? valueOf(values, "persons") : "1"}
+              className="sm:max-w-40"
               {...controlAria(id("persons"), err("persons"))}
             />
           </Field>
-          <Field label="Navn" htmlFor={id("name")} required error={err("name")}>
+          <Field label="Navn" htmlFor={id("name")} required error={err("name")} className="sm:col-start-1">
             <Input
               id={id("name")}
               name="name"
@@ -46,17 +61,6 @@ export function EventSignupForm({ eventId, eventTitle }: { eventId: string; even
               required
               defaultValue={valueOf(values, "name")}
               {...controlAria(id("name"), err("name"))}
-            />
-          </Field>
-          <Field label="E-mail" htmlFor={id("email")} required error={err("email")}>
-            <Input
-              id={id("email")}
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              defaultValue={valueOf(values, "email")}
-              {...controlAria(id("email"), err("email"))}
             />
           </Field>
           <Field label="Telefon" htmlFor={id("phone")} required error={err("phone")}>
@@ -70,7 +74,27 @@ export function EventSignupForm({ eventId, eventTitle }: { eventId: string; even
               {...controlAria(id("phone"), err("phone"))}
             />
           </Field>
+          <Field label="E-mail" htmlFor={id("email")} required error={err("email")} className="sm:col-span-2">
+            <Input
+              id={id("email")}
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              defaultValue={valueOf(values, "email")}
+              {...controlAria(id("email"), err("email"))}
+            />
+          </Field>
         </div>
+        <Field label="Besked" htmlFor={id("message")} error={err("message")}>
+          <Textarea
+            id={id("message")}
+            name="message"
+            defaultValue={valueOf(values, "message")}
+            className="min-h-28"
+            {...controlAria(id("message"), err("message"))}
+          />
+        </Field>
       </FormGroup>
 
       <Honeypot />

@@ -29,35 +29,6 @@ const PRODUCT = /* groq */ `{
   stripePriceId
 }`;
 
-const CAKE = /* groq */ `{
-  _id,
-  "slug": slug.current,
-  name,
-  description,
-  fromPriceOere,
-  priceNote,
-  servings,
-  leadTimeDays,
-  "image": image ${IMAGE},
-  options,
-  sort
-}`;
-
-const EVENT = /* groq */ `{
-  _id,
-  "slug": slug.current,
-  title,
-  kind,
-  start,
-  end,
-  place,
-  description,
-  priceOere,
-  signup,
-  capacity,
-  "image": image ${IMAGE}
-}`;
-
 const FAQ = /* groq */ `{ _id, question, answer, group, sort }`;
 
 /** Every section field, with images resolved and references followed. Fields a section does not have come back null. */
@@ -70,21 +41,27 @@ const SECTIONS = /* groq */ `sections[]{
   "secondaryLink": secondaryLink ${LINK},
   "link": link ${LINK},
   "products": products[]->${PRODUCT},
-  "items": items[]->${FAQ}
+  "items": items[]->${FAQ},
+  "entries": entries[]{ _key, title, text, href, "image": image ${IMAGE}, "links": links[]${LINK} }
 }`;
 
 export const SITE_SETTINGS_QUERY = defineQuery(/* groq */ `*[_type == "siteSettings" && _id == "siteSettings"][0]{
   ...,
-  "logo": logo ${IMAGE}
+  "logo": logo ${IMAGE},
+  "logoLight": logoLight ${IMAGE}
 }`);
 
 export const HOURS_QUERY = defineQuery(/* groq */ `*[_type == "hours" && _id == "hours"][0]{
   locations[]{ id, name, subtitle, address, mapsUrl, hours[]{ days, time, note }, pickup, notes }
 }`);
 
-export const SHOP_SETTINGS_QUERY = defineQuery(/* groq */ `*[_type == "shopSettings" && _id == "shopSettings"][0]{ ... }`);
 
-export const PIZZA_SETTINGS_QUERY = defineQuery(/* groq */ `*[_type == "pizzaSettings" && _id == "pizzaSettings"][0]{ ... }`);
+/** Pizzas and desserts carry a photo each; the rest of the document comes back as it is. */
+export const PIZZA_SETTINGS_QUERY = defineQuery(/* groq */ `*[_type == "pizzaSettings" && _id == "pizzaSettings"][0]{
+  ...,
+  "pizzas": pizzas[]{ ..., "image": image ${IMAGE} },
+  "desserts": desserts[]{ ..., "image": image ${IMAGE} }
+}`);
 
 export const PAGE_QUERY = defineQuery(/* groq */ `*[_type == "page" && slug.current == $slug][0]{
   _id,
@@ -107,14 +84,6 @@ export const PAGES_QUERY = defineQuery(/* groq */ `*[_type == "page" && defined(
   navOrder,
   hidden
 }`);
-
-export const PRODUCTS_QUERY = defineQuery(/* groq */ `*[_type == "product" && active == true && defined(slug.current)] | order(sort asc, name asc) ${PRODUCT}`);
-
-export const PRODUCT_QUERY = defineQuery(/* groq */ `*[_type == "product" && active == true && slug.current == $slug][0] ${PRODUCT}`);
-
-export const CAKES_QUERY = defineQuery(/* groq */ `*[_type == "cake" && defined(slug.current)] | order(sort asc, name asc) ${CAKE}`);
-
-export const EVENTS_QUERY = defineQuery(/* groq */ `*[_type == "event" && defined(start)] | order(start asc) ${EVENT}`);
 
 export const FAQ_QUERY = defineQuery(/* groq */ `*[_type == "faqItem"] | order(sort asc, question asc) ${FAQ}`);
 

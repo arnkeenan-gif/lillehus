@@ -57,10 +57,11 @@ No uppercase tracking labels anywhere. No italics in headings. Headings are sent
 - Container 1200px; `size="wide"` 1400px for photo grids; full-bleed for the hero, the rust block and photo bands.
 - The forside is a shop window, not a stack. Section order and content come from Sanity; the section components are:
   1. `hero`, variant `cover` (the default, what the Copenhagen sites do): the photograph fills the first screen edge to edge (82svh, min 540px), the header floats transparent over it in white and turns to paper once the photo has scrolled past, and a two-line headline of at most five words with two small underlined uppercase links sits at the bottom left of the photo. A gradient scrim darkens the top and bottom edges only. No paragraph. With two or more slides the photo crossfades to the next every 5 seconds (1 second fade, paused under reduced motion and while the tab is hidden, with a small pause button bottom right); the words stay put. Square and portrait photos (phone shots) are shown two at a time on desktop, side by side edge to edge, so nothing is stretched or cropped to a strip; a landscape photo fills the band alone. Phones always show one portrait crop. Needs a photo at least 1800px wide (2000+ preferred); smaller files use variant `stacked`: the photo in the container, the headline and one sentence on paper below it.
+  1b. `entries` ("Tre indgange"): right after the forside hero, the three main entries from Kristine's spec (Bagværk with Fryser and Kager under it, Pizzavogn, Arrangementer) as large photo tiles, 4/5 from md and 3/2 on phones; the photo and title are one link, small text links sit under the tile.
   2. `richText` with `imagePosition`: prose beside a photo; the "this week" block uses this with `lead` size text and no heading.
   3. `priceList`: the chalkboard as typography. A two-column list on desktop, one on phones, each row "Surdejsbrød .......... 55 kr." with dotted leaders (`border-bottom: 1px dotted` on a flex spacer), tabular prices, a footnote. No photos per row. Kristine edits rows freely.
   4. `productStrip`: photo (4/5), name, price, nothing else, four across, no borders, no buttons; the whole tile links to the shop.
-  5. `gallery`: a mixed grid, first image spans two columns and two rows, the rest fill (CSS grid, `grid-cols-2 md:grid-cols-4`, `auto-rows`), gap 8px, no captions in the grid, no overlays. This replaces the Instagram strip; Kristine drops in her own photos.
+  5. `gallery`: a mixed grid (or the "trin for trin" layout with a numbered caption under each photo, used for way-finding on the Fryser page), first image spans two columns and two rows, the rest fill (CSS grid, `grid-cols-2 md:grid-cols-4`, `auto-rows`), gap 8px, no captions in the grid, no overlays. This replaces the Instagram strip; Kristine drops in her own photos.
   6. `photoBand`: one photo full width with a caption below.
   7. `cta` with `tone: rust`: the full-bleed rust block, display text in paper, one paper-outline button, optional photo bleeding on the right half.
   8. `hours`: the two locations as large text, not a table: "Torvedag i Næstved, onsdag og lørdag kl. 9 til 14" as a sentence with the hours in bold, then the freezer. A map link each.
@@ -70,7 +71,7 @@ No uppercase tracking labels anywhere. No italics in headings. Headings are sent
   12. `quote`: only for real words from real people.
 - Section spacing is not uniform: hero to the next block 40px; between text blocks 80 to 120px; photo bands can touch each other with 8px gaps.
 - Never two consecutive text-and-photo splits. Never three equal cards. Never a heading on every section: at most half the sections on a page carry a heading.
-- Header: 72px, paper, one line, seven items, cart. Below lg: hamburger to a full-screen list. The announcement bar (from Sanity) sits under the header in `rust-tint` when enabled.
+- Header, the Copenhagen pattern: Bagværk, Pizzavogn, Arrangementer and Fryser on the left, the logo centred (40px on phones, 48px on desktop; the white `logoLight` over a cover hero, where the header is transparent until the photo has scrolled past), Find os, Om os, Kontakt and the cart on the right, 72px. Below lg: logo, cart and hamburger to a full-screen list. The announcement bar (from Sanity) sits under the header in `rust-tint` when enabled.
 
 ## 6. Imagery
 
@@ -87,7 +88,7 @@ Hover and active transitions 150ms `ease-out-quart`. The cart drawer and the mob
 
 ## 8. Copy
 
-Danish, "du"-form, in Kristine's voice: short, warm, dry, concrete ("Klar, parat..... Bag!"). Headlines are things she would say. No "Velkommen til", no "oplev", "unik", "eksklusiv", "passion", "skræddersyet", no exclamation-mark marketing, no emojis, no em-dashes or en-dashes anywhere. One label per intent: Bestil bagværk, Forespørg på kage, Book pizzavognen, Tilmeld dig, Skriv til os, Tilmeld, Kurv, Gå til betaling, Tilbage til bageriet. Every string that Kristine might want to change lives in Sanity, with the JSON fallback carrying the same words.
+Danish, "du"-form, in Kristine's voice: short, warm, dry, concrete ("Klar, parat..... Bag!"). Headlines are things she would say. No "Velkommen til", no "oplev", "unik", "eksklusiv", "passion", "skræddersyet", no exclamation-mark marketing, no emojis, no em-dashes or en-dashes anywhere. One label per intent: Bestil bagværk, Forespørg på kage, Book pizzavognen, Tilmeld dig, Skriv til os, Tilmeld, Kurv, Gå til betaling, Tilbage til bagværket. Every string that Kristine might want to change lives in Sanity, with the JSON fallback carrying the same words.
 
 ## 9. Forms, print, accessibility
 

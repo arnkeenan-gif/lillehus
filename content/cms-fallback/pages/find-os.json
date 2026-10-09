@@ -1,10 +1,10 @@
 {
-  "_readme": "Åbningstider og adresser kommer fra content/site.json (i Studio: Åbningstider og steder); afhentning fra content/shop.json. Ret tallene der, ikke her.",
+  "_readme": "Åbningstider og adresser kommer fra content/site.json (i Studio: Åbningstider og steder). Afhentningssteder, de næste afhentningsdage og bestillingsfristen kommer fra bestillingen (content/ordering, i Studio: Afhentningssteder). Ret tallene der, ikke her.",
   "title": "Find os",
   "slug": "find-os",
   "seo": {
     "title": "Find os",
-    "description": "Bageriet og fryseren på Torpevej 10 i Herlufmagle, Torvedag i Næstved onsdag og lørdag, og afhentning af bestilt brød i Hønsehuset. Åbningstider og kalender.",
+    "description": "Fryseren på Torpevej 10 i Herlufmagle, Torvedag i Næstved onsdag og lørdag, og hvor og hvornår du henter bestilt bagværk. Åbningstider og kalender.",
     "image": "/images/instagram/ig-2026-08-26-prisliste-surdejsbroed.jpg"
   },
   "showInNav": true,
@@ -21,7 +21,11 @@
     {
       "_type": "hoursSection",
       "_key": "steder",
-      "only": "alle"
+      "only": "alle",
+      "link": {
+        "label": "Mere om fryseren",
+        "href": "/fryser"
+      }
     },
     {
       "_type": "richTextSection",
@@ -34,7 +38,7 @@
     {
       "_type": "pickupInfoSection",
       "_key": "afhentning",
-      "heading": "Sådan henter du bestilt brød",
+      "heading": "Sådan henter du bestilt bagværk",
       "detail": "kort",
       "link": {
         "label": "Læs mere om afhentning og levering",

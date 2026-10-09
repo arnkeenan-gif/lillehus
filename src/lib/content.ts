@@ -1,16 +1,8 @@
 /**
- * Typed loaders for the JSON content in /content.
- *
- * These types are the contract between the pages and the data. If you change
- * a shape here, update the matching JSON file and every consumer. The bakery
- * shop may replace the internals of getProducts() with a Stripe-backed
- * version, but the return type stays the same.
+ * Base content types shared by the CMS façade (src/lib/cms). The data itself
+ * lives in Sanity, or in the JSON in /content when Sanity is not configured;
+ * pages always read it through @/lib/cms, never from here.
  */
-import productsJson from "@content/products.json";
-import cakesJson from "@content/cakes.json";
-import eventsJson from "@content/events.json";
-import faqJson from "@content/faq.json";
-import pizzaJson from "@content/pizza.json";
 
 /** Danish weekday abbreviations used for pickup availability. */
 export type Weekday = "man" | "tir" | "ons" | "tor" | "fre" | "lør" | "søn";
@@ -101,31 +93,4 @@ export interface PizzaContent {
   /** Radius in km the wagon normally drives, for the booking form copy. */
   radiusKm: number;
   notes: string[];
-}
-
-export async function getProducts(): Promise<Product[]> {
-  return (productsJson as Product[]).filter((p) => p.active);
-}
-
-export async function getProductBySlug(slug: string): Promise<Product | undefined> {
-  return (await getProducts()).find((p) => p.slug === slug);
-}
-
-export async function getCakes(): Promise<CakeType[]> {
-  return cakesJson as CakeType[];
-}
-
-export async function getEvents({ upcomingOnly = true } = {}): Promise<EventItem[]> {
-  const all = (eventsJson as EventItem[]).slice().sort((a, b) => a.start.localeCompare(b.start));
-  if (!upcomingOnly) return all;
-  const now = Date.now();
-  return all.filter((e) => new Date(e.end ?? e.start).getTime() >= now);
-}
-
-export async function getFaq(): Promise<FaqItem[]> {
-  return faqJson as FaqItem[];
-}
-
-export async function getPizza(): Promise<PizzaContent> {
-  return pizzaJson as PizzaContent;
 }

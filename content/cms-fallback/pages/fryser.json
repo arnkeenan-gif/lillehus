@@ -1,0 +1,41 @@
+{
+  "_readme": "Fryserens side. Åbningstiderne, betalingen og adressen kommer fra Åbningstider og steder (stedet med det korte navn bageriet), så de kun rettes ét sted. Teksten om fryseren skriver du i det tomme tekstafsnit; så længe det er tomt, vises det ikke. Billederne til at finde vej lægger du i afsnittet Sådan finder du fryseren, med en linje under hvert billede; uden billeder vises det ikke.",
+  "title": "Fryser",
+  "slug": "fryser",
+  "seo": {
+    "title": "Fryseren på gården",
+    "description": "Fryseren på Torpevej 10 i Herlufmagle er åben hverdage kl. 7 til 18. Priser på skiltet og betaling via MobilePay (står på fryserens dør)."
+  },
+  "showInNav": true,
+  "navLabel": "Fryser",
+  "navOrder": 45,
+  "hidden": false,
+  "sections": [
+    {
+      "_type": "heroSection",
+      "_key": "top",
+      "heading": "Frostsalg på gården",
+      "variant": "stacked"
+    },
+    {
+      "_type": "richTextSection",
+      "_key": "beskrivelse",
+      "body": [],
+      "imagePosition": "right",
+      "tone": "paper"
+    },
+    {
+      "_type": "hoursSection",
+      "_key": "fryseren",
+      "only": "bageriet"
+    },
+    {
+      "_type": "gallerySection",
+      "_key": "find-vej",
+      "heading": "Sådan finder du fryseren",
+      "layout": "steps",
+      "columns": 3,
+      "images": []
+    }
+  ]
+}

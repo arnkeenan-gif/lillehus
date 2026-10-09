@@ -7,25 +7,26 @@ import { z } from "zod";
 import type Stripe from "stripe";
 import { getSiteSettings } from "@/lib/cms";
 import { formatPrice } from "@/lib/format";
-import { MAX_QTY, type CheckoutField, type CheckoutState } from "@/lib/cart-order";
-import { filterDaysForItems, getPickupDays, pickupDayLabel, pickupHours } from "@/lib/cart-pickup";
-import { getShop, getShopProducts, type ShopProduct } from "@/lib/products";
+import { MAX_QTY, encodeOptions, metadataValue, type CheckoutField, type CheckoutState } from "@/lib/cart-order";
+import { evaluateCake } from "@/lib/ordering/cake-options";
+import { copenhagenDate, formatDayDate, normalizeClock, pickupTimeText } from "@/lib/ordering/dates";
+import { isBeforeDeadline } from "@/lib/ordering/deadline";
+import { cakeInCart, cakeRule, getShopCatalog } from "@/lib/products";
 import { getStripe, siteOrigin } from "@/lib/stripe";
 
 /*
-  Validates the checkout form, re-prices every line from the server-side
-  catalogue (client prices are never trusted), builds a Stripe Checkout Session
-  and sends the customer to it. Payment methods are whatever the Stripe
-  dashboard has enabled, which is how MobilePay gets in. The pickup facts and
-  the phone number come from the CMS façade.
+  The checkout. Everything the browser sends is checked again here with the
+  server's clock and the CMS: the pickup location must be active, the date
+  open for that location, every product and cake still for sale, the cake
+  options valid, and no line past its deadline for the date (so a page left
+  open cannot get around a deadline). Names, prices and options are taken
+  from the CMS, never from the browser. Then a Stripe Checkout Session is
+  created and the customer is sent to it; payment methods are whatever the
+  Stripe dashboard has enabled, which is how MobilePay gets in.
 */
 
-const FIELDS = new Set<string>(["pickupDate", "name", "phone", "email", "note", "fulfilment", "items"]);
 const ORDER_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-function isField(key: string): key is CheckoutField {
-  return FIELDS.has(key);
-}
+const CONTACT_FIELDS = new Set<string>(["name", "phone", "email", "note"]);
 
 function makeOrderNo(): string {
   let s = "DLH-";
@@ -57,13 +58,7 @@ function isRateLimited(ip: string): boolean {
   return entry.count > MAX_ATTEMPTS;
 }
 
-const itemSchema = z.object({
-  productId: z.string().min(1),
-  qty: z.coerce.number().int().min(1).max(MAX_QTY),
-});
-
-const schema = z.object({
-  pickupDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Vælg en dag."),
+const contactSchema = z.object({
   name: z.string().trim().min(2, "Skriv dit navn.").max(80, "Navnet er for langt."),
   phone: z.string().trim().min(1, "Skriv dit telefonnummer.").refine(isPhone, "Skriv et telefonnummer på 8 cifre."),
   email: z
@@ -73,21 +68,49 @@ const schema = z.object({
     .max(120, "E-mailen er for lang.")
     .pipe(z.email({ error: "Skriv en e-mail, vi kan sende kvitteringen til." })),
   note: z.string().trim().max(500, "Beskeden må højst være 500 tegn."),
-  fulfilment: z.enum(["pickup", "delivery"]),
-  items: z.array(itemSchema).min(1, "Din kurv er tom."),
+});
+
+const lineSchema = z.object({
+  key: z.string().min(1).max(400),
+  kind: z.enum(["product", "cake"]),
+  productId: z.string().min(1).max(100),
+  // Products stop at MAX_QTY, cakes at their own maximum (checked below); 100 is the hard ceiling.
+  qty: z.number().int().min(1).max(100),
+  selections: z.record(z.string().max(100), z.union([z.string().max(400), z.array(z.string().max(100)).max(30)])).optional(),
+});
+
+const orderSchema = z.object({
+  pickup: z.object({ locationId: z.string().min(1).max(100), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).nullable(),
+  lines: z.array(lineSchema).max(60),
 });
 
 function text(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value : "";
 }
 
-function parseItems(value: FormDataEntryValue | null): unknown {
-  if (typeof value !== "string" || !value) return [];
+function parseJson(value: FormDataEntryValue | null): unknown {
+  if (typeof value !== "string" || !value) return null;
   try {
     return JSON.parse(value);
   } catch {
-    return [];
+    return null;
   }
+}
+
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} og ${names[names.length - 1]}`;
+}
+
+interface PricedLine {
+  key: string;
+  kind: "product" | "cake";
+  productId: string;
+  name: string;
+  qty: number;
+  unitOere: number;
+  options: string[];
+  image?: string;
 }
 
 export async function createCheckoutSession(_prev: CheckoutState, formData: FormData): Promise<CheckoutState> {
@@ -96,84 +119,135 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
   const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "ukendt";
   if (isRateLimited(ip)) return { message: "Du har prøvet mange gange på kort tid. Vent lidt, og prøv igen." };
 
-  const parsed = schema.safeParse({
-    pickupDate: text(formData.get("pickupDate")),
+  const contact = contactSchema.safeParse({
     name: text(formData.get("name")),
     phone: text(formData.get("phone")),
     email: text(formData.get("email")),
     note: text(formData.get("note")),
-    fulfilment: text(formData.get("fulfilment")) || "pickup",
-    items: parseItems(formData.get("items")),
   });
-
-  if (!parsed.success) {
-    const errors: NonNullable<CheckoutState["errors"]> = {};
-    for (const issue of parsed.error.issues) {
+  const errors: NonNullable<CheckoutState["errors"]> = {};
+  if (!contact.success) {
+    for (const issue of contact.error.issues) {
       const key = issue.path[0];
-      if (typeof key === "string" && isField(key) && !errors[key]) errors[key] = issue.message;
+      if (typeof key === "string" && CONTACT_FIELDS.has(key) && !errors[key as CheckoutField]) errors[key as CheckoutField] = issue.message;
     }
-    return { errors, message: errors.items };
   }
-  const data = parsed.data;
 
-  const [shop, settings] = await Promise.all([getShop(), getSiteSettings()]);
+  const order = orderSchema.safeParse(parseJson(formData.get("order")));
+  if (!order.success) return { errors, message: "Vi kunne ikke læse din kurv. Opdater siden, og prøv igen." };
+  if (order.data.lines.length === 0) return { errors: { ...errors, order: "Din kurv er tom." }, message: "Din kurv er tom." };
+  if (!order.data.pickup) {
+    return { errors, pickupInvalid: true, message: "Vælg afhentningssted og dato, før du går til betaling." };
+  }
+
+  const pickup = order.data.pickup;
+  const now = Date.now();
+  const today = copenhagenDate(now);
+  const catalog = await getShopCatalog();
+
+  const location = catalog.locations.find((l) => l.id === pickup.locationId);
+  if (!location) {
+    return { errors, pickupInvalid: true, message: "Afhentningsstedet kan ikke vælges længere. Vælg et andet sted." };
+  }
+  const date = location.dates.find((d) => d.date === pickup.date);
+  if (!date || date.date < today) {
+    return { errors, pickupInvalid: true, message: `${location.name} har ikke åbent for afhentning den dag længere. Vælg en anden dato.` };
+  }
+
+  const lines: PricedLine[] = [];
+  const removed: { key: string; name: string }[] = [];
+  const expired: { key: string; name: string }[] = [];
+  for (const raw of order.data.lines) {
+    if (raw.kind === "product") {
+      const product = catalog.products.find((p) => p.id === raw.productId);
+      if (!product || !product.canOrder) {
+        removed.push({ key: raw.key, name: product?.name ?? "En vare" });
+        continue;
+      }
+      if (!isBeforeDeadline(date.date, product.rule, now)) expired.push({ key: raw.key, name: product.name });
+      lines.push({
+        key: raw.key,
+        kind: "product",
+        productId: product.id,
+        name: product.name,
+        qty: Math.min(raw.qty, MAX_QTY),
+        unitOere: product.priceOere,
+        options: [],
+        image: product.photo?.src,
+      });
+    } else {
+      const cake = catalog.cakes.find((c) => c.id === raw.productId);
+      const evaluation = cake ? evaluateCake(cake, raw.selections ?? {}) : null;
+      if (!cake || !evaluation || !cakeInCart(cake) || Object.keys(evaluation.errors).length > 0) {
+        removed.push({ key: raw.key, name: cake?.name ?? "En kage" });
+        continue;
+      }
+      if (!isBeforeDeadline(date.date, cakeRule(cake, catalog.settings), now)) expired.push({ key: raw.key, name: cake.name });
+      lines.push({
+        key: raw.key,
+        kind: "cake",
+        productId: cake.id,
+        name: cake.name,
+        qty: Math.min(Math.max(raw.qty, cake.minQuantity), cake.maxQuantity),
+        unitOere: evaluation.unitOere,
+        options: evaluation.lines,
+        image: cake.photos[0]?.src,
+      });
+    }
+  }
+
+  if (removed.length > 0) {
+    return {
+      errors,
+      removedKeys: removed.map((r) => r.key),
+      message:
+        lines.length > 0
+          ? `${joinNames(removed.map((r) => r.name))} kan ikke bestilles længere, eller valgene er ændret. Vi har taget det ud af kurven, så tjek kurven og prøv igen.`
+          : "Varerne i kurven kan ikke bestilles længere, så vi har tømt kurven.",
+    };
+  }
+  if (expired.length > 0) {
+    return {
+      errors,
+      expiredKeys: expired.map((e) => e.key),
+      message: `Fristen er gået for ${joinNames(expired.map((e) => e.name))} til ${formatDayDate(date.date)}. Tag ${expired.length === 1 ? "den" : "dem"} ud af kurven, eller vælg en senere dato.`,
+    };
+  }
+  if (Object.keys(errors).length > 0 || !contact.success) return { errors };
+
+  const total = lines.reduce((sum, l) => sum + l.unitOere * l.qty, 0);
+  const minOrder = catalog.settings.minOrderOere ?? 0;
+  if (minOrder > 0 && total < minOrder) return { message: `Mindste bestilling er ${formatPrice(minOrder)}.` };
+
+  const settings = await getSiteSettings();
   const stripe = getStripe();
   if (!stripe) {
     return {
+      paymentUnavailable: true,
       message: `Betaling er ikke sat op endnu. Ring eller skriv til os på ${settings.phone}, så tager vi bestillingen manuelt.`,
     };
   }
 
-  const products = await getShopProducts();
-  const byId = new Map(products.map((p) => [p.id, p]));
-  const lines: { product: ShopProduct; qty: number }[] = [];
-  const removed: string[] = [];
-  for (const item of data.items) {
-    const product = byId.get(item.productId);
-    if (product) lines.push({ product, qty: item.qty });
-    else removed.push(item.productId);
-  }
-  if (removed.length > 0) {
-    return {
-      removedProductIds: removed,
-      message:
-        lines.length > 0
-          ? "En vare i kurven kan ikke bestilles længere. Vi har fjernet den, så tjek kurven og prøv igen."
-          : "Varerne i kurven kan ikke bestilles længere, så vi har tømt kurven.",
-    };
-  }
-
-  const isDelivery = shop.delivery.enabled && data.fulfilment === "delivery";
-  const daysForItems = filterDaysForItems(
-    getPickupDays(new Date(), shop),
-    lines.map((l) => ({ name: l.product.name, days: l.product.days })),
-  );
-  const days = isDelivery ? daysForItems.filter((d) => shop.delivery.days.includes(d.weekday)) : daysForItems;
-  const day = days.find((d) => d.iso === data.pickupDate);
-  if (!day) return { errors: { pickupDate: "Den dag kan vi ikke nå længere. Vælg en anden dag." } };
-
-  const subtotal = lines.reduce((sum, l) => sum + l.product.priceOere * l.qty, 0);
-  if (shop.minOrderOere > 0 && subtotal < shop.minOrderOere) {
-    return { message: `Mindste bestilling er ${formatPrice(shop.minOrderOere)}.` };
-  }
-  const deliveryFee = isDelivery ? (subtotal >= shop.delivery.freeAboveOere ? 0 : shop.delivery.feeOere) : null;
-
+  const data = contact.data;
   const origin = siteOrigin();
   const publicImages = origin.startsWith("https://");
   const orderNo = makeOrderNo();
-  const dayLabel = pickupDayLabel(day.iso);
-  const hours = pickupHours(shop.pickupWindow);
+  const dayLabel = formatDayDate(date.date);
+  const from = normalizeClock(date.from);
+  const to = normalizeClock(date.to);
+  const time = pickupTimeText(from, to);
 
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lines.map(({ product, qty }) => {
-    if (product.stripePriceId) return { price: product.stripePriceId, quantity: qty };
-    const image = product.image ? (product.image.startsWith("http") ? product.image : `${origin}${product.image}`) : undefined;
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lines.map((line) => {
+    const image = line.image ? (line.image.startsWith("http") ? line.image : `${origin}${line.image}`) : undefined;
     return {
-      quantity: qty,
+      quantity: line.qty,
       price_data: {
         currency: "dkk",
-        unit_amount: product.priceOere,
+        unit_amount: line.unitOere,
         product_data: {
-          name: product.name,
+          name: line.name,
+          ...(line.options.length > 0 ? { description: metadataValue(line.options.join(". ")) } : {}),
+          metadata: { kind: line.kind, productId: line.productId, options: encodeOptions(line.options) },
           ...(publicImages && image ? { images: [image] } : {}),
         },
       },
@@ -188,39 +262,29 @@ export async function createCheckoutSession(_prev: CheckoutState, formData: Form
     customer_email: data.email,
     phone_number_collection: { enabled: true },
     metadata: {
+      kind: "bakery",
       orderNo,
-      pickupDate: day.iso,
+      locationId: location.id,
+      location: location.name,
+      pickupDate: date.date,
+      pickupFrom: from,
+      pickupTo: to,
       customerName: data.name,
       phone: data.phone,
       note: data.note,
-      fulfilment: isDelivery ? "delivery" : "pickup",
+      lines: metadataValue(
+        lines.map((l) => `${l.qty} x ${l.name}${l.options.length > 0 ? ` (${l.options.join("; ")})` : ""}`).join(", "),
+      ),
     },
     custom_text: {
-      submit: {
-        message: isDelivery
-          ? `Vi leverer ${dayLabel}. ${shop.delivery.note}`
-          : `Du henter dine varer i ${shop.pickupPlace}, ${dayLabel} mellem kl. ${hours}.`,
-      },
+      submit: { message: `Du henter din bestilling: ${location.name}, ${dayLabel}${time ? `, ${time}` : ""}.` },
     },
     payment_intent_data: {
-      description: `${orderNo}, ${isDelivery ? "levering" : "afhentning"} ${dayLabel}`,
+      description: `${orderNo}, afhentning ${dayLabel}, ${location.name}`,
     },
     success_url: `${origin}/bagvaerk/tak?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/bagvaerk/kasse`,
   };
-
-  if (isDelivery && deliveryFee !== null) {
-    params.shipping_address_collection = { allowed_countries: ["DK"] };
-    params.shipping_options = [
-      {
-        shipping_rate_data: {
-          type: "fixed_amount",
-          display_name: deliveryFee === 0 ? "Levering, gratis" : "Levering",
-          fixed_amount: { amount: deliveryFee, currency: "dkk" },
-        },
-      },
-    ];
-  }
 
   let url: string | null = null;
   try {

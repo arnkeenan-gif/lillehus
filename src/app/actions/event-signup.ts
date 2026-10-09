@@ -2,65 +2,82 @@
 
 import { createElement } from "react";
 import { z } from "zod";
-import { getEvents } from "@/lib/content";
+import { getEvent } from "@/lib/cms";
+import { whenLong, priceLabel } from "@/lib/events/dates";
+import { maxPersons, signupState } from "@/lib/events/status";
 import { EMAIL_TO, sendEmail } from "@/lib/resend";
-import {
-  field,
-  fieldErrors,
-  formatEventWhen,
-  gate,
-  invalid,
-  MSG,
-  plainText,
-  readValues,
-  sendFailure,
-  str,
-  type FormState,
-} from "@/lib/forms";
+import { isStripeConfigured, siteOrigin } from "@/lib/stripe";
+import { site } from "@/lib/site";
+import { field, fieldErrors, gate, invalid, plainText, readValues, sendFailure, str, type FormState } from "@/lib/forms";
 import { EventSignupKristineEmail, eventSignupRows, type EventSignupEmailData } from "@/emails/event-kristine";
-import { EventSignupCustomerEmail, EVENT_NEXT_STEPS } from "@/emails/event-customer";
+import { EventSignupCustomerEmail, eventSignupCustomerText } from "@/emails/event-customer";
+import { EVENT_NEXT_STEPS } from "@/lib/events/copy";
 
-const SUCCESS = `Tak for din tilmelding. ${EVENT_NEXT_STEPS}`;
+/*
+  The free sign-up: validates the form, checks again that the event is still
+  open (a page can stand open past the deadline), then mails Kristine and
+  sends the guest a copy. Paid events go through startEventCheckout in
+  src/app/arrangementer/actions.ts instead.
+*/
 
-const schema = z.object({
-  eventId: z.string().trim().min(1, { error: MSG.choose }),
-  persons: field.count(1, "Skriv, hvor mange I kommer."),
-  name: field.name,
-  email: field.email,
-  phone: field.phone,
-});
+/* The event page already says what happens next (CONFIRM_SENTENCE), so the thanks stays short. */
+const SUCCESS = "Tak for din tilmelding.";
+
+function notOpen(formData: FormData, message: string): FormState {
+  return { ok: false, errors: {}, message, values: readValues(formData) };
+}
 
 export async function submitEventSignup(_prev: FormState, formData: FormData): Promise<FormState> {
   const gated = await gate("arrangement", formData, SUCCESS);
   if (gated) return gated;
 
+  const event = await getEvent(str(formData, "eventId"));
+  if (!event) {
+    return notOpen(formData, `Vi kan ikke finde arrangementet længere. Ring til os på ${site.phone}, hvis du er i tvivl.`);
+  }
+
+  const state = signupState(event, { stripe: isStripeConfigured() });
+  if (state.kind === "past") return notOpen(formData, "Arrangementet har fundet sted, så der er ikke længere tilmelding.");
+  if (state.kind === "closed" || state.kind === "none") {
+    return notOpen(formData, `Tilmeldingen er lukket. Ring til os på ${site.phone}, hvis du har spørgsmål.`);
+  }
+  if (state.kind === "pay") return notOpen(formData, "Tilmeldingen til dette arrangement betales, når du tilmelder dig på arrangementets side.");
+  if (state.kind === "pay-unavailable") {
+    return notOpen(formData, `Betaling på siden er ikke sat op endnu. Ring til os på ${site.phone}, så tilmelder vi dig.`);
+  }
+
+  const most = maxPersons(event);
+  const schema = z.object({
+    persons: field
+      .count(1, "Skriv, hvor mange I kommer.")
+      .refine((n) => n <= most, { error: `Én tilmelding kan højst være til ${most} personer. Ring, hvis I er flere.` }),
+    name: field.name,
+    email: field.email,
+    phone: field.phone,
+    message: field.text(1000),
+  });
+
   const parsed = schema.safeParse({
-    eventId: str(formData, "eventId"),
     persons: str(formData, "persons"),
     name: str(formData, "name"),
     email: str(formData, "email"),
     phone: str(formData, "phone"),
+    message: str(formData, "message"),
   });
   if (!parsed.success) return invalid(fieldErrors(parsed.error), formData);
 
   const v = parsed.data;
-  const event = (await getEvents()).find((e) => e.id === v.eventId && e.signup);
-  if (!event) {
-    return {
-      ok: false,
-      errors: {},
-      message: "Arrangementet er ikke længere åbent for tilmelding. Skriv til os, hvis du er i tvivl.",
-      values: readValues(formData),
-    };
-  }
-
   const data: EventSignupEmailData = {
     eventTitle: event.title,
-    eventDate: formatEventWhen(event),
+    eventDate: whenLong(event),
+    eventPlace: event.place,
+    eventUrl: `${siteOrigin()}/arrangementer/${event.slug}`,
     persons: v.persons,
     name: v.name,
     email: v.email,
     phone: v.phone,
+    message: v.message,
+    priceNote: priceLabel(event) || undefined,
   };
 
   const toKristine = await sendEmail({
@@ -79,10 +96,10 @@ export async function submitEventSignup(_prev: FormState, formData: FormData): P
     to: v.email,
     subject: `Din tilmelding til ${event.title}`,
     react: createElement(EventSignupCustomerEmail, { data }),
-    text: plainText(`Tak for din tilmelding. ${EVENT_NEXT_STEPS}`, eventSignupRows(data), "Kristine"),
+    text: eventSignupCustomerText(data),
     replyTo: EMAIL_TO,
   });
-  if (!copy.ok) console.warn("[event-signup] kopi til kunden fejlede:", copy.error);
+  if (!copy.ok) console.warn("[event-signup] kopi til gæsten fejlede:", copy.error);
 
-  return { ok: true, message: SUCCESS };
+  return { ok: true, message: copy.ok ? `${SUCCESS} Vi har sendt en kopi til ${v.email}.` : `${SUCCESS} ${EVENT_NEXT_STEPS}` };
 }

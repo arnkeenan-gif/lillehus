@@ -1,9 +1,10 @@
 {
+  "_readme": "Om os, delt i afsnit efter emnerne i Kristines arbejdsbeskrivelse. Teksterne er hendes egne fra den gamle hjemmeside, med årstallet fra CVR. Emner uden tekst endnu (Kristine selv og håndværket) står ikke på siden; skriv dem som nye Tekst-afsnit i Studio.",
   "title": "Om os",
   "slug": "om-os",
   "seo": {
     "title": "Om os",
-    "description": "Historien om Det lille hus på landet: en historie om personlige tilvalg og fravalg, og et liv med fokus på familie, økologi, bæredygtighed.",
+    "description": "Historien om Det lille hus på landet: en historie om personlige tilvalg og fravalg, og et liv med fokus på familie og bæredygtighed.",
     "image": "/images/family-on-bench-brick-wall.jpg"
   },
   "showInNav": true,
@@ -26,18 +27,25 @@
     },
     {
       "_type": "richTextSection",
-      "_key": "historien",
+      "_key": "tankerne",
       "body": [
-        "En historie om personlige tilvalg og fravalg.",
-        "En historie skabt ud af søgen efter det bedste liv.",
-        "Et liv med fokus på familie, økologi, bæredygtighed.",
-        "Vi forsøger med hygge og nærvær at formidle vores kærlighed til kvalitet og god mad ud til alle de, som har lyst til at lytte og smage.",
-        "Det lille hus på landet startede i 2009. Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved. På gården er fryseren åben hverdage kl. 7 til 18, og bestilte varer afhentes i Hønsehuset. Cafén Hønsehuset på gården kommer senere.",
-        "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn. Læs mere om [den rullende pizzavogn](/pizza).",
-        "**Kristine & Nicolas**"
+        "En historie om personlige tilvalg og fravalg.\nEn historie skabt ud af søgen efter det bedste liv.\nEt liv med fokus på familie og bæredygtighed.",
+        "Vi forsøger med hygge og nærvær at formidle vores kærlighed til kvalitet og god mad ud til alle de, som har lyst til at lytte og smage."
       ],
-      "image": "/images/logo.png",
       "imagePosition": "right",
+      "tone": "paper"
+    },
+    {
+      "_type": "richTextSection",
+      "_key": "mikrobageriet",
+      "heading": "Mikrobageriet",
+      "body": [
+        "Det lille hus på landet startede i 2009. Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved, foran Løveapoteket.",
+        "På gården ligger [fryseren](/fryser) og Hønsehuset, hvor bestilte varer afhentes.",
+        "Fødevarestyrelsens seneste kontrolrapport kan du læse på [findsmiley.dk](https://www.findsmiley.dk/1221266)."
+      ],
+      "image": "/images/instagram/ig-2026-07-25-foto.jpg",
+      "imagePosition": "left",
       "tone": "paper"
     },
     {
@@ -68,11 +76,23 @@
       "_key": "besoeg-os",
       "heading": "Besøg os i Det lille hus på landet",
       "body": [
-        "På udvalgte dage holder vi “Åben dørene til haven og huset”. Alt efter humør, står vi klar med de lækreste pizzaer, de skønneste kager og de dejligste drikke. Selvfølgelig alt sammen økologisk og hjemmelavet.",
+        "På udvalgte dage holder vi “Åben dørene til haven og huset”. Alt efter humør, står vi klar med de lækreste pizzaer, de skønneste kager og de dejligste drikke. Selvfølgelig alt sammen hjemmelavet.",
         "Arrangementerne afholdes sporadisk og vil derfor ikke blive annonceret lang tid i forvejen. Når de annonceres, sker det via vores [facebookside](https://www.facebook.com/dlhpl) og vores [Instagramprofil](https://www.instagram.com/detlillehuspaalandet/).",
-        "Fødevarestyrelsens seneste kontrolrapport kan du læse på [findsmiley.dk](https://www.findsmiley.dk/1221266)."
+        "Cafén Hønsehuset på gården kommer senere.",
+        "[Se arrangementer](/arrangementer)"
       ],
       "imagePosition": "right",
+      "tone": "paper"
+    },
+    {
+      "_type": "ctaSection",
+      "_key": "pizzavogn",
+      "heading": "Den rullende pizzavogn",
+      "text": "Skal du holde barnedåb, konfirmation, fødselsdag, firmaarrangementer eller måske marked, rykker vi ud med vores hjemmebyggede pizzaovn og medvirker til at gøre dagen lidt anderledes.",
+      "link": {
+        "label": "Book pizzavognen",
+        "href": "/pizza"
+      },
       "tone": "paper"
     }
   ]

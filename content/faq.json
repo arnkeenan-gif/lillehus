@@ -1,13 +1,18 @@
 [
   {
     "group": "Bestilling og afhentning",
-    "q": "Hvordan bestiller jeg brød?",
-    "a": "Du bestiller under Bageri her på siden, vælger en afhentningsdag og betaler med kort eller MobilePay. Bestil senest dagen før kl. 18. Du får en ordrebekræftelse på mail."
+    "q": "Hvordan bestiller jeg bagværk?",
+    "a": "Du bestiller under [Bagværk](/bagvaerk) her på siden. Du vælger først afhentningssted, så en dato, og lægger derefter varerne i kurven. Du betaler med kort eller MobilePay og får en ordrebekræftelse på mail."
   },
   {
     "group": "Bestilling og afhentning",
-    "q": "Hvor henter jeg det, jeg har bestilt?",
-    "a": "Bestilte varer afhentes i Hønsehuset på Torpevej 10 i Herlufmagle, på den dag du har valgt, kl. 7 til 18. Du kan vælge afhentning tirsdag, onsdag, torsdag og fredag."
+    "q": "Hvornår skal jeg senest bestille?",
+    "a": "Senest kl. 18 to dage før afhentning, dansk tid. Henter du onsdag, skal du bestille senest mandag kl. 18. Henter du lørdag, skal du bestille senest torsdag kl. 18. Når fristen er nået, lukker bestillingen af sig selv. Nogle varer kan have deres egen frist, og den vises, når du bestiller."
+  },
+  {
+    "group": "Bestilling og afhentning",
+    "q": "Hvor og hvornår kan jeg hente?",
+    "a": "Når du bestiller, vælger du først afhentningssted. Derefter kan du kun vælge de datoer, Kristine har åbnet for netop det sted. Til at begynde med hentes bestillinger i Hønsehuset på gården, Torpevej 10 i Herlufmagle. Under [Find os](/find-os) står de næste afhentningsdage."
   },
   {
     "group": "Bestilling og afhentning",
@@ -15,12 +20,12 @@
     "a": "Oplysninger om allergener kan fås mod forespørgsel. Skriv til os, før du bestiller."
   },
   {
-    "group": "Fryseren og Torvedag",
+    "group": "Frostsalg og Torvedag",
     "q": "Hvordan fungerer fryseren på gården?",
-    "a": "Fryseren på Torpevej 10 er åben hverdage kl. 7 til 18. Priser på skiltet og betaling via MobilePay (står på fryserens dør)."
+    "a": "Fryseren på Torpevej 10 i Herlufmagle er åben hverdage kl. 7 til 18. Priser på skiltet og betaling via MobilePay (står på fryserens dør). Læs mere om [fryseren](/fryser)."
   },
   {
-    "group": "Fryseren og Torvedag",
+    "group": "Frostsalg og Torvedag",
     "q": "Hvornår er I på Torvedag i Næstved?",
     "a": "Onsdag og lørdag kl. 9 til 14, eller til vi er udsolgt. Vi holder på Axeltorv, foran Løveapoteket."
   },

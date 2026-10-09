@@ -1,14 +1,14 @@
 import { CartDrawer } from "@/components/shop/cart-drawer";
-import { pickupPlaceShort } from "@/lib/cart-pickup";
-import { getShop } from "@/lib/products";
+import { toClientLocations } from "@/lib/cart-pickup";
+import { getShopCatalog, renderTime } from "@/lib/products";
 
-/** The cart drawer lives here so it exists on every shop route and nowhere else. */
+/** The cart drawer lives here (and in the kager layout) so it exists on every shop route and nowhere else. */
 export default async function BakeryLayout({ children }: { children: React.ReactNode }) {
-  const shop = await getShop();
+  const catalog = await getShopCatalog();
   return (
     <>
       {children}
-      <CartDrawer note={`Du henter i ${pickupPlaceShort(shop.pickupPlace)}. Betal med kort eller MobilePay.`} />
+      <CartDrawer locations={toClientLocations(catalog.locations)} renderedAt={renderTime()} />
     </>
   );
 }

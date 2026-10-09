@@ -24,7 +24,24 @@ export interface CakeChoice {
   leadTimeDays: number;
 }
 
-export function CakeRequestForm({ cakes, defaultCakeId }: { cakes: CakeChoice[]; defaultCakeId?: string }) {
+/** The value for "Noget andet" in the list; the server action knows it too. */
+const OTHER_CAKE = "andet";
+
+/**
+ * The request form at the bottom of /kager: one of the cakes or something
+ * else, a date, how many, wishes and contact details. `otherLeadTimeDays`
+ * is the notice for "Noget andet" (the default deadline's days); the server
+ * checks every date against the real deadline either way.
+ */
+export function CakeRequestForm({
+  cakes,
+  defaultCakeId,
+  otherLeadTimeDays = 2,
+}: {
+  cakes: CakeChoice[];
+  defaultCakeId?: string;
+  otherLeadTimeDays?: number;
+}) {
   const [state, formAction, pending] = useActionState(submitCakeRequest, INITIAL_FORM_STATE);
   const [cakeId, setCakeId] = useState(defaultCakeId ?? cakes[0]?.id ?? "");
   const today = useTodayIso();
@@ -36,7 +53,7 @@ export function CakeRequestForm({ cakes, defaultCakeId }: { cakes: CakeChoice[];
   const values = formValues(state);
   const err = (name: string) => fieldError(state, name);
   const cake = cakes.find((c) => c.id === cakeId);
-  const lead = cake?.leadTimeDays ?? 5;
+  const lead = cake?.leadTimeDays ?? otherLeadTimeDays;
   const earliest = today ? localIso(lead) : undefined;
   const dateHelper = "Kristine bekræfter, om datoen kan lade sig gøre.";
 
@@ -60,6 +77,7 @@ export function CakeRequestForm({ cakes, defaultCakeId }: { cakes: CakeChoice[];
                   {c.name}
                 </option>
               ))}
+              <option value={OTHER_CAKE}>Noget andet</option>
             </Select>
           </Field>
           <Field label="Hvornår skal den bruges?" htmlFor="kage-date" required helper={dateHelper} error={err("date")}>

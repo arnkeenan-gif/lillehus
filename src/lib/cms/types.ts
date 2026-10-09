@@ -10,7 +10,6 @@ import type {
   EventItem as BaseEventItem,
   FaqItem as BaseFaqItem,
   Product as BaseProduct,
-  Weekday,
 } from "@/lib/content";
 
 export type { ProductCategory, Weekday } from "@/lib/content";
@@ -62,7 +61,10 @@ export interface SiteSettings {
     linktree?: string;
   };
   smileyUrl?: string;
+  /** Kristine's logo, dark on transparent: the header on paper and the footer. */
   logo?: CmsImage;
+  /** The same logo in white, for the transparent header over a full-image hero. */
+  logoLight?: CmsImage;
   /** An optional bar under the header, e.g. "Lukket i uge 42". */
   announcement: { enabled: boolean; text: string };
   footerText?: string;
@@ -83,30 +85,12 @@ export interface Location {
   address: string;
   mapsUrl?: string;
   hours: LocationHours[];
-  /** Whether ordered bread is picked up here. */
+  /**
+   * No longer read by the site: where orders are collected now comes from
+   * getPickupLocations() (the ordering lane). Kept so old data still maps.
+   */
   pickup: boolean;
   notes?: string;
-}
-
-export interface ShopSettings {
-  pickupDays: Weekday[];
-  pickupWindow: string;
-  pickupPlace: string;
-  cutoffHour: number;
-  cutoffDaysBefore: number;
-  maxDaysAhead: number;
-  minOrderOere: number;
-  delivery: {
-    enabled: boolean;
-    feeOere: number;
-    freeAboveOere: number;
-    radiusKm: number;
-    days: Weekday[];
-    note: string;
-  };
-  /** ISO dates ("2026-12-24") with no pickup. */
-  closedDates: string[];
-  notice: string;
 }
 
 export interface PizzaPackage {
@@ -128,6 +112,38 @@ export interface PizzaPrices {
   mileageNote: string;
 }
 
+/** One pizza on the wagon's menu. The façade only returns the ones Kristine marked available. */
+export interface PizzaMenuItem {
+  /** The toppings, e.g. "Tomat, mozzarella og basilikum". */
+  name: string;
+  description?: string;
+  image?: CmsImage;
+  /** Price of one pizza in øre, when it has one. The wagon itself is priced per cover (`prices`). */
+  priceOere?: number;
+  vegetarian?: boolean;
+}
+
+/** One dessert for the wagon. Only available ones reach the site. */
+export interface PizzaDessert {
+  name: string;
+  description?: string;
+  image?: CmsImage;
+  /** Price per cover in øre. Empty means the general dessert price in `prices.dessertOere`. */
+  priceOere?: number;
+}
+
+/** A day the wagon stands somewhere the public can come, e.g. a market. */
+export interface PizzaStop {
+  _key: string;
+  place: string;
+  /** "YYYY-MM-DD", Danish date. */
+  date: string;
+  /** Opening hours as written, e.g. "11.00" and "15.00". */
+  from?: string;
+  to?: string;
+  note?: string;
+}
+
 export interface PizzaSettings {
   intro: string;
   packages: PizzaPackage[];
@@ -137,8 +153,12 @@ export interface PizzaSettings {
   prices: PizzaPrices;
   /** Paragraphs under "Sådan foregår det". */
   day: string[];
-  pizzas: { name: string; vegetarian?: boolean }[];
-  desserts: string[];
+  /** Available pizzas, in Kristine's order. */
+  pizzas: PizzaMenuItem[];
+  /** Available desserts, in Kristine's order. */
+  desserts: PizzaDessert[];
+  /** Places, dates and opening hours, soonest first. Past ones are left out when rendered. */
+  schedule: PizzaStop[];
   /** Paragraphs under "Praktisk". */
   terms: string[];
 }
@@ -224,6 +244,25 @@ export interface HeroSection extends SectionBase {
   secondaryLink?: CmsLink;
 }
 
+/** One of the forside's main entries: a large photo with a title, and smaller links under it. */
+export interface EntryItem {
+  _key: string;
+  title: string;
+  text?: string;
+  image?: CmsImage;
+  /** Where the photo and the title lead, e.g. "/bagvaerk". */
+  href: string;
+  /** E.g. "Bestil bagværk", "Fryser", "Kager og specialbestillinger". */
+  links: CmsLink[];
+}
+
+/** "Tre indgange": large photo tiles that lead to the main parts of the site. */
+export interface EntriesSection extends SectionBase {
+  _type: "entriesSection";
+  heading?: string;
+  entries: EntryItem[];
+}
+
 export interface RichTextSection extends SectionBase {
   _type: "richTextSection";
   heading?: string;
@@ -245,12 +284,17 @@ export interface GallerySection extends SectionBase {
   heading?: string;
   images: { _key: string; image: CmsImage; caption?: string }[];
   columns: 2 | 3 | 4;
+  /**
+   * "grid": the mixed grid, first photo large, captions as one line under it.
+   * "steps": photos in order with each caption under its photo, e.g. how to find the freezer.
+   */
+  layout: "grid" | "steps";
 }
 
 export interface ProductStripSection extends SectionBase {
   _type: "productStripSection";
   heading?: string;
-  /** When empty, show the pickup facts from ShopSettings (cutoff and pickup days). */
+  /** When empty, the section states the deadline rule from the ordering settings. */
   text?: string;
   /** "auto" shows the first `limit` active products; "manual" shows `products`. */
   mode: "auto" | "manual";
@@ -342,15 +386,17 @@ export interface CakeListSection extends SectionBase {
   text?: string;
 }
 
+export type PizzaSectionPart = "intro" | "day" | "schedule" | "prices" | "menu" | "terms";
+
 /** One part of the pizza wagon page, rendered from getPizzaSettings(). */
 export interface PizzaSection extends SectionBase {
   _type: "pizzaSection";
-  part: "day" | "prices" | "menu" | "terms";
+  part: PizzaSectionPart;
   heading?: string;
   text?: string;
 }
 
-/** How pickup and delivery work, written from getShopSettings() and the locations. */
+/** How pickup works, written from the pickup locations, their dates and the deadline rule. */
 export interface PickupInfoSection extends SectionBase {
   _type: "pickupInfoSection";
   heading?: string;
@@ -369,6 +415,7 @@ export interface ContactSection extends SectionBase {
 
 export type Section =
   | HeroSection
+  | EntriesSection
   | RichTextSection
   | PhotoBandSection
   | GallerySection
@@ -391,6 +438,7 @@ export type SectionType = Section["_type"];
 /** Every section `_type`, in the order they appear in the Studio. */
 export const SECTION_TYPES = [
   "heroSection",
+  "entriesSection",
   "richTextSection",
   "photoBandSection",
   "gallerySection",

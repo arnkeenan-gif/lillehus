@@ -18,13 +18,25 @@ import {
 } from "@/components/forms/form-status";
 import { PizzaEstimateCard } from "@/components/forms/pizza-estimate-card";
 import { PizzaStickyBar } from "@/components/forms/pizza-sticky-bar";
-import { estimatePizza, mileageLine, ratesLine, toCount, type PizzaRates } from "@/components/forms/pizza-estimate";
+import {
+  dessertRate,
+  estimatePizza,
+  mileageLine,
+  pizzaCountWord,
+  ratesLine,
+  requiredPizzas,
+  toCount,
+  type DessertChoice,
+  type PizzaChoice,
+  type PizzaRates,
+} from "@/components/forms/pizza-estimate";
 import { formatPrice } from "@/lib/format";
-import type { PizzaMenuItem } from "@/lib/forms";
 
 interface Props {
-  pizzas: PizzaMenuItem[];
-  desserts: string[];
+  /** The available pizzas from the pizza settings, in Kristine's order. */
+  pizzas: PizzaChoice[];
+  /** The available desserts; a dessert may carry its own price per cover. */
+  desserts: DessertChoice[];
   minAdults: number;
   dessertMinCovers: number;
   childAges: string;
@@ -35,8 +47,6 @@ interface Props {
   /** The id of the form section, for the phone bar's link. */
   anchor?: string;
 }
-
-const MAX_PIZZAS = 3;
 
 /** The fields folded away under "Flere ønsker": the group opens itself when any of them has a value or an error. */
 const FOLDED_FIELDS = ["time", "eventType", "specialDiet", "dessert", "dessertCovers", "source", "message"] as const;
@@ -77,13 +87,17 @@ export function PizzaBookingForm({
 
   const values = formValues(state);
   const err = (name: string) => fieldError(state, name);
-  const full = selected.length >= MAX_PIZZAS;
+  /* Three pizzas, or all of them when Kristine has fewer than three available. */
+  const required = requiredPizzas(pizzas.length);
+  const full = selected.length >= required;
   /* The boxes are uncontrolled: React resets the form after the action, and an
      uncontrolled box then follows its (echoed) default, where a controlled one
      would come back empty. `selected` only drives the helper and the max-3 lock. */
   const echoedPizzas = listOf(values, "pizzas");
 
-  const estimate = estimatePizza(rates, {
+  /* A dessert with its own price replaces the general dessert price in the estimate and the helper. */
+  const dessertOere = dessert === DESSERT_NONE ? rates.dessertOere : dessertRate(rates, desserts, dessert);
+  const estimate = estimatePizza({ ...rates, dessertOere }, {
     adults: toCount(counts.adults),
     children: toCount(counts.children),
     specialDiet: toCount(counts.specialDiet),
@@ -102,11 +116,14 @@ export function PizzaBookingForm({
 
   const adultsHelper = `Minimum ${minAdults} voksne. Er I færre, så spørg alligevel.`;
   const dietHelper = `Hvor mange kuverter skal være veganske eller glutenfri? Tillæg ${formatPrice(rates.specialDietExtraOere)} pr. kuvert.`;
-  const coversHelper = `Dessert er fra ${dessertMinCovers} kuverter, ${formatPrice(rates.dessertOere)} pr. kuvert.`;
+  const coversHelper = `Dessert er fra ${dessertMinCovers} kuverter, ${formatPrice(dessertOere)} pr. kuvert.`;
   const messageHelper = "Traileren med pizzavognen er tung, så pladsen skal kunne køres til.";
+  const countWord = pizzaCountWord(required);
+  const pizzaLegend = required === 1 ? "Vælg en pizza" : `Vælg ${countWord} pizzaer`;
+  const vegetarianNote = pizzas.some((p) => p.vegetarian) ? " Der er altid mindst en vegetarisk." : "";
   const pizzaHelper = full
-    ? "Tre valgt. Fjern en, hvis du vil vælge en anden."
-    : `${selected.length} af ${MAX_PIZZAS} valgt. Der er altid mindst en vegetarisk.`;
+    ? `${countWord.charAt(0).toUpperCase()}${countWord.slice(1)} valgt. Fjern en, hvis du vil vælge en anden.`
+    : `${selected.length} af ${required} valgt.${vegetarianNote}`;
 
   function togglePizza(name: string, checked: boolean) {
     setSelected((prev) => {
@@ -197,32 +214,34 @@ export function PizzaBookingForm({
               </div>
             </FormGroup>
 
-            <FormGroup>
-              <Fieldset id="pizza-pizzas" legend="Vælg tre pizzaer" required helper={pizzaHelper} error={err("pizzas")}>
-                {pizzas.map((pizza, i) => {
-                  const checked = selected.includes(pizza.name);
-                  const blocked = !checked && full;
-                  return (
-                    <Checkbox
-                      key={pizza.name}
-                      id={`pizza-p${i}`}
-                      name="pizzas"
-                      value={pizza.name}
-                      defaultChecked={echoedPizzas.includes(pizza.name)}
-                      disabled={blocked}
-                      onChange={(e) => togglePizza(pizza.name, e.currentTarget.checked)}
-                      className={blocked ? "opacity-50" : undefined}
-                      label={
-                        <>
-                          {pizza.name}
-                          {pizza.vegetarian ? <span className="text-muted"> (vegetarisk)</span> : null}
-                        </>
-                      }
-                    />
-                  );
-                })}
-              </Fieldset>
-            </FormGroup>
+            {required > 0 ? (
+              <FormGroup>
+                <Fieldset id="pizza-pizzas" legend={pizzaLegend} required helper={pizzaHelper} error={err("pizzas")}>
+                  {pizzas.map((pizza, i) => {
+                    const checked = selected.includes(pizza.name);
+                    const blocked = !checked && full;
+                    return (
+                      <Checkbox
+                        key={pizza.name}
+                        id={`pizza-p${i}`}
+                        name="pizzas"
+                        value={pizza.name}
+                        defaultChecked={echoedPizzas.includes(pizza.name)}
+                        disabled={blocked}
+                        onChange={(e) => togglePizza(pizza.name, e.currentTarget.checked)}
+                        className={blocked ? "opacity-50" : undefined}
+                        label={
+                          <>
+                            {pizza.name}
+                            {pizza.vegetarian ? <span className="text-muted"> (vegetarisk)</span> : null}
+                          </>
+                        }
+                      />
+                    );
+                  })}
+                </Fieldset>
+              </FormGroup>
+            ) : null}
 
             <FormGroup legend="Hvem skal vi kontakte?">
               <div className="grid gap-6 sm:grid-cols-2">
@@ -331,22 +350,24 @@ export function PizzaBookingForm({
                         ))}
                       </Select>
                     </Field>
-                    <Field label="Dessert" htmlFor="pizza-dessert" error={err("dessert")}>
-                      <Select
-                        id="pizza-dessert"
-                        name="dessert"
-                        value={dessert}
-                        onChange={(e) => setDessert(e.currentTarget.value)}
-                        {...controlAria("pizza-dessert", err("dessert"))}
-                      >
-                        <option value={DESSERT_NONE}>Ingen dessert</option>
-                        {desserts.map((d) => (
-                          <option key={d} value={d}>
-                            {d}
-                          </option>
-                        ))}
-                      </Select>
-                    </Field>
+                    {desserts.length > 0 ? (
+                      <Field label="Dessert" htmlFor="pizza-dessert" error={err("dessert")}>
+                        <Select
+                          id="pizza-dessert"
+                          name="dessert"
+                          value={dessert}
+                          onChange={(e) => setDessert(e.currentTarget.value)}
+                          {...controlAria("pizza-dessert", err("dessert"))}
+                        >
+                          <option value={DESSERT_NONE}>Ingen dessert</option>
+                          {desserts.map((d) => (
+                            <option key={d.name} value={d.name}>
+                              {d.name}
+                            </option>
+                          ))}
+                        </Select>
+                      </Field>
+                    ) : null}
                     {dessert !== DESSERT_NONE ? (
                       <Field
                         label="Antal kuverter med dessert"
@@ -388,7 +409,7 @@ export function PizzaBookingForm({
 
             <Honeypot />
 
-            <PizzaEstimateCard estimate={estimate} rates={rates} className="lg:hidden" />
+            <PizzaEstimateCard estimate={estimate} rates={{ ...rates, dessertOere }} className="lg:hidden" />
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <SubmitButton pending={pending}>Book pizzavognen</SubmitButton>
@@ -399,7 +420,7 @@ export function PizzaBookingForm({
 
         <aside className="hidden lg:col-span-5 lg:col-start-8 lg:block xl:col-span-4 xl:col-start-9">
           <div className="lg:sticky lg:top-24">
-            <PizzaEstimateCard estimate={estimate} rates={rates} />
+            <PizzaEstimateCard estimate={estimate} rates={{ ...rates, dessertOere }} />
             {steps.length > 0 ? (
               <div className="mt-8">
                 <p className="font-semibold text-ink">Sådan går det videre</p>

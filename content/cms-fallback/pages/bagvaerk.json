@@ -1,10 +1,10 @@
 {
-  "_readme": "Bageriets side (webshoppen) bygges af shop-koden, ikke af afsnit. Dokumentet her giver siden en plads i menuen og en tekst til søgemaskiner.",
+  "_readme": "Bagværkssiden (webshoppen) bygges af bestillingskoden, ikke af afsnit: kategorier og varer (i Studio: Bagværk), afhentningssteder og datoer (Afhentningssteder) og fristen (Bageri og bestilling). Dokumentet her giver siden en plads i menuen og en tekst til søgemaskiner.",
   "title": "Bagværk",
   "slug": "bagvaerk",
   "seo": {
-    "title": "Bestil brød",
-    "description": "Bestil surdejsbrød, boller, rugbrød og vaniljesnegle til afhentning i Hønsehuset på Torpevej 10 i Herlufmagle. Betal med kort eller MobilePay.",
+    "title": "Bagværk",
+    "description": "Bestil surdejsbrød, rugbrød, boller og vaniljesnegle. Vælg afhentningssted og dato, og betal med kort eller MobilePay.",
     "image": "/images/scored-sourdough-loaf.jpg"
   },
   "showInNav": true,

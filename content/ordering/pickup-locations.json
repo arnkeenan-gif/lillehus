@@ -1,5 +1,5 @@
 {
-  "_readme": "Afhentningssteder til bestilling af bagværk og kager. Kun gården er aktiv ved opstart. Datoerne sættes i Sanity Studio; uden Sanity viser siden onsdage og lørdage fire uger frem på de aktive steder. Afhentningstider aftales med Kristine.",
+  "_readme": "Afhentningssteder til bestilling af bagværk og kager. Kun gården er aktiv ved opstart; de andre steder vises først, når active sættes til true (i Sanity Studio: Afhentningssteder). Hvert sted har sine egne datoer: { \"date\": \"2026-10-17\", \"from\": \"9.00\", \"to\": \"12.00\", \"closed\": false, \"note\": \"\" }. closed: true lukker en dato uden at slette den. Står dates tom på et aktivt sted, viser siden uden Sanity selv ugedagene i fallbackWeekdays (0 = søndag, 3 = onsdag, 6 = lørdag) fallbackWeeksAhead uger frem, uden tidspunkter. De første rigtige datoer, afhentningstider og adresserne på de andre steder aftales med Kristine.",
   "locations": [
     { "id": "gaarden", "name": "Gården", "address": "Torpevej 10, 4160 Herlufmagle", "note": "Hønsehuset", "mapsUrl": "https://maps.google.com/?q=Torpevej+10,+4160+Herlufmagle", "active": true, "sort": 1, "dates": [] },
     { "id": "naestved-torv", "name": "Næstved Torv", "address": "", "note": "", "mapsUrl": "", "active": false, "sort": 2, "dates": [] },
@@ -8,6 +8,5 @@
     { "id": "haslev", "name": "Haslev", "address": "", "note": "", "mapsUrl": "", "active": false, "sort": 5, "dates": [] }
   ],
   "fallbackWeekdays": [3, 6],
-  "fallbackWeeksAhead": 4,
-  "defaultDeadline": { "daysBefore": 2, "hour": 18 }
+  "fallbackWeeksAhead": 4
 }

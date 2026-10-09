@@ -13,7 +13,7 @@ export const link = defineType({
       name: "label",
       title: "Tekst",
       type: "string",
-      description: 'Det, der står på knappen eller linket, fx "Bestil brød".',
+      description: 'Det, der står på knappen eller linket, fx "Bestil bagværk".',
       validation: (rule) => rule.required().error("Skriv, hvad der skal stå på linket.").max(60),
     }),
     defineField({

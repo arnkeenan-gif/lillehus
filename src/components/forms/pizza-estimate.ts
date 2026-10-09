@@ -36,6 +36,35 @@ export interface PizzaEstimate {
   depositOere: number;
 }
 
+/** A pizza as the booking form offers it. */
+export interface PizzaChoice {
+  name: string;
+  vegetarian?: boolean;
+}
+
+/** A dessert as the booking form offers it; its own price per cover, when Kristine set one. */
+export interface DessertChoice {
+  name: string;
+  priceOere?: number;
+}
+
+/** "Man kan vælge 3 varianter": three, or fewer when fewer pizzas are available. */
+export const MAX_PIZZAS = 3;
+
+export function requiredPizzas(available: number): number {
+  return Math.max(0, Math.min(MAX_PIZZAS, available));
+}
+
+/** 1 gives "en", 2 "to", 3 "tre". */
+export function pizzaCountWord(n: number): string {
+  return ["ingen", "en", "to", "tre"][n] ?? String(n);
+}
+
+/** The dessert's own price per cover when it has one, otherwise the general dessert price. */
+export function dessertRate(rates: PizzaRates, desserts: readonly DessertChoice[], chosen: string): number {
+  return desserts.find((d) => d.name === chosen)?.priceOere ?? rates.dessertOere;
+}
+
 /** The rates the estimate needs, read from the pizza settings. `packages[0]` is the ad libitum offer. */
 export function pizzaRates(pizza: PizzaSettings): PizzaRates {
   return {

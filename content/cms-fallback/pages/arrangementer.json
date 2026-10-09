@@ -1,10 +1,10 @@
 {
-  "_readme": "Datoer kommer fra content/events.json (i Studio: Arrangementer). Ugens faste tider kommer fra Åbningstider og steder.",
+  "_readme": "Siden /arrangementer. Afsnittene her står øverst; derefter kommer kategorierne, kalenderen og listen over kommende arrangementer (fra Arrangementer i Studio, uden Sanity fra content/events.json og content/events/categories.json), og kursusformularen står altid nederst. Afsnittet 'Det sker' bestemmer overskriften over kalenderen og teksten, når kalenderen er tom (de øvrige felter i afsnittet bruges ikke på denne side).",
   "title": "Arrangementer",
   "slug": "arrangementer",
   "seo": {
     "title": "Arrangementer",
-    "description": "På udvalgte dage holder vi åbent i haven og huset, og onsdag og lørdag holder vi Torvedag i Næstved. Skriv, hvis du er interesseret i et kursus.",
+    "description": "På udvalgte dage holder vi åbent i haven og huset. Se kalenderen med arrangementer på gården, kurser og øvrige arrangementer, og tilmeld dig på siden.",
     "image": "/images/family-at-table-in-garden.jpg"
   },
   "showInNav": true,
@@ -16,29 +16,22 @@
       "_type": "heroSection",
       "_key": "top",
       "heading": "Åben dørene til haven og huset",
-      "text": "På udvalgte dage holder vi åbent i haven og huset. Onsdag og lørdag holder vi Torvedag på Axeltorv i Næstved."
+      "text": "På udvalgte dage holder vi åbent i haven og huset. Alt efter humør, står vi klar med de lækreste pizzaer, de skønneste kager og de dejligste drikke.",
+      "image": {
+        "src": "/images/family-at-table-in-garden.jpg",
+        "hotspot": {
+          "x": 0.6,
+          "y": 0.22
+        }
+      }
     },
     {
-      "_type": "richTextSection",
-      "_key": "aabne-doere",
-      "body": [
-        "På udvalgte dage holder vi “Åben dørene til haven og huset”. Alt efter humør, står vi klar med de lækreste pizzaer, de skønneste kager og de dejligste drikke. Selvfølgelig alt sammen økologisk og hjemmelavet.",
-        "Arrangementerne afholdes sporadisk og vil derfor ikke blive annonceret lang tid i forvejen. Når de annonceres, sker det via vores [facebookside](https://www.facebook.com/dlhpl) og vores [Instagramprofil](https://www.instagram.com/detlillehuspaalandet/)."
-      ],
-      "imagePosition": "right",
-      "tone": "paper"
-    },
-    {
-      "_type": "gallerySection",
-      "_key": "haven",
-      "columns": 4,
-      "images": [
-        { "image": "/images/family-at-table-in-garden.jpg" },
-        { "image": "/images/kale-burger-on-plate.jpg" },
-        { "image": "/images/rainbow-salad-bowl.jpg" },
-        { "image": "/images/roasted-carrots-with-parsley.jpg" },
-        { "image": "/images/courgette-pasta-bowl.jpg" }
-      ]
+      "_type": "eventsSection",
+      "_key": "kalender",
+      "heading": "Det sker",
+      "showWeek": false,
+      "emptyText": "Lige nu er der ingen datoer i kalenderen. Arrangementerne afholdes sporadisk og vil derfor ikke blive annonceret lang tid i forvejen.",
+      "limit": 50
     },
     {
       "_type": "formSection",
@@ -46,14 +39,6 @@
       "kind": "course",
       "heading": "Interesseret i et kursus?",
       "text": "Skriv, hvad du gerne vil lære, hvor mange I er, og hvornår det kunne passe. Kristine svarer, når hun har set din forespørgsel."
-    },
-    {
-      "_type": "eventsSection",
-      "_key": "kalender",
-      "heading": "Det sker",
-      "showWeek": true,
-      "emptyText": "Lige nu er der ingen datoer i kalenderen. Arrangementerne bliver ikke annonceret lang tid i forvejen.",
-      "limit": 20
     }
   ]
 }

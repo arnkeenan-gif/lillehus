@@ -1,184 +1,58 @@
-import type { Weekday } from "@/lib/content";
+import type { CartLine, CartPickup } from "@/lib/cart";
+import type { PickupDate, PickupLocation } from "@/lib/cms/ordering-types";
+import { formatDayDate, pickupTimeText } from "@/lib/ordering/dates";
+import { isBeforeDeadline } from "@/lib/ordering/deadline";
 
 /*
-  Pure pickup-day arithmetic and the Danish sentences built from the shop
-  settings. No JSON imports and no server-only code, so both the checkout
-  form (client) and the server action can use it. All calendar maths happens
-  on Copenhagen dates represented as "YYYY-MM-DD" strings.
+  Pickup helpers shared by the bagværk page, the cake pages, the cart drawer
+  and the checkout. Pure functions on the façade's PickupLocation shape, so
+  client components and the server action can both use them. The old weekday
+  logic (tirsdag til fredag, dagen før kl. 18) is gone: an order is picked up
+  on a date Kristine opened for a location, and the deadline engine in
+  src/lib/ordering/deadline.ts decides until when it can be ordered.
 */
 
-export const WEEKDAY_ORDER: Weekday[] = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
+/** What a browser needs to know about a pickup location. */
+export type ClientLocation = Pick<PickupLocation, "id" | "name" | "address" | "note" | "mapsUrl" | "dates">;
 
-/** Local copy of the weekday names so client bundles do not pull in content.ts and its JSON. */
-export const WEEKDAY_NAMES: Record<Weekday, string> = {
-  man: "mandag",
-  tir: "tirsdag",
-  ons: "onsdag",
-  tor: "torsdag",
-  fre: "fredag",
-  lør: "lørdag",
-  søn: "søndag",
-};
-
-export interface PickupConfig {
-  pickupDays: Weekday[];
-  /** Orders placed at or after this hour (Copenhagen time) lose one day of lead time. */
-  cutoffHour: number;
-  /** Minimum whole days between ordering and pickup. 1 = earliest tomorrow. */
-  cutoffDaysBefore: number;
-  maxDaysAhead: number;
-  /** ISO dates the bakery is closed. */
-  closedDates: string[];
+export function toClientLocations(locations: PickupLocation[]): ClientLocation[] {
+  return locations.map(({ id, name, address, note, mapsUrl, dates }) => ({ id, name, address, note, mapsUrl, dates }));
 }
 
-export interface DeliveryConfig {
-  enabled: boolean;
-  feeOere: number;
-  freeAboveOere: number;
-  radiusKm: number;
-  days: Weekday[];
-  note: string;
+export interface ResolvedPickup {
+  location: ClientLocation;
+  date: PickupDate;
 }
 
-/** The shop settings as the client needs them. getShopSettings() from the façade returns this shape. */
-export interface ShopConfig extends PickupConfig {
-  pickupWindow: string;
-  pickupPlace: string;
-  minOrderOere: number;
-  delivery: DeliveryConfig;
-  notice: string;
+/**
+ * The chosen pickup, when its location is still offered and its date is
+ * still open and not in the past; otherwise null (the customer chooses again).
+ */
+export function resolvePickup(pickup: CartPickup | null, locations: ClientLocation[], today: string): ResolvedPickup | null {
+  if (!pickup) return null;
+  const location = locations.find((l) => l.id === pickup.locationId);
+  const date = location?.dates.find((d) => d.date === pickup.date);
+  if (!location || !date || date.date < today) return null;
+  return { location, date };
 }
 
-export interface PickupDay {
-  /** "2026-09-15" */
-  iso: string;
-  weekday: Weekday;
-  /** "tirsdag den 15. september" */
-  label: string;
+/** "Hønsehuset, Torpevej 10, 4160 Herlufmagle": the note and the address, when there are any. */
+export function locationDetails(location: Pick<ClientLocation, "note" | "address">): string {
+  return [location.note, location.address].filter((s): s is string => Boolean(s && s.trim())).join(", ");
 }
 
-export interface DayConstraint {
-  name: string;
-  days: Weekday[];
+/** "kl. 9.00 til 12.00" for the chosen date, or "" when Kristine has not set a time. */
+export function pickupTime(date: Pick<PickupDate, "from" | "to">): string {
+  return pickupTimeText(date.from, date.to);
 }
 
-const TZ = "Europe/Copenhagen";
-
-const cphParts = new Intl.DateTimeFormat("en-GB", {
-  timeZone: TZ,
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  hourCycle: "h23",
-});
-
-const dayLabel = new Intl.DateTimeFormat("da-DK", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  timeZone: TZ,
-});
-
-/** Calendar date and hour in Copenhagen for an instant. */
-function copenhagenNow(now: Date): { y: number; m: number; d: number; hour: number } {
-  const parts = cphParts.formatToParts(now);
-  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? 0);
-  return { y: get("year"), m: get("month"), d: get("day"), hour: get("hour") % 24 };
+/** "Gården, lørdag den 17. oktober, kl. 9.00 til 12.00" */
+export function pickupSentence(resolved: ResolvedPickup, options: { year?: boolean } = {}): string {
+  const time = pickupTime(resolved.date);
+  return [resolved.location.name, formatDayDate(resolved.date.date, options), time].filter(Boolean).join(", ");
 }
 
-/** A Date at 12:00 UTC on the given ISO day; the same calendar day in Copenhagen. */
-export function noonUtc(iso: string): Date {
-  return new Date(`${iso}T12:00:00Z`);
-}
-
-export function weekdayOf(iso: string): Weekday {
-  return WEEKDAY_ORDER[(noonUtc(iso).getUTCDay() + 6) % 7];
-}
-
-/** "tirsdag den 15. september", no year. For selects, subjects and the baking list. */
-export function pickupDayLabel(iso: string): string {
-  return dayLabel.format(noonUtc(iso)).replace(/^(\p{L}+) /u, "$1 den ");
-}
-
-export function getPickupDays(now: Date, config: PickupConfig): PickupDay[] {
-  const { y, m, d, hour } = copenhagenNow(now);
-  const today = Date.UTC(y, m - 1, d, 12);
-  const allowed = new Set(config.pickupDays);
-  const closed = new Set(config.closedDates);
-  const firstOffset = Math.max(0, config.cutoffDaysBefore) + (hour >= config.cutoffHour ? 1 : 0);
-  const days: PickupDay[] = [];
-  for (let offset = firstOffset; offset <= config.maxDaysAhead; offset++) {
-    const iso = new Date(today + offset * 86_400_000).toISOString().slice(0, 10);
-    const weekday = weekdayOf(iso);
-    if (!allowed.has(weekday) || closed.has(iso)) continue;
-    days.push({ iso, weekday, label: pickupDayLabel(iso) });
-  }
-  return days;
-}
-
-/** Keep only the days on which every item in the cart can be baked. */
-export function filterDaysForItems(days: PickupDay[], items: DayConstraint[]): PickupDay[] {
-  const constrained = items.filter((i) => i.days.length > 0);
-  if (constrained.length === 0) return days;
-  return days.filter((day) => constrained.every((i) => i.days.includes(day.weekday)));
-}
-
-/** Danish list: ["a"] → "a", ["a","b"] → "a og b", ["a","b","c"] → "a, b og c". */
-export function joinDa(parts: string[]): string {
-  if (parts.length <= 1) return parts.join("");
-  return `${parts.slice(0, -1).join(", ")} og ${parts[parts.length - 1]}`;
-}
-
-export function sortWeekdays(days: Weekday[]): Weekday[] {
-  return [...new Set(days)].sort((a, b) => WEEKDAY_ORDER.indexOf(a) - WEEKDAY_ORDER.indexOf(b));
-}
-
-/** "Bages tirsdag og fredag", or null when the item is baked every pickup day. */
-export function bakedDaysLabel(days: Weekday[]): string | null {
-  if (days.length === 0) return null;
-  return `Bages ${joinDa(sortWeekdays(days).map((d) => WEEKDAY_NAMES[d]))}`;
-}
-
-/** Explains why the day list is shorter than usual, or null when nothing constrains it. */
-export function constraintHelper(items: DayConstraint[]): string | null {
-  const constrained = items.filter((i) => i.days.length > 0);
-  if (constrained.length === 0) return null;
-  const sentences = constrained.map(
-    (i) => `${i.name} bages kun ${joinDa(sortWeekdays(i.days).map((d) => WEEKDAY_NAMES[d]))}.`,
-  );
-  return `${sentences.join(" ")} Derfor kan du kun vælge de dage.`;
-}
-
-/** "tirsdag til fredag" for three or more consecutive days, otherwise "tirsdag, onsdag og fredag". */
-export function pickupDaysLabel(days: Weekday[]): string {
-  const sorted = sortWeekdays(days);
-  if (sorted.length === 0) return "";
-  const first = WEEKDAY_ORDER.indexOf(sorted[0]);
-  const consecutive = sorted.every((d, i) => WEEKDAY_ORDER.indexOf(d) === first + i);
-  if (consecutive && sorted.length > 2) {
-    return `${WEEKDAY_NAMES[sorted[0]]} til ${WEEKDAY_NAMES[sorted[sorted.length - 1]]}`;
-  }
-  return joinDa(sorted.map((d) => WEEKDAY_NAMES[d]));
-}
-
-/** "7 og 18" from the window "7 til 18", for "mellem kl. 7 og 18". */
-export function pickupHours(pickupWindow: string): string {
-  return pickupWindow.replace(" til ", " og ");
-}
-
-/** "Hønsehuset" from "Hønsehuset, Torpevej 10, 4160 Herlufmagle". */
-export function pickupPlaceShort(pickupPlace: string): string {
-  return pickupPlace.split(",")[0]?.trim() || pickupPlace;
-}
-
-/** "senest kl. 18 dagen før", from the cutoff settings. */
-export function cutoffLabel(config: Pick<PickupConfig, "cutoffHour" | "cutoffDaysBefore">): string {
-  const when =
-    config.cutoffDaysBefore <= 0
-      ? "samme dag"
-      : config.cutoffDaysBefore === 1
-        ? "dagen før"
-        : `${config.cutoffDaysBefore} dage før`;
-  return `senest kl. ${config.cutoffHour} ${when}`;
+/** The lines in the cart that can no longer be ordered for `date` (their deadline has passed). */
+export function expiredLines(items: CartLine[], date: string, now: number): CartLine[] {
+  return items.filter((line) => !isBeforeDeadline(date, line.rule, now));
 }

@@ -1,5 +1,5 @@
 {
-  "_readme": "Pizzavognens side. Priser, pizzaer, desserter og teksterne om dagen og depositum ligger i content/pizza.json (i Studio: Pizzavogn); afsnittene af typen pizzaSection henter dem derfra. Bookingformularen står højt på siden, lige efter priserne, så man kan sende en forespørgsel uden at læse det hele først.",
+  "_readme": "Pizzavognens side i Kristines rækkefølge: først billedet, så teksten, dernæst priserne og til sidst forespørgslen. Priser, pizzaer, desserter, steder og datoer og teksterne om dagen og depositum ligger i content/pizza.json (i Studio: Pizzavogn); afsnittene af typen pizzaSection henter dem derfra. Pizzaernes billeder vises over listen. Afsnittet med steder og datoer vises kun, når der står noget i det. På telefonen er knappen Book pizzavognen altid lige ved hånden nederst på skærmen.",
   "title": "Pizzavogn",
   "slug": "pizza",
   "seo": {
@@ -31,29 +31,8 @@
     },
     {
       "_type": "pizzaSection",
-      "_key": "priser",
-      "part": "prices"
-    },
-    {
-      "_type": "formSection",
-      "_key": "book",
-      "kind": "pizza",
-      "heading": "Book pizzavognen",
-      "text": "Udfyld det vigtigste her, så bekræfter Kristine pris og dato. Du betaler ikke noget, før hun har bekræftet.",
-      "steps": []
-    },
-    {
-      "_type": "photoBandSection",
-      "_key": "pizza",
-      "image": "/images/pizza-rocket-parma-ham.jpg",
-      "caption": "Tomat, mozzarella, frisk rucola, parmaskinke og parmesan.",
-      "ratio": "3/2"
-    },
-    {
-      "_type": "pizzaSection",
-      "_key": "pizzaerne",
-      "part": "menu",
-      "text": "Alle vores pizzaer er økologiske og lavet på en langtidskoldhævet bund, toppet med vores lækre fyld. I vælger tre varianter fra listen, og der er altid mindst en vegetarisk. Pizzaerne er hele tiden under udvikling, så spørg endelig ind, og kom med ønsker."
+      "_key": "intro",
+      "part": "intro"
     },
     {
       "_type": "pizzaSection",
@@ -63,9 +42,35 @@
     },
     {
       "_type": "pizzaSection",
+      "_key": "steder",
+      "part": "schedule",
+      "heading": "Her står pizzavognen"
+    },
+    {
+      "_type": "pizzaSection",
+      "_key": "priser",
+      "part": "prices",
+      "heading": "Priser"
+    },
+    {
+      "_type": "pizzaSection",
+      "_key": "pizzaerne",
+      "part": "menu",
+      "text": "Alle vores pizzaer er lavet på en langtids-, koldhævet bund og toppet med vores lækre fyld. I vælger tre varianter fra listen, og der er altid mindst en vegetarisk. Pizzaerne er hele tiden under udvikling, så spørg endelig ind, og kom med ønsker."
+    },
+    {
+      "_type": "pizzaSection",
       "_key": "depositum",
       "part": "terms",
       "text": "Depositum"
+    },
+    {
+      "_type": "formSection",
+      "_key": "book",
+      "kind": "pizza",
+      "heading": "Book pizzavognen",
+      "text": "Udfyld det vigtigste her, så bekræfter Kristine pris og dato. Du betaler ikke noget, før hun har bekræftet.",
+      "steps": []
     }
   ]
 }

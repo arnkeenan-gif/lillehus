@@ -46,7 +46,16 @@ export const siteSettings = defineType({
       title: "Logo",
       type: "photo",
       group: "grund",
-      description: "Det håndtegnede logo som PNG med gennemsigtig baggrund. Bruges i sidefoden og på Om os.",
+      description:
+        "Dit logo som PNG med gennemsigtig baggrund, i mørk farve. Vises øverst på hver side og stort i sidefoden. Upload dit eget for at skifte det ud overalt.",
+    }),
+    defineField({
+      name: "logoLight",
+      title: "Logo i hvidt",
+      type: "photo",
+      group: "grund",
+      description:
+        "Det samme logo i hvidt, også som PNG med gennemsigtig baggrund. Bruges øverst på siden, når menuen ligger hen over et stort billede. Mangler det, gør siden selv det mørke logo hvidt.",
     }),
 
     defineField({

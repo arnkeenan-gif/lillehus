@@ -1,21 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FacebookLogo, InstagramLogo } from "@phosphor-icons/react/dist/ssr";
-import { getLocations, getPages, getSiteSettings } from "@/lib/cms";
-import { hoursText, upperFirst } from "@/components/cms/text";
+import { getLocations, getOrderingSettings, getPages, getPickupLocations, getSiteSettings } from "@/lib/cms";
+import { deadlineText, hoursText, listDa, upperFirst } from "@/components/cms/text";
 import { Container } from "@/components/ui/container";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 
 /**
- * The one tinted surface: the hand-drawn logo large beside the address, the
- * hours as sentences, every page as a link, the smiley report and the
- * newsletter. On phones the places and the page links share a row in two
- * columns so the footer stays short; from lg it is four columns. Everything
- * comes from the site settings, the locations and the page list, so
+ * The one tinted surface: Kristine's logo large beside the address, the
+ * hours as sentences, where orders are collected and by when, every page as
+ * a link, the smiley report and the newsletter. On phones the places and the
+ * page links share a row in two columns so the footer stays short; from lg it
+ * is four columns. Everything comes from the site settings, the locations,
+ * the ordering's pickup locations and deadline, and the page list, so
  * Kristine's edits land here too.
  */
 export async function Footer() {
-  const [settings, locations, pages] = await Promise.all([getSiteSettings(), getLocations(), getPages()]);
+  const [settings, locations, pages, pickup, ordering] = await Promise.all([
+    getSiteSettings(),
+    getLocations(),
+    getPages(),
+    getPickupLocations(),
+    getOrderingSettings(),
+  ]);
   const year = new Date().getFullYear();
   const links = pages
     .filter((p) => !p.hidden && p.slug !== "forside")
@@ -82,6 +89,13 @@ export async function Footer() {
                   {loc.hours.length > 0 ? <p className="tnum">{upperFirst(hoursText(loc.hours))}</p> : null}
                 </li>
               ))}
+              {pickup.length > 0 ? (
+                <li>
+                  <p className="font-medium text-ink">Afhentning af bestillinger</p>
+                  <p>{listDa(pickup.map((l) => (l.note ? `${l.name} (${l.note})` : l.name)))}</p>
+                  <p>Bestil senest {deadlineText(ordering.defaultDeadline)}</p>
+                </li>
+              ) : null}
             </ul>
           </div>
 

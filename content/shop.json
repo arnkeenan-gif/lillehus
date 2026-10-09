@@ -1,25 +1,9 @@
 {
-  "_readme": "Settings for the bakery shop. Days use man/tir/ons/tor/fre/lør/søn. Prices in øre.",
-  "pickupDays": [
-    "tir",
-    "ons",
-    "tor",
-    "fre"
-  ],
-  "pickupWindow": "7 til 18",
-  "pickupPlace": "Hønsehuset, Torpevej 10, 4160 Herlufmagle",
-  "cutoffHour": 18,
-  "cutoffDaysBefore": 1,
-  "maxDaysAhead": 14,
-  "minOrderOere": 0,
-  "delivery": {
-    "enabled": false,
-    "feeOere": 0,
-    "freeAboveOere": 0,
-    "radiusKm": 0,
-    "days": [],
-    "note": "Vil du spørge om levering, så skriv til os gennem kontaktformularen."
+  "_readme": "Indstillinger for bestilling (i Sanity Studio: Bageri og bestilling). defaultDeadline er den almindelige bestillingsfrist: kl. hour, daysBefore dage før afhentning (Kristines regel: kl. 18 to dage før). En kategori, en vare eller en kage kan have sin egen frist. minOrderOere er mindste bestilling i øre (0 = ingen). notice er en besked øverst i bagværket, tom = ingen. Afhentningssteder og datoer ligger i content/ordering/pickup-locations.json.",
+  "defaultDeadline": {
+    "daysBefore": 2,
+    "hour": 18
   },
-  "closedDates": [],
+  "minOrderOere": 0,
   "notice": ""
 }

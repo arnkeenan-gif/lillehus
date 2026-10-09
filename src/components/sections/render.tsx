@@ -4,6 +4,7 @@ import type { HeadingLevel } from "./heading";
 import { CakeList } from "./cake-list";
 import { Contact } from "./contact";
 import { Cta } from "./cta";
+import { Entries } from "./entries";
 import { Events } from "./events";
 import { Faq } from "./faq";
 import { FormBlock } from "./form";
@@ -107,6 +108,8 @@ function SectionSwitch({
   switch (section._type) {
     case "heroSection":
       return <Hero section={section} level={level} className={className} />;
+    case "entriesSection":
+      return <Entries section={section} level={level} className={className} />;
     case "richTextSection":
       return <RichTextBlock section={section} level={level} className={className} afterLead={isHeroWithLead(prev)} />;
     case "photoBandSection":

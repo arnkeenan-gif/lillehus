@@ -51,7 +51,7 @@ export const page = defineType({
       title: "Navn i menuen",
       type: "string",
       group: "menu",
-      description: 'Kort, fx "Bageri". Står der ikke noget, bruges sidens navn.',
+      description: 'Kort, fx "Bagværk". Står der ikke noget, bruges sidens navn.',
       validation: (rule) => rule.max(20),
     }),
     defineField({

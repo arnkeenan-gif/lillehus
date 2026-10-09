@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { List, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Container } from "@/components/ui/container";
+import type { CmsImage } from "@/lib/cms";
 
 type Item = { href: string; label: string };
 
 /**
  * The hamburger below lg: a full-screen list that slides in over 240ms
  * (a plain fade under reduced motion). Its top bar repeats the header's
- * wordmark and puts the X exactly where the hamburger was, so nothing
- * jumps. Closes on a link, Escape or the X.
+ * logo (the dark one: the menu is always on paper) and puts the X exactly
+ * where the hamburger was, so nothing jumps. Closes on a link, Escape or
+ * the X.
  */
-export function MobileNav({ items, name }: { items: Item[]; name: string }) {
+export function MobileNav({ items, name, logo }: { items: Item[]; name: string; logo?: CmsImage }) {
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();
 
@@ -60,16 +63,29 @@ export function MobileNav({ items, name }: { items: Item[]; name: string }) {
             animate={shown}
             exit={hidden}
             transition={{ duration: 0.24, ease: [0.25, 1, 0.5, 1] }}
-            className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-paper text-ink"
+            // The overlay sits inside the header, so the white-header text shadow over a hero (globals.css) is switched off here.
+            className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-paper text-ink [&_a]:[text-shadow:none]! [&_button]:[text-shadow:none]! [&_span]:[text-shadow:none]!"
           >
             <Container className="flex h-16 shrink-0 items-center justify-between gap-4">
-              <Link
-                href="/"
-                onClick={() => setOpen(false)}
-                className="whitespace-nowrap text-[12px] font-bold uppercase tracking-[0.14em] text-ink"
-              >
-                {name}
-              </Link>
+              {logo ? (
+                <Link href="/" onClick={() => setOpen(false)} className="flex shrink-0 items-center rounded-sm">
+                  <Image
+                    src={logo.src}
+                    alt={name}
+                    width={Math.round(40 * ((logo.width ?? 1356) / (logo.height ?? 1141)))}
+                    height={40}
+                    className="h-10 w-auto"
+                  />
+                </Link>
+              ) : (
+                <Link
+                  href="/"
+                  onClick={() => setOpen(false)}
+                  className="whitespace-nowrap text-[12px] font-bold uppercase tracking-[0.14em] text-ink"
+                >
+                  {name}
+                </Link>
+              )}
               <button type="button" onClick={() => setOpen(false)} className={iconButton}>
                 <X size={24} aria-hidden="true" />
                 <span className="sr-only">Luk menu</span>

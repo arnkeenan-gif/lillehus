@@ -9,9 +9,11 @@ import { toPortableText, type RichTextInput } from "./blocks";
 import type {
   CmsImage,
   CmsLink,
+  EntryItem,
   FaqItem,
   FormKind,
   GallerySection,
+  PizzaSectionPart,
   PriceListRow,
   Product,
   Section,
@@ -27,6 +29,8 @@ export interface SectionContext {
 type Raw = Record<string, unknown>;
 
 const FORM_KINDS: readonly FormKind[] = ["pizza", "cake", "contact", "company", "course", "newsletter", "event"];
+
+const PIZZA_PARTS: readonly PizzaSectionPart[] = ["intro", "day", "schedule", "prices", "menu", "terms"];
 
 export function buildSections(raw: unknown, ctx: SectionContext): Section[] {
   if (!Array.isArray(raw)) return [];
@@ -81,6 +85,18 @@ function list(o: Raw, key: string): unknown[] {
   return Array.isArray(v) ? v : [];
 }
 
+/** An array of { label, href } objects; incomplete ones are left out. */
+function links(o: Raw, key: string): CmsLink[] {
+  const out: CmsLink[] = [];
+  for (const entry of list(o, key)) {
+    if (!isRaw(entry)) continue;
+    const label = str(entry, "label");
+    const href = str(entry, "href");
+    if (label && href) out.push({ label, href });
+  }
+  return out;
+}
+
 function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | null {
   const type = raw._type as SectionType;
   const _key = str(raw, "_key") ?? `${type}-${index}`;
@@ -109,6 +125,25 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
         secondaryLink: link(raw, "secondaryLink"),
       };
     }
+    case "entriesSection": {
+      const entries: EntryItem[] = [];
+      list(raw, "entries").forEach((entry, i) => {
+        if (!isRaw(entry)) return;
+        const title = str(entry, "title");
+        const href = str(entry, "href");
+        if (!title || !href) return;
+        entries.push({
+          _key: str(entry, "_key") ?? `${_key}-${i}`,
+          title,
+          text: str(entry, "text"),
+          image: ctx.image(entry.image),
+          href,
+          links: links(entry, "links"),
+        });
+      });
+      if (entries.length === 0) return null;
+      return { _type: type, _key, heading, entries };
+    }
     case "richTextSection": {
       const body = toPortableText(raw.body as RichTextInput, `${_key}-`);
       if (body.length === 0 && !heading) return null;
@@ -134,9 +169,17 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
         const image = ctx.image(entry.image);
         if (image) images.push({ _key: str(entry, "_key") ?? `${_key}-${i}`, image, caption: str(entry, "caption") });
       });
+      // An empty gallery (a slot waiting for Kristine's photos) is not shown.
       if (images.length === 0) return null;
       const columns = num(raw, "columns", 3);
-      return { _type: type, _key, heading, images, columns: columns === 2 || columns === 4 ? columns : 3 };
+      return {
+        _type: type,
+        _key,
+        heading,
+        images,
+        columns: columns === 2 || columns === 4 ? columns : 3,
+        layout: oneOf(raw, "layout", ["grid", "steps"] as const, "grid"),
+      };
     }
     case "productStripSection": {
       const mode = oneOf(raw, "mode", ["auto", "manual"] as const, "auto");
@@ -195,8 +238,8 @@ function buildSection(raw: Raw, index: number, ctx: SectionContext): Section | n
       return { _type: type, _key, heading, text };
     case "pizzaSection": {
       const part = raw.part;
-      if (part !== "day" && part !== "prices" && part !== "menu" && part !== "terms") return null;
-      return { _type: type, _key, part, heading, text };
+      if (typeof part !== "string" || !(PIZZA_PARTS as readonly string[]).includes(part)) return null;
+      return { _type: type, _key, part: part as PizzaSectionPart, heading, text };
     }
     case "pickupInfoSection":
       return { _type: type, _key, heading, detail: oneOf(raw, "detail", ["kort", "udførlig"] as const, "kort"), text, link: link(raw, "link") };

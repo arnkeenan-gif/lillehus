@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { CmsPhoto } from "@/components/cms/photo";
-import { cutoffText, pickupDaysText } from "@/components/cms/text";
-import { getProducts, getShopSettings, type CmsImage, type Product, type ProductStripSection } from "@/lib/cms";
+import { getOrderingSettings, getProducts, type CmsImage, type Product, type ProductStripSection } from "@/lib/cms";
+import { ruleText } from "@/lib/ordering/deadline";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { SectionHeading, SectionIntro, afterIntro, textLink } from "./heading";
@@ -12,7 +12,8 @@ import type { SectionProps } from "./types";
  * Bread as a shop window: photo (4/5), name, price. Four across from lg, two
  * on phones, even gutters at every width, no borders, no buttons; every tile
  * links to the shop. Products without a photo are left out, since the photo
- * is the tile.
+ * is the tile. Without a text of its own the section states the deadline
+ * rule ("Bestil senest kl. 18 to dage før afhentning.").
  */
 function photoOf(product: Product): CmsImage | undefined {
   if (product.photo) return product.photo;
@@ -21,16 +22,14 @@ function photoOf(product: Product): CmsImage | undefined {
 }
 
 export async function ProductStrip({ section, level, className }: SectionProps<ProductStripSection>) {
-  const [all, shop] = await Promise.all([section.mode === "auto" ? getProducts() : section.products, getShopSettings()]);
+  const [all, ordering] = await Promise.all([section.mode === "auto" ? getProducts() : section.products, getOrderingSettings()]);
   const products = all
     .map((product) => ({ product, photo: photoOf(product) }))
     .filter((entry): entry is { product: Product; photo: CmsImage } => Boolean(entry.photo))
     .slice(0, section.limit);
   if (products.length === 0) return null;
 
-  const text =
-    section.text ??
-    `Bestil senest ${cutoffText(shop)}. Hent i Hønsehuset ${pickupDaysText(shop)}, kl. ${shop.pickupWindow}.`;
+  const text = section.text ?? `Bestil senest ${ruleText(ordering.defaultDeadline)}.`;
   const hasTop = Boolean(section.heading || text);
 
   return (

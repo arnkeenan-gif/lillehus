@@ -1,16 +1,17 @@
 import { Column, Hr, Row, Section, Text } from "@react-email/components";
 import { EmailLayout, EmailRow, emailStyles } from "@/emails/_layout";
 import type { OrderDetails } from "@/lib/cart-order";
-import { pickupDayLabel, pickupPlaceShort, type ShopConfig } from "@/lib/cart-pickup";
 import { formatPrice } from "@/lib/format";
+import { formatDayDate, pickupTimeText } from "@/lib/ordering/dates";
 
 /*
-  The baking list. Lines first, big and tabular, then who and when. Kristine
-  reads this on her phone at five in the morning, so the numbers come first.
+  The baking list. Lines first, big and tabular, with the chosen options
+  under each name, then where, when and who. Kristine reads this on her
+  phone at five in the morning, so the numbers come first.
 */
 
 export function orderDayLabel(order: OrderDetails): string {
-  return order.pickupDate ? pickupDayLabel(order.pickupDate) : "ukendt dag";
+  return order.pickupDate ? formatDayDate(order.pickupDate) : "ukendt dag";
 }
 
 const line = {
@@ -25,6 +26,7 @@ const line = {
     ...emailStyles.tnum,
   },
   name: { fontSize: 18, color: "#1d1d1b", padding: "12px 8px 10px 0", verticalAlign: "top" as const },
+  options: { display: "block", fontSize: 15, color: "#3d3d39", marginTop: 4 },
   price: {
     fontSize: 15,
     color: "#626360",
@@ -36,40 +38,44 @@ const line = {
   },
 };
 
-type Props = { order: OrderDetails; shop: ShopConfig };
+type Props = { order: OrderDetails; address: string };
 
-export function OrderKristineEmail({ order, shop }: Props) {
+function pickupLine(order: OrderDetails): string {
+  const time = pickupTimeText(order.pickupFrom, order.pickupTo);
+  return [order.pickupDate ? formatDayDate(order.pickupDate, { year: true }) : "ukendt dag", order.locationName || "ukendt sted", time]
+    .filter(Boolean)
+    .join(", ");
+}
+
+export function OrderKristineEmail({ order, address }: Props) {
   const day = orderDayLabel(order);
-  const isDelivery = order.fulfilment === "delivery";
   const preview = `${order.customerName || "Ukendt navn"}: ${order.lines.map((l) => `${l.qty} ${l.name}`).join(", ")}`;
 
   return (
-    <EmailLayout preview={preview} title={`Bagesedel til ${day}`}>
+    <EmailLayout preview={preview} title={`Bagesedel til ${day}${order.locationName ? `, ${order.locationName}` : ""}`}>
       <Section>
         {order.lines.map((l, i) => (
           <Row key={i} style={line.row}>
             <Column style={line.qty}>{l.qty}</Column>
-            <Column style={line.name}>{l.name}</Column>
+            <Column style={line.name}>
+              {l.name}
+              {l.options.map((option) => (
+                <span key={option} style={line.options}>
+                  {option}
+                </span>
+              ))}
+            </Column>
             <Column style={line.price}>{formatPrice(l.totalOere)}</Column>
           </Row>
         ))}
-        {order.deliveryOere !== null ? (
-          <Row style={line.row}>
-            <Column style={line.qty} />
-            <Column style={line.name}>Levering</Column>
-            <Column style={line.price}>{formatPrice(order.deliveryOere)}</Column>
-          </Row>
-        ) : null}
       </Section>
       <Text style={{ ...emailStyles.text, marginTop: 12, fontWeight: 600, color: "#1d1d1b" }}>
         Betalt i alt: <span style={emailStyles.tnum}>{formatPrice(order.totalOere)}</span>
       </Text>
       <Hr style={emailStyles.hr} />
       <EmailRow label="Ordrenummer" value={order.orderNo} />
-      <EmailRow
-        label={isDelivery ? "Levering" : "Afhentning"}
-        value={isDelivery ? day : `${day} i ${pickupPlaceShort(shop.pickupPlace)}, kl. ${shop.pickupWindow}`}
-      />
+      <EmailRow label="Afhentning" value={pickupLine(order)} />
+      {address ? <EmailRow label="Adresse" value={address} /> : null}
       <EmailRow label="Navn" value={order.customerName || "Ikke oplyst"} />
       <EmailRow label="Telefon" value={order.phone || "Ikke oplyst"} />
       <EmailRow label="E-mail" value={order.email || "Ikke oplyst"} />
@@ -79,17 +85,17 @@ export function OrderKristineEmail({ order, shop }: Props) {
   );
 }
 
-export function orderKristineText(order: OrderDetails, shop: ShopConfig): string {
+export function orderKristineText(order: OrderDetails, address: string): string {
   const day = orderDayLabel(order);
-  const isDelivery = order.fulfilment === "delivery";
-  const out: string[] = [`Bagesedel til ${day}`, ""];
-  for (const l of order.lines) out.push(`${l.qty} x ${l.name}   ${formatPrice(l.totalOere)}`);
-  if (order.deliveryOere !== null) out.push(`Levering   ${formatPrice(order.deliveryOere)}`);
+  const out: string[] = [`Bagesedel til ${day}${order.locationName ? `, ${order.locationName}` : ""}`, ""];
+  for (const l of order.lines) {
+    out.push(`${l.qty} x ${l.name}   ${formatPrice(l.totalOere)}`);
+    for (const option of l.options) out.push(`    ${option}`);
+  }
   out.push("", `Betalt i alt: ${formatPrice(order.totalOere)}`, "");
   out.push(`Ordrenummer: ${order.orderNo}`);
-  out.push(
-    `${isDelivery ? "Levering" : "Afhentning"}: ${isDelivery ? day : `${day} i ${pickupPlaceShort(shop.pickupPlace)}, kl. ${shop.pickupWindow}`}`,
-  );
+  out.push(`Afhentning: ${pickupLine(order)}`);
+  if (address) out.push(`Adresse: ${address}`);
   out.push(`Navn: ${order.customerName || "Ikke oplyst"}`);
   out.push(`Telefon: ${order.phone || "Ikke oplyst"}`);
   out.push(`E-mail: ${order.email || "Ikke oplyst"}`);
