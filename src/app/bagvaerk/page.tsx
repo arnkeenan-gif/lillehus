@@ -1,4 +1,3 @@
-import { Sprig } from "@/components/ui/sprig";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { pageMetadata } from "@/components/cms/metadata";
@@ -41,7 +40,6 @@ export default async function BakeryPage() {
       renderedAt={renderedAt}
     >
       <Container className="pt-12 sm:pt-20">
-        <Sprig className="mb-5 h-6 sm:h-8" />
         <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink">Bagværk</h1>
         <p className="mt-5 max-w-[46ch] text-lead text-ink-2">Oplysninger om allergener kan fås mod forespørgsel.</p>
         {notice ? <p className="mt-6 max-w-[62ch] rounded-md bg-rust-tint px-4 py-3 text-ink">{notice}</p> : null}
@@ -89,13 +87,13 @@ export default async function BakeryPage() {
               key={category.id}
               id={`kategori-${category.id}`}
               aria-labelledby={`kategori-${category.id}-titel`}
-              className={index === 0 ? "scroll-mt-40 pt-10" : "scroll-mt-40 pt-20 sm:pt-24"}
+              className={index === 0 ? "scroll-mt-40 pt-10" : "scroll-mt-40 pt-16 sm:pt-20"}
             >
-              <h2 id={`kategori-${category.id}-titel`} className="text-title font-semibold text-ink">
+              <h2 id={`kategori-${category.id}-titel`} className="border-b border-line pb-3 text-title font-semibold text-ink">
                 {category.title}
               </h2>
               {category.description ? <p className="mt-3 max-w-[62ch] text-ink-2">{category.description}</p> : null}
-              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:gap-x-6 lg:gap-y-12">
+              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12">
                 {products.map((product, i) => (
                   <ProductTile key={product.id} product={product} eager={index === 0 && i < 3} />
                 ))}

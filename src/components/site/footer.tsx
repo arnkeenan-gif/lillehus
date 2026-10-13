@@ -4,7 +4,6 @@ import { FacebookLogo, InstagramLogo } from "@phosphor-icons/react/dist/ssr";
 import { getLocations, getOrderingSettings, getPages, getPickupLocations, getSiteSettings } from "@/lib/cms";
 import { deadlineText, hoursText, listDa, upperFirst } from "@/components/cms/text";
 import { Container } from "@/components/ui/container";
-import { Sprig } from "@/components/ui/sprig";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 
 /**
@@ -36,11 +35,6 @@ export async function Footer() {
 
   return (
     <footer className="no-print border-t border-line bg-paper-2">
-      <div className="-mt-3 flex justify-center" aria-hidden="true">
-        <span className="bg-paper-2 px-4">
-          <Sprig wide />
-        </span>
-      </div>
       <Container className="grid gap-x-8 gap-y-12 py-14 sm:py-16 lg:grid-cols-12 lg:py-20">
         <div className="lg:col-span-4">
           {logo ? (
