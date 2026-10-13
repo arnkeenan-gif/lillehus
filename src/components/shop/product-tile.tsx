@@ -14,7 +14,7 @@ import { ProductPhoto, hotspotPosition } from "@/components/shop/product-photo";
 export function ProductTile({ product, eager = false }: { product: ShopProduct; eager?: boolean }) {
   const photo = product.photo;
   return (
-    <article id={`vare-${product.id}`} className="flex scroll-mt-40 flex-col rounded-md target:outline target:outline-2 target:outline-offset-8 target:outline-rust/60">
+    <article id={`vare-${product.id}`} className="flex scroll-mt-40 flex-col">
       {photo ? (
         <Link href={`/bagvaerk/vare/${product.id}`} tabIndex={-1} aria-hidden="true" className="relative block aspect-[4/5] overflow-hidden rounded-md bg-paper-2">
           <ProductPhoto
