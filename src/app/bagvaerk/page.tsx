@@ -82,24 +82,30 @@ export default async function BakeryPage() {
             ) : null}
           </p>
         ) : (
-          catalog.groups.map(({ category, products }, index) => (
-            <section
-              key={category.id}
-              id={`kategori-${category.id}`}
-              aria-labelledby={`kategori-${category.id}-titel`}
-              className={index === 0 ? "scroll-mt-40 pt-10" : "scroll-mt-40 pt-16 sm:pt-20"}
-            >
-              <h2 id={`kategori-${category.id}-titel`} className="border-b border-line pb-3 text-title font-semibold text-ink">
-                {category.title}
-              </h2>
-              {category.description ? <p className="mt-3 max-w-[62ch] text-ink-2">{category.description}</p> : null}
-              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12">
-                {products.map((product, i) => (
-                  <ProductTile key={product.id} product={product} eager={index === 0 && i < 3} />
-                ))}
-              </div>
-            </section>
-          ))
+          <div className="divide-y divide-line">
+            {catalog.groups.map(({ category, products }, index) => (
+              <section
+                key={category.id}
+                id={`kategori-${category.id}`}
+                aria-labelledby={`kategori-${category.id}-titel`}
+                className="grid scroll-mt-40 gap-x-6 gap-y-6 py-12 first:pt-10 sm:py-16 lg:grid-cols-12"
+              >
+                <div className="lg:col-span-3">
+                  <div className="lg:sticky lg:top-40">
+                    <h2 id={`kategori-${category.id}-titel`} className="text-title font-semibold text-ink">
+                      {category.title}
+                    </h2>
+                    {category.description ? <p className="mt-3 max-w-[40ch] text-ink-2">{category.description}</p> : null}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:col-span-9 lg:gap-x-6">
+                  {products.map((product, i) => (
+                    <ProductTile key={product.id} product={product} eager={index === 0 && i < 3} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         )}
       </Container>
 

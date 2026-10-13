@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { formatPrice } from "@/lib/format";
 import type { ShopProduct } from "@/lib/products";
@@ -15,17 +16,21 @@ export function ProductTile({ product, eager = false }: { product: ShopProduct; 
   return (
     <article id={`vare-${product.id}`} className="flex scroll-mt-40 flex-col rounded-md target:outline target:outline-2 target:outline-offset-8 target:outline-rust/60">
       {photo ? (
-        <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-paper-2">
+        <Link href={`/bagvaerk/vare/${product.id}`} tabIndex={-1} aria-hidden="true" className="relative block aspect-[4/5] overflow-hidden rounded-md bg-paper-2">
           <ProductPhoto
             photo={photo}
             alt={product.name}
             sizes="(min-width: 1264px) 272px, (min-width: 1024px) 23vw, (min-width: 768px) 31vw, 46vw"
             eager={eager}
           />
-        </div>
+        </Link>
       ) : null}
       <div className={cn("flex items-baseline justify-between gap-3", photo && "mt-3")}>
-        <h3 className="font-medium leading-snug text-ink">{product.name}</h3>
+        <h3 className="font-medium leading-snug text-ink">
+          <Link href={`/bagvaerk/vare/${product.id}`} className="hover:underline hover:underline-offset-[3px]">
+            {product.name}
+          </Link>
+        </h3>
         {product.priceOere > 0 ? <p className="tnum shrink-0 text-ink-2">{formatPrice(product.priceOere)}</p> : null}
       </div>
       {product.description ? <p className="mt-1 text-sm text-ink-2">{product.description}</p> : null}
