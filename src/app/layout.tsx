@@ -3,7 +3,6 @@ import { Figtree } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
-import { BackgroundWreath } from "@/components/site/background-wreath";
 import { site } from "@/lib/site";
 
 const figtree = Figtree({
@@ -41,7 +40,6 @@ export default function RootLayout({
   return (
     <html lang="da" className={`${figtree.variable} h-full`} suppressHydrationWarning>
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
-        <BackgroundWreath />
         <a
           href="#indhold"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
