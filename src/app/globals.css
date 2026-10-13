@@ -211,3 +211,33 @@ html[data-hero-cover="true"]:not([data-hero-scrolled="true"]) .site-header :is(a
     }
   }
 }
+
+/*
+  The laurel branches behind the page (background-wreath.tsx). --grow runs
+  from about 0.22 at the top of the page to 1 at the footer: it draws the
+  stem and opens each leaf when the stem reaches it (--at on the leaf).
+*/
+.background-wreath .wreath-stem {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--grow, 1));
+}
+.background-wreath .wreath-leaf {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: clamp(0, calc((var(--grow, 1) - var(--at)) * 30), 1);
+  scale: clamp(0.4, calc(0.4 + (var(--grow, 1) - var(--at)) * 18), 1);
+  transition:
+    opacity 300ms ease-out,
+    scale 300ms ease-out;
+}
+.background-wreath .wreath-branch[data-side="left"] {
+  translate: 0 var(--drift, 0px);
+}
+.background-wreath .wreath-branch[data-side="right"] {
+  translate: 0 calc(var(--drift, 0px) * -1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .background-wreath .wreath-leaf {
+    transition: none;
+  }
+}
