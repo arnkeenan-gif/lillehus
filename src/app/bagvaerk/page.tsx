@@ -1,3 +1,4 @@
+import { Sprig } from "@/components/ui/sprig";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { pageMetadata } from "@/components/cms/metadata";
@@ -40,6 +41,7 @@ export default async function BakeryPage() {
       renderedAt={renderedAt}
     >
       <Container className="pt-12 sm:pt-20">
+        <Sprig className="mb-5 h-6 sm:h-8" />
         <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink">Bagværk</h1>
         <p className="mt-5 max-w-[46ch] text-lead text-ink-2">Oplysninger om allergener kan fås mod forespørgsel.</p>
         {notice ? <p className="mt-6 max-w-[62ch] rounded-md bg-rust-tint px-4 py-3 text-ink">{notice}</p> : null}

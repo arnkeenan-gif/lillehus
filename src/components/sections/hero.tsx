@@ -6,6 +6,7 @@ import { CmsPhoto } from "@/components/cms/photo";
 import { CoverHeaderMode } from "@/components/site/cover-header-mode";
 import { HeroSlideshow } from "./hero-slideshow";
 import { cn } from "@/lib/cn";
+import { Sprig } from "@/components/ui/sprig";
 import type { HeroSection } from "@/lib/cms";
 import type { SectionProps } from "./types";
 
@@ -118,6 +119,7 @@ function HeroStacked({ section, level: Tag, className }: SectionProps<HeroSectio
       ) : null}
 
       <Container className={image ? "pt-8 sm:pt-10" : "pt-12 sm:pt-20"}>
+        {image ? null : <Sprig className="mb-5 h-6 sm:h-8" />}
         <Tag className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink">{heading}</Tag>
         {text ? <p className="mt-5 max-w-[46ch] text-lead text-ink-2">{text}</p> : null}
         {primaryLink || secondaryLink ? (
