@@ -78,7 +78,7 @@ export function ProductOrderControls({ product, className }: { product: Orderabl
   return (
     <div className={cn("pt-4", className)}>
       {ownDeadline ? <p className="mb-2 text-sm text-muted">{ownDeadline}</p> : null}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-[auto_1fr]">
+      <div className="grid grid-cols-[auto_1fr] gap-2">
         <QuantityStepper value={qty} onChange={setQty} label={product.name} className="justify-self-start" />
         <Button type="button" variant="secondary" onClick={add} className="w-full" aria-haspopup={date ? undefined : "dialog"}>
           {showAdded ? "Lagt i kurven" : "Læg i kurv"}

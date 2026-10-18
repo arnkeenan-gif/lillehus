@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/container";
 import { pageMetadata } from "@/components/cms/metadata";
 import { BakeryCakesBlock } from "@/components/ordering/bakery-cakes-block";
 import { OrderFlowProvider, PickupBar, StartOrderButton } from "@/components/ordering/order-flow";
-import { ProductTile } from "@/components/shop/product-tile";
+import { ProductRow } from "@/components/shop/product-row";
 import { getPage, getSiteSettings } from "@/lib/cms";
 import { toClientLocations } from "@/lib/cart-pickup";
 import { generalRule } from "@/lib/ordering/deadline";
@@ -40,6 +40,7 @@ export default async function BakeryPage() {
       renderedAt={renderedAt}
     >
       <Container className="pt-12 sm:pt-20">
+        <div className="mx-auto max-w-4xl">
         <h1 className="max-w-[18ch] text-balance text-display font-semibold tracking-tight text-ink">Bagværk</h1>
         <p className="mt-5 max-w-[46ch] text-lead text-ink-2">Oplysninger om allergener kan fås mod forespørgsel.</p>
         {notice ? <p className="mt-6 max-w-[62ch] rounded-md bg-rust-tint px-4 py-3 text-ink">{notice}</p> : null}
@@ -62,6 +63,7 @@ export default async function BakeryPage() {
             </ul>
           </nav>
         ) : null}
+        </div>
       </Container>
 
       <PickupBar className="mt-10 sm:mt-14" />
@@ -82,27 +84,23 @@ export default async function BakeryPage() {
             ) : null}
           </p>
         ) : (
-          <div className="divide-y divide-line">
+          <div className="mx-auto max-w-4xl">
             {catalog.groups.map(({ category, products }, index) => (
               <section
                 key={category.id}
                 id={`kategori-${category.id}`}
                 aria-labelledby={`kategori-${category.id}-titel`}
-                className="grid scroll-mt-40 gap-x-6 gap-y-6 py-12 first:pt-10 sm:py-16 lg:grid-cols-12"
+                className={index === 0 ? "scroll-mt-40 pt-10" : "scroll-mt-40 pt-14 sm:pt-16"}
               >
-                <div className="lg:col-span-3">
-                  <div className="lg:sticky lg:top-40">
-                    <h2 id={`kategori-${category.id}-titel`} className="text-title font-semibold text-ink">
-                      {category.title}
-                    </h2>
-                    {category.description ? <p className="mt-3 max-w-[40ch] text-ink-2">{category.description}</p> : null}
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:col-span-9 lg:gap-x-6">
+                <h2 id={`kategori-${category.id}-titel`} className="text-title font-semibold text-ink">
+                  {category.title}
+                </h2>
+                {category.description ? <p className="mt-2 max-w-[62ch] text-ink-2">{category.description}</p> : null}
+                <ul className="mt-3 divide-y divide-line border-y border-line">
                   {products.map((product, i) => (
-                    <ProductTile key={product.id} product={product} eager={index === 0 && i < 3} />
+                    <ProductRow key={product.id} product={product} eager={index === 0 && i < 3} />
                   ))}
-                </div>
+                </ul>
               </section>
             ))}
           </div>
